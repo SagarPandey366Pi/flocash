@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.MemoryFullPrunedBlockChainTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 1.997 sec <<< FAILURE! - in org.floj.core.MemoryFullPrunedBlockChainTest
+testFirst100KBlocks(org.floj.core.MemoryFullPrunedBlockChainTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.NullPointerException
+
+testGeneratedChain(org.floj.core.MemoryFullPrunedBlockChainTest)  Time elapsed: 1.171 sec  <<< ERROR!
+java.lang.IllegalStateException
+

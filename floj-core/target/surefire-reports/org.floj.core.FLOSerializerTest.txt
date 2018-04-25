@@ -1,0 +1,20 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.FLOSerializerTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0 sec <<< FAILURE! - in org.floj.core.FLOSerializerTest
+testCachedParsing(org.floj.core.FLOSerializerTest)  Time elapsed: 0 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.FLOSerializerTest.testCachedParsing(FLOSerializerTest.java:96)
+
+testAddr(org.floj.core.FLOSerializerTest)  Time elapsed: 0 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.FLOSerializerTest.testAddr(FLOSerializerTest.java:73)
+
+testHeaders1(org.floj.core.FLOSerializerTest)  Time elapsed: 0 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.FLOSerializerTest.testHeaders1(FLOSerializerTest.java:156)
+
+testHeaders2(org.floj.core.FLOSerializerTest)  Time elapsed: 0 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.FLOSerializerTest.testHeaders2(FLOSerializerTest.java:192)
+

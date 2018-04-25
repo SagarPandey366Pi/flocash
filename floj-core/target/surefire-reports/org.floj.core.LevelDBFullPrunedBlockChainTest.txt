@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.LevelDBFullPrunedBlockChainTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 3.303 sec <<< FAILURE! - in org.floj.core.LevelDBFullPrunedBlockChainTest
+testFirst100KBlocks(org.floj.core.LevelDBFullPrunedBlockChainTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.NullPointerException
+
+testGeneratedChain(org.floj.core.LevelDBFullPrunedBlockChainTest)  Time elapsed: 1.176 sec  <<< ERROR!
+java.lang.IllegalStateException
+

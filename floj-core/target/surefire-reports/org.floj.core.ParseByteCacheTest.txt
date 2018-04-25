@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.ParseByteCacheTest
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.159 sec <<< FAILURE! - in org.floj.core.ParseByteCacheTest
+testTransactionsNoRetain(org.floj.core.ParseByteCacheTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.ParseByteCacheTest.testTransaction(ParseByteCacheTest.java:373)
+	at org.floj.core.ParseByteCacheTest.testTransactionsNoRetain(ParseByteCacheTest.java:160)
+
+testTransactionsRetain(org.floj.core.ParseByteCacheTest)  Time elapsed: 0.047 sec  <<< ERROR!
+java.nio.BufferUnderflowException
+	at org.floj.core.ParseByteCacheTest.testTransaction(ParseByteCacheTest.java:373)
+	at org.floj.core.ParseByteCacheTest.testTransactionsRetain(ParseByteCacheTest.java:153)
+

@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.BlockChainTest
+-------------------------------------------------------------------------------
+Tests run: 13, Failures: 3, Errors: 2, Skipped: 0, Time elapsed: 3.257 sec <<< FAILURE! - in org.floj.core.BlockChainTest
+difficultyTransitions(org.floj.core.BlockChainTest)  Time elapsed: 1.618 sec  <<< FAILURE!
+java.lang.AssertionError
+	at org.floj.core.BlockChainTest.difficultyTransitions(BlockChainTest.java:183)
+
+estimatedBlockTime(org.floj.core.BlockChainTest)  Time elapsed: 0.1 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<Tue Oct 23 11:35:05 EDT 2012> but was:<Thu Apr 06 10:19:56 EDT 2017>
+	at org.floj.core.BlockChainTest.estimatedBlockTime(BlockChainTest.java:439)
+
+coinbaseTransactionAvailability(org.floj.core.BlockChainTest)  Time elapsed: 0.25 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<5100000000> but was:<100000000>
+	at org.floj.core.BlockChainTest.coinbaseTransactionAvailability(BlockChainTest.java:396)
+
+badDifficulty(org.floj.core.BlockChainTest)  Time elapsed: 0.071 sec  <<< ERROR!
+org.floj.core.VerificationException: Hash is higher than target: 000000033cc282bc1fa9dcae7a533263fd7fe66490f550d80076433340831604 vs 7fff80000000000000000000000000000000000000000000000000000
+	at org.floj.core.BlockChainTest.getBlock1(BlockChainTest.java:429)
+	at org.floj.core.BlockChainTest.badDifficulty(BlockChainTest.java:197)
+
+testBasicChaining(org.floj.core.BlockChainTest)  Time elapsed: 0.096 sec  <<< ERROR!
+org.floj.core.VerificationException: Hash is higher than target: 000000033cc282bc1fa9dcae7a533263fd7fe66490f550d80076433340831604 vs 7fff80000000000000000000000000000000000000000000000000000
+	at org.floj.core.BlockChainTest.getBlock1(BlockChainTest.java:429)
+	at org.floj.core.BlockChainTest.testBasicChaining(BlockChainTest.java:118)
+

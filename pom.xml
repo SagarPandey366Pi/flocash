@@ -8,10 +8,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>core</module>
-    <module>examples</module>
-    <module>tools</module>
-    <module>wallettemplate</module>
+    <module>floj-core</module>
+    <module>flowallet</module>
   </modules>
 
   <parent>

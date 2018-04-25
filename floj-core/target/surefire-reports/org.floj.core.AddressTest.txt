@@ -1,0 +1,60 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.AddressTest
+-------------------------------------------------------------------------------
+Tests run: 15, Failures: 2, Errors: 12, Skipped: 0, Time elapsed: 1.665 sec <<< FAILURE! - in org.floj.core.AddressTest
+comparisonGreaterThan(org.floj.core.AddressTest)  Time elapsed: 0.002 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 0 not in [35, 8]
+	at org.floj.core.AddressTest.comparisonGreaterThan(AddressTest.java:245)
+
+comparisonEqualTo(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 0 not in [35, 8]
+	at org.floj.core.AddressTest.comparisonEqualTo(AddressTest.java:227)
+
+getNetwork(org.floj.core.AddressTest)  Time elapsed: 0.169 sec  <<< ERROR!
+org.floj.core.AddressFormatException: No network found for 17kzeh4N8g49GFvdDzSf8PjaPfyoD1MndL
+	at org.floj.core.AddressTest.getNetwork(AddressTest.java:124)
+
+testJavaSerialization(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 111 not in [115, 198]
+	at org.floj.core.AddressTest.testJavaSerialization(AddressTest.java:51)
+
+p2shAddressCreationFromKeys(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 128 not in [163]
+	at org.floj.core.AddressTest.p2shAddressCreationFromKeys(AddressTest.java:188)
+
+p2shAddress(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 5 not in [35, 8]
+	at org.floj.core.AddressTest.p2shAddress(AddressTest.java:162)
+
+stringification(org.floj.core.AddressTest)  Time elapsed: 0.001 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<[n4eA2nbYqErp7H6jebchxAN59DmNpksexv]> but was:<[ofzZyDnhfxiKP1f5kGwytfTDfEo9f2NFp9]>
+	at org.floj.core.AddressTest.stringification(AddressTest.java:70)
+
+getAltNetwork(org.floj.core.AddressTest)  Time elapsed: 0.091 sec  <<< ERROR!
+org.floj.core.AddressFormatException: No network found for 17kzeh4N8g49GFvdDzSf8PjaPfyoD1MndL
+	at org.floj.core.AddressTest.getAltNetwork(AddressTest.java:149)
+
+decoding(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 111 not in [115, 198]
+	at org.floj.core.AddressTest.decoding(AddressTest.java:80)
+
+comparisonCloneEqualTo(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 0 not in [35, 8]
+	at org.floj.core.AddressTest.comparisonCloneEqualTo(AddressTest.java:218)
+
+comparisonLessThan(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 0 not in [35, 8]
+	at org.floj.core.AddressTest.comparisonLessThan(AddressTest.java:236)
+
+roundtripBase58(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.AddressFormatException: No network found for 17kzeh4N8g49GFvdDzSf8PjaPfyoD1MndL
+	at org.floj.core.AddressTest.roundtripBase58(AddressTest.java:213)
+
+errorPaths(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<0> but was:<35>
+	at org.floj.core.AddressTest.errorPaths(AddressTest.java:115)
+
+comparisonBytesVsString(org.floj.core.AddressTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 0 not in [35, 8]
+	at org.floj.core.AddressTest.comparisonBytesVsString(AddressTest.java:255)
+

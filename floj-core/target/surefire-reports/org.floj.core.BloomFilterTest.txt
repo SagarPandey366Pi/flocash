@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.BloomFilterTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.001 sec <<< FAILURE! - in org.floj.core.BloomFilterTest
+walletTest(org.floj.core.BloomFilterTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.WrongNetworkException: Version code of address did not match acceptable versions for network: 128 not in [163]
+	at org.floj.core.BloomFilterTest.walletTest(BloomFilterTest.java:82)
+

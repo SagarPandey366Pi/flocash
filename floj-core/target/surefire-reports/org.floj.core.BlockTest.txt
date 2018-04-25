@@ -1,0 +1,48 @@
+-------------------------------------------------------------------------------
+Test set: org.floj.core.BlockTest
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 2, Errors: 9, Skipped: 0, Time elapsed: 0.009 sec <<< FAILURE! - in org.floj.core.BlockTest
+testBadTransactions(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testBadTransactions(BlockTest.java:127)
+
+testReceiveCoinbaseTransaction(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.NullPointerException
+	at org.floj.core.BlockTest.testReceiveCoinbaseTransaction(BlockTest.java:231)
+
+isBIPs(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+java.lang.NullPointerException
+	at org.floj.core.BlockTest.isBIPs(BlockTest.java:270)
+
+testProofOfWork(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testProofOfWork(BlockTest.java:98)
+
+testDate(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testDate(BlockTest.java:90)
+
+testWork(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<536879104> but was:<1048592>
+	at org.floj.core.BlockTest.testWork(BlockTest.java:77)
+
+testCoinbaseHeightTestnet(org.floj.core.BlockTest)  Time elapsed: 0.001 sec  <<< ERROR!
+java.lang.NullPointerException
+	at org.floj.core.BlockTest.testCoinbaseHeightTestnet(BlockTest.java:199)
+
+testUpdateLength(org.floj.core.BlockTest)  Time elapsed: 0.005 sec  <<< FAILURE!
+java.lang.AssertionError: expected:<71> but was:<72>
+	at org.floj.core.BlockTest.testUpdateLength(BlockTest.java:175)
+
+testHeaderParse(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testHeaderParse(BlockTest.java:143)
+
+testBlockVerification(org.floj.core.BlockTest)  Time elapsed: 0.001 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testBlockVerification(BlockTest.java:82)
+
+testFLOSerialization(org.floj.core.BlockTest)  Time elapsed: 0 sec  <<< ERROR!
+org.floj.core.ProtocolException: Claimed value length too large: 50331647
+	at org.floj.core.BlockTest.testFLOSerialization(BlockTest.java:155)
+

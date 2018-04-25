@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/floj-core/bitcoinj-core.iml" filepath="$PROJECT_DIR$/floj-core/bitcoinj-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/floj-parent.iml" filepath="$PROJECT_DIR$/floj-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flowallet/wallettemplate.iml" filepath="$PROJECT_DIR$/flowallet/wallettemplate.iml" />
+    </modules>
+  </component>
+</project>
