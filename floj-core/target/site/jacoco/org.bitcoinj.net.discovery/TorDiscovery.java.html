@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TorDiscovery.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bitcoinj</a> &gt; <a href="index.source.html" class="el_package">org.bitcoinj.net.discovery</a> &gt; <span class="el_source">TorDiscovery.java</span></div><h1>TorDiscovery.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2014 Miron Cuperman
+ * Copyright 2015 Andreas Schildbach
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.bitcoinj.net.discovery;
+
+import com.google.common.collect.*;
+import com.google.common.util.concurrent.*;
+import com.subgraph.orchid.*;
+import com.subgraph.orchid.circuits.path.*;
+import com.subgraph.orchid.data.*;
+import com.subgraph.orchid.data.exitpolicy.*;
+import org.bitcoinj.core.*;
+import org.bitcoinj.utils.*;
+import org.slf4j.*;
+
+import java.net.*;
+import java.util.*;
+import java.util.concurrent.*;
+
+import static com.google.common.base.Preconditions.*;
+import static java.util.Collections.*;
+
+/**
+ * &lt;p&gt;Supports peer discovery through Tor.&lt;/p&gt;
+ *
+ * &lt;p&gt;Failure to obtain at least four different peers through different exit nodes will cause
+ * a PeerDiscoveryException will be thrown during getPeers().
+ * &lt;/p&gt;
+ *
+ * &lt;p&gt;DNS seeds do not attempt to enumerate every peer on the network. If you want more peers
+ * to connect to, you need to discover them via other means (like addr broadcasts).&lt;/p&gt;
+ */
+public class TorDiscovery implements PeerDiscovery {
+<span class="nc" id="L48">    private static final Logger log = LoggerFactory.getLogger(TorDiscovery.class);</span>
+    public static final int MINIMUM_ROUTER_COUNT = 4;
+    public static final int ROUTER_LOOKUP_COUNT = 10;
+    public static final int MINIMUM_ROUTER_LOOKUP_COUNT = 6;
+    public static final int RECEIVE_RETRIES = 3;
+    public static final int RESOLVE_STREAM_ID = 0x1000; // An arbitrary stream ID
+    public static final int RESOLVE_CNAME = 0x00;
+    public static final int RESOLVE_ERROR = 0xf0;
+    public static final int RESOLVE_IPV4 = 0x04;
+    public static final int RESOLVE_IPV6 = 0x06;
+
+    private final String[] hostNames;
+    private final NetworkParameters netParams;
+    private final CircuitPathChooser pathChooser;
+    private final TorClient torClient;
+    private ListeningExecutorService threadPool;
+
+    /**
+     * Supports finding peers through Tor. Community run DNS entry points will be used.
+     *
+     * @param netParams Network parameters to be used for port information.
+     */
+    public TorDiscovery(NetworkParameters netParams, TorClient torClient) {
+<span class="nc" id="L71">        this(netParams.getDnsSeeds(), netParams, torClient);</span>
+<span class="nc" id="L72">    }</span>
+
+    /**
+     * Supports finding peers through Tor.
+     *
+     * @param hostNames Host names to be examined for seed addresses.
+     * @param netParams Network parameters to be used for port information.
+     * @param torClient an already-started Tor client.
+     */
+<span class="nc" id="L81">    public TorDiscovery(String[] hostNames, NetworkParameters netParams, TorClient torClient) {</span>
+<span class="nc" id="L82">        this.hostNames = hostNames;</span>
+<span class="nc" id="L83">        this.netParams = netParams;</span>
+
+<span class="nc" id="L85">        this.torClient = torClient;</span>
+<span class="nc" id="L86">        this.pathChooser = CircuitPathChooser.create(torClient.getConfig(), torClient.getDirectory());</span>
+<span class="nc" id="L87">    }</span>
+
+    private static class Lookup {
+        final Router router;
+        final InetAddress address;
+
+<span class="nc" id="L93">        Lookup(Router router, InetAddress address) {</span>
+<span class="nc" id="L94">            this.router = router;</span>
+<span class="nc" id="L95">            this.address = address;</span>
+<span class="nc" id="L96">        }</span>
+    }
+
+    @Override
+    public InetSocketAddress[] getPeers(long services, long timeoutValue, TimeUnit timeoutUnit) throws PeerDiscoveryException {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (hostNames == null)</span>
+<span class="nc" id="L102">            throw new PeerDiscoveryException(&quot;Unable to find any peers via DNS&quot;);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">        if (services != 0)</span>
+<span class="nc" id="L104">            throw new PeerDiscoveryException(&quot;DNS seeds cannot filter by services: &quot; + services);</span>
+
+<span class="nc" id="L106">        Set&lt;Router&gt; routers = Sets.newHashSet();</span>
+<span class="nc" id="L107">        ArrayList&lt;ExitTarget&gt; dummyTargets = Lists.newArrayList();</span>
+
+        // Collect exit nodes until we have enough
+<span class="nc bnc" id="L110" title="All 2 branches missed.">        while (routers.size() &lt; ROUTER_LOOKUP_COUNT) {</span>
+<span class="nc" id="L111">            Router router = pathChooser.chooseExitNodeForTargets(dummyTargets);</span>
+<span class="nc" id="L112">            routers.add(router);</span>
+<span class="nc" id="L113">        }</span>
+
+        try {
+<span class="nc" id="L116">            List&lt;Circuit&gt; circuits =</span>
+<span class="nc" id="L117">                getCircuits(torClient.getConfig().getCircuitBuildTimeout(), TimeUnit.MILLISECONDS, routers);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (circuits.isEmpty())</span>
+<span class="nc" id="L119">                throw new PeerDiscoveryException(&quot;Failed to open any circuit within &quot; +</span>
+<span class="nc" id="L120">                                                 String.valueOf(timeoutValue) + &quot; &quot; + timeoutUnit);</span>
+
+<span class="nc" id="L122">            Collection&lt;InetSocketAddress&gt; addresses = lookupAddresses(timeoutValue, timeoutUnit, circuits);</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">            if (addresses.size() &lt; MINIMUM_ROUTER_COUNT)</span>
+<span class="nc" id="L125">                throw new PeerDiscoveryException(&quot;Unable to find enough peers via Tor - got &quot; + addresses.size());</span>
+<span class="nc" id="L126">            ArrayList&lt;InetSocketAddress&gt; addressList = Lists.newArrayList();</span>
+<span class="nc" id="L127">            addressList.addAll(addresses);</span>
+<span class="nc" id="L128">            Collections.shuffle(addressList);</span>
+<span class="nc" id="L129">            return addressList.toArray(new InetSocketAddress[addressList.size()]);</span>
+<span class="nc" id="L130">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L131">            throw new PeerDiscoveryException(e);</span>
+        }
+    }
+
+    private List&lt;Circuit&gt; getCircuits(long timeoutValue, TimeUnit timeoutUnit, Set&lt;Router&gt; routers) throws InterruptedException {
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        checkArgument(routers.size() &gt;= MINIMUM_ROUTER_LOOKUP_COUNT, &quot;Set of {} routers is smaller than required minimum {}&quot;,</span>
+<span class="nc" id="L137">                      routers.size(), MINIMUM_ROUTER_LOOKUP_COUNT);</span>
+<span class="nc" id="L138">        createThreadPool(routers.size());</span>
+
+        try {
+<span class="nc" id="L141">            List&lt;ListenableFuture&lt;Circuit&gt;&gt; circuitFutures = Lists.newArrayList();</span>
+<span class="nc" id="L142">            final CountDownLatch doneSignal = new CountDownLatch(MINIMUM_ROUTER_LOOKUP_COUNT);</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            for (final Router router : routers) {</span>
+<span class="nc" id="L144">                ListenableFuture&lt;Circuit&gt; openCircuit = threadPool.submit(new Callable&lt;Circuit&gt;() {</span>
+                    @Override
+                    public Circuit call() throws Exception {
+<span class="nc" id="L147">                        return torClient.getCircuitManager().openInternalCircuitTo(Lists.newArrayList(router));</span>
+                    }
+                });
+<span class="nc" id="L150">                Futures.addCallback(openCircuit, new FutureCallback&lt;Circuit&gt;() {</span>
+                    @Override
+                    public void onSuccess(Circuit circuit) {
+<span class="nc" id="L153">                        doneSignal.countDown();</span>
+<span class="nc" id="L154">                    }</span>
+                    @Override
+                    public void onFailure(Throwable thrown) {
+<span class="nc" id="L157">                        doneSignal.countDown();</span>
+<span class="nc" id="L158">                    }</span>
+                });
+<span class="nc" id="L160">                circuitFutures.add(openCircuit);</span>
+<span class="nc" id="L161">            }</span>
+
+<span class="nc" id="L163">            boolean countedDown = doneSignal.await(timeoutValue, timeoutUnit);</span>
+
+            try {
+<span class="nc" id="L166">                List&lt;Circuit&gt; circuits = new ArrayList&lt;Circuit&gt;(Futures.successfulAsList(circuitFutures).get());</span>
+                // Any failures will result in null entries.  Remove them.
+<span class="nc" id="L168">                circuits.removeAll(singleton(null));</span>
+<span class="nc" id="L169">                int failures = routers.size() - circuits.size();</span>
+<span class="nc bnc" id="L170" title="All 4 branches missed.">                if (failures &gt; 0) log.warn(&quot;{} failures &quot; + (countedDown ? &quot;&quot; : &quot;(including timeout) &quot;) +</span>
+<span class="nc" id="L171">                                           &quot;opening DNS lookup circuits&quot;, failures);</span>
+<span class="nc" id="L172">                return circuits;</span>
+<span class="nc" id="L173">            } catch (ExecutionException e) {</span>
+                // Cannot happen, successfulAsList accepts failures
+<span class="nc" id="L175">                throw new RuntimeException(e);</span>
+            }
+        } finally {
+<span class="nc" id="L178">            shutdownThreadPool();</span>
+<span class="nc" id="L179">        }</span>
+    }
+
+    private Collection&lt;InetSocketAddress&gt; lookupAddresses(long timeoutValue, TimeUnit timeoutUnit, List&lt;Circuit&gt; circuits) throws InterruptedException {
+<span class="nc" id="L183">        createThreadPool(circuits.size() * hostNames.length);</span>
+
+        try {
+<span class="nc" id="L186">            List&lt;ListenableFuture&lt;Lookup&gt;&gt; lookupFutures = Lists.newArrayList();</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            for (final Circuit circuit : circuits) {</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                for (final String seed : hostNames) {</span>
+<span class="nc" id="L189">                    lookupFutures.add(threadPool.submit(new Callable&lt;Lookup&gt;() {</span>
+                        @Override
+                        public Lookup call() throws Exception {
+<span class="nc" id="L192">                            return new Lookup(circuit.getFinalCircuitNode().getRouter(), lookup(circuit, seed));</span>
+                        }
+                    }));
+                }
+<span class="nc" id="L196">            }</span>
+
+<span class="nc" id="L198">            threadPool.awaitTermination(timeoutValue, timeoutUnit);</span>
+<span class="nc" id="L199">            int timeouts = 0;</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            for (ListenableFuture&lt;Lookup&gt; future : lookupFutures) {</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                if (!future.isDone()) {</span>
+<span class="nc" id="L202">                    timeouts++;</span>
+<span class="nc" id="L203">                    future.cancel(true);</span>
+                }
+<span class="nc" id="L205">            }</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (timeouts &gt; 0)</span>
+<span class="nc" id="L207">                log.warn(&quot;{} DNS lookups timed out&quot;, timeouts);</span>
+
+            try {
+<span class="nc" id="L210">                List&lt;Lookup&gt; lookups = new ArrayList&lt;Lookup&gt;(Futures.successfulAsList(lookupFutures).get());</span>
+                // Any failures will result in null entries.  Remove them.
+<span class="nc" id="L212">                lookups.removeAll(singleton(null));</span>
+
+                // Use a map to enforce one result per exit node
+                // TODO: randomize result selection better
+<span class="nc" id="L216">                Map&lt;HexDigest, InetSocketAddress&gt; lookupMap = Maps.newHashMap();</span>
+
+<span class="nc bnc" id="L218" title="All 2 branches missed.">                for (Lookup lookup : lookups) {</span>
+<span class="nc" id="L219">                    InetSocketAddress address = new InetSocketAddress(lookup.address, netParams.getPort());</span>
+<span class="nc" id="L220">                    lookupMap.put(lookup.router.getIdentityHash(), address);</span>
+<span class="nc" id="L221">                }</span>
+
+<span class="nc" id="L223">                return lookupMap.values();</span>
+<span class="nc" id="L224">            } catch (ExecutionException e) {</span>
+                // Cannot happen, successfulAsList accepts failures
+<span class="nc" id="L226">                throw new RuntimeException(e);</span>
+            }
+        } finally {
+<span class="nc" id="L229">            shutdownThreadPool();</span>
+<span class="nc" id="L230">        }</span>
+    }
+
+    private synchronized void shutdownThreadPool() {
+<span class="nc" id="L234">        threadPool.shutdownNow();</span>
+<span class="nc" id="L235">        threadPool = null;</span>
+<span class="nc" id="L236">    }</span>
+
+    private synchronized void createThreadPool(int size) {
+<span class="nc" id="L239">        threadPool = MoreExecutors.listeningDecorator(</span>
+<span class="nc" id="L240">                Executors.newFixedThreadPool(size, new ContextPropagatingThreadFactory(&quot;Tor DNS discovery&quot;)));</span>
+<span class="nc" id="L241">    }</span>
+
+    private InetAddress lookup(Circuit circuit, String seed) throws UnknownHostException {
+        // Send a resolve cell to the exit node
+<span class="nc" id="L245">        RelayCell cell = circuit.createRelayCell(RelayCell.RELAY_RESOLVE, RESOLVE_STREAM_ID, circuit.getFinalCircuitNode());</span>
+<span class="nc" id="L246">        cell.putString(seed);</span>
+<span class="nc" id="L247">        circuit.sendRelayCell(cell);</span>
+
+        // Wait a few cell timeout periods (3 * 20 sec) for replies, in case the path is slow
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        for (int i = 0 ; i &lt; RECEIVE_RETRIES; i++) {</span>
+<span class="nc" id="L251">            RelayCell res = circuit.receiveRelayCell();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (res != null) {</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">                while (res.cellBytesRemaining() &gt; 0) {</span>
+<span class="nc" id="L254">                    int type = res.getByte();</span>
+<span class="nc" id="L255">                    int len = res.getByte();</span>
+<span class="nc" id="L256">                    byte[] value = new byte[len];</span>
+<span class="nc" id="L257">                    res.getByteArray(value);</span>
+<span class="nc" id="L258">                    int ttl = res.getInt();</span>
+
+<span class="nc bnc" id="L260" title="All 4 branches missed.">                    if (type == RESOLVE_CNAME || type &gt;= RESOLVE_ERROR) {</span>
+                        // TODO handle .onion CNAME replies
+<span class="nc" id="L262">                        throw new RuntimeException(new String(value));</span>
+<span class="nc bnc" id="L263" title="All 4 branches missed.">                    } else if (type == RESOLVE_IPV4 || type == RESOLVE_IPV6) {</span>
+<span class="nc" id="L264">                        return InetAddress.getByAddress(value);</span>
+                    }
+<span class="nc" id="L266">                }</span>
+                break;
+            }
+        }
+<span class="nc" id="L270">        throw new RuntimeException(&quot;Could not look up &quot; + seed);</span>
+    }
+
+    @Override
+    public synchronized void shutdown() {
+<span class="nc bnc" id="L275" title="All 2 branches missed.">        if (threadPool != null) {</span>
+<span class="nc" id="L276">            shutdownThreadPool();</span>
+        }
+<span class="nc" id="L278">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

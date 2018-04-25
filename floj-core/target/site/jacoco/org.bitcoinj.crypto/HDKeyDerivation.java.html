@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HDKeyDerivation.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bitcoinj</a> &gt; <a href="index.source.html" class="el_package">org.bitcoinj.crypto</a> &gt; <span class="el_source">HDKeyDerivation.java</span></div><h1>HDKeyDerivation.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2013 Matija Mazi.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.bitcoinj.crypto;
+
+import com.google.common.collect.*;
+import org.bitcoinj.core.*;
+import org.spongycastle.math.ec.*;
+
+import java.math.*;
+import java.nio.*;
+import java.security.*;
+import java.util.*;
+
+import static com.google.common.base.Preconditions.*;
+
+/**
+ * Implementation of the &lt;a href=&quot;https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki&quot;&gt;BIP 32&lt;/a&gt;
+ * deterministic wallet child key generation algorithm.
+ */
+public final class HDKeyDerivation {
+    static {
+        // Init proper random number generator, as some old Android installations have bugs that make it unsecure.
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (Utils.isAndroidRuntime())</span>
+<span class="nc" id="L38">            new LinuxSecureRandom();</span>
+
+<span class="fc" id="L40">        RAND_INT = new BigInteger(256, new SecureRandom());</span>
+<span class="fc" id="L41">    }</span>
+
+    // Some arbitrary random number. Doesn't matter what it is.
+    private static final BigInteger RAND_INT;
+
+<span class="nc" id="L46">    private HDKeyDerivation() { }</span>
+
+    /**
+     * Child derivation may fail (although with extremely low probability); in such case it is re-attempted.
+     * This is the maximum number of re-attempts (to avoid an infinite loop in case of bugs etc.).
+     */
+    public static final int MAX_CHILD_DERIVATION_ATTEMPTS = 100;
+
+    /**
+     * Generates a new deterministic key from the given seed, which can be any arbitrary byte array. However resist
+     * the temptation to use a string as the seed - any key derived from a password is likely to be weak and easily
+     * broken by attackers (this is not theoretical, people have had money stolen that way). This method checks
+     * that the given seed is at least 64 bits long.
+     *
+     * @throws HDDerivationException if generated master key is invalid (private key 0 or &gt;= n).
+     * @throws IllegalArgumentException if the seed is less than 8 bytes and could be brute forced.
+     */
+    public static DeterministicKey createMasterPrivateKey(byte[] seed) throws HDDerivationException {
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        checkArgument(seed.length &gt; 8, &quot;Seed is too short and could be brute forced&quot;);</span>
+        // Calculate I = HMAC-SHA512(key=&quot;FLO seed&quot;, msg=S)
+<span class="fc" id="L66">        byte[] i = HDUtils.hmacSha512(HDUtils.createHmacSha512Digest(&quot;FLO seed&quot;.getBytes()), seed);</span>
+        // Split I into two 32-byte sequences, Il and Ir.
+        // Use Il as master secret key, and Ir as master chain code.
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        checkState(i.length == 64, i.length);</span>
+<span class="fc" id="L70">        byte[] il = Arrays.copyOfRange(i, 0, 32);</span>
+<span class="fc" id="L71">        byte[] ir = Arrays.copyOfRange(i, 32, 64);</span>
+<span class="fc" id="L72">        Arrays.fill(i, (byte)0);</span>
+<span class="fc" id="L73">        DeterministicKey masterPrivKey = createMasterPrivKeyFromBytes(il, ir);</span>
+<span class="fc" id="L74">        Arrays.fill(il, (byte)0);</span>
+<span class="fc" id="L75">        Arrays.fill(ir, (byte)0);</span>
+        // Child deterministic keys will chain up to their parents to find the keys.
+<span class="fc" id="L77">        masterPrivKey.setCreationTimeSeconds(Utils.currentTimeSeconds());</span>
+<span class="fc" id="L78">        return masterPrivKey;</span>
+    }
+
+    /**
+     * @throws HDDerivationException if privKeyBytes is invalid (0 or &gt;= n).
+     */
+    public static DeterministicKey createMasterPrivKeyFromBytes(byte[] privKeyBytes, byte[] chainCode) throws HDDerivationException {
+<span class="fc" id="L85">        BigInteger priv = new BigInteger(1, privKeyBytes);</span>
+<span class="fc" id="L86">        assertNonZero(priv, &quot;Generated master key is invalid.&quot;);</span>
+<span class="fc" id="L87">        assertLessThanN(priv, &quot;Generated master key is invalid.&quot;);</span>
+<span class="fc" id="L88">        return new DeterministicKey(ImmutableList.&lt;ChildNumber&gt;of(), chainCode, priv, null);</span>
+    }
+
+    public static DeterministicKey createMasterPubKeyFromBytes(byte[] pubKeyBytes, byte[] chainCode) {
+<span class="fc" id="L92">        return new DeterministicKey(ImmutableList.&lt;ChildNumber&gt;of(), chainCode, new LazyECPoint(ECKey.CURVE.getCurve(), pubKeyBytes), null, null);</span>
+    }
+
+    /**
+     * Derives a key given the &quot;extended&quot; child number, ie. the 0x80000000 bit of the value that you
+     * pass for {@code childNumber} will determine whether to use hardened derivation or not.
+     * Consider whether your code would benefit from the clarity of the equivalent, but explicit, form
+     * of this method that takes a {@code ChildNumber} rather than an {@code int}, for example:
+     * {@code deriveChildKey(parent, new ChildNumber(childNumber, true))}
+     * where the value of the hardened bit of {@code childNumber} is zero.
+     */
+    public static DeterministicKey deriveChildKey(DeterministicKey parent, int childNumber) {
+<span class="fc" id="L104">        return deriveChildKey(parent, new ChildNumber(childNumber));</span>
+    }
+
+    /**
+     * Derives a key of the &quot;extended&quot; child number, ie. with the 0x80000000 bit specifying whether to use
+     * hardened derivation or not. If derivation fails, tries a next child.
+     */
+    public static DeterministicKey deriveThisOrNextChildKey(DeterministicKey parent, int childNumber) {
+<span class="fc" id="L112">        int nAttempts = 0;</span>
+<span class="fc" id="L113">        ChildNumber child = new ChildNumber(childNumber);</span>
+<span class="fc" id="L114">        boolean isHardened = child.isHardened();</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        while (nAttempts &lt; MAX_CHILD_DERIVATION_ATTEMPTS) {</span>
+            try {
+<span class="fc" id="L117">                child = new ChildNumber(child.num() + nAttempts, isHardened);</span>
+<span class="fc" id="L118">                return deriveChildKey(parent, child);</span>
+<span class="nc" id="L119">            } catch (HDDerivationException ignore) { }</span>
+<span class="nc" id="L120">            nAttempts++;</span>
+        }
+<span class="nc" id="L122">        throw new HDDerivationException(&quot;Maximum number of child derivation attempts reached, this is probably an indication of a bug.&quot;);</span>
+
+    }
+
+    /**
+     * @throws HDDerivationException if private derivation is attempted for a public-only parent key, or
+     * if the resulting derived key is invalid (eg. private key == 0).
+     */
+    public static DeterministicKey deriveChildKey(DeterministicKey parent, ChildNumber childNumber) throws HDDerivationException {
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (!parent.hasPrivKey()) {</span>
+<span class="fc" id="L132">            RawKeyBytes rawKey = deriveChildKeyBytesFromPublic(parent, childNumber, PublicDeriveMode.NORMAL);</span>
+<span class="fc" id="L133">            return new DeterministicKey(</span>
+<span class="fc" id="L134">                    HDUtils.append(parent.getPath(), childNumber),</span>
+                    rawKey.chainCode,
+<span class="fc" id="L136">                    new LazyECPoint(ECKey.CURVE.getCurve(), rawKey.keyBytes),</span>
+                    null,
+                    parent);
+        } else {
+<span class="fc" id="L140">            RawKeyBytes rawKey = deriveChildKeyBytesFromPrivate(parent, childNumber);</span>
+<span class="fc" id="L141">            return new DeterministicKey(</span>
+<span class="fc" id="L142">                    HDUtils.append(parent.getPath(), childNumber),</span>
+                    rawKey.chainCode,
+                    new BigInteger(1, rawKey.keyBytes),
+                    parent);
+        }
+    }
+
+    public static RawKeyBytes deriveChildKeyBytesFromPrivate(DeterministicKey parent,
+                                                              ChildNumber childNumber) throws HDDerivationException {
+<span class="fc" id="L151">        checkArgument(parent.hasPrivKey(), &quot;Parent key must have private key bytes for this method.&quot;);</span>
+<span class="fc" id="L152">        byte[] parentPublicKey = parent.getPubKeyPoint().getEncoded(true);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        checkState(parentPublicKey.length == 33, &quot;Parent pubkey must be 33 bytes, but is &quot; + parentPublicKey.length);</span>
+<span class="fc" id="L154">        ByteBuffer data = ByteBuffer.allocate(37);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (childNumber.isHardened()) {</span>
+<span class="fc" id="L156">            data.put(parent.getPrivKeyBytes33());</span>
+        } else {
+<span class="fc" id="L158">            data.put(parentPublicKey);</span>
+        }
+<span class="fc" id="L160">        data.putInt(childNumber.i());</span>
+<span class="fc" id="L161">        byte[] i = HDUtils.hmacSha512(parent.getChainCode(), data.array());</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        checkState(i.length == 64, i.length);</span>
+<span class="fc" id="L163">        byte[] il = Arrays.copyOfRange(i, 0, 32);</span>
+<span class="fc" id="L164">        byte[] chainCode = Arrays.copyOfRange(i, 32, 64);</span>
+<span class="fc" id="L165">        BigInteger ilInt = new BigInteger(1, il);</span>
+<span class="fc" id="L166">        assertLessThanN(ilInt, &quot;Illegal derived key: I_L &gt;= n&quot;);</span>
+<span class="fc" id="L167">        final BigInteger priv = parent.getPrivKey();</span>
+<span class="fc" id="L168">        BigInteger ki = priv.add(ilInt).mod(ECKey.CURVE.getN());</span>
+<span class="fc" id="L169">        assertNonZero(ki, &quot;Illegal derived key: derived private key equals 0.&quot;);</span>
+<span class="fc" id="L170">        return new RawKeyBytes(ki.toByteArray(), chainCode);</span>
+    }
+
+<span class="pc" id="L173">    public enum PublicDeriveMode {</span>
+<span class="fc" id="L174">        NORMAL,</span>
+<span class="fc" id="L175">        WITH_INVERSION</span>
+    }
+
+    public static RawKeyBytes deriveChildKeyBytesFromPublic(DeterministicKey parent, ChildNumber childNumber, PublicDeriveMode mode) throws HDDerivationException {
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        checkArgument(!childNumber.isHardened(), &quot;Can't use private derivation with public keys only.&quot;);</span>
+<span class="fc" id="L180">        byte[] parentPublicKey = parent.getPubKeyPoint().getEncoded(true);</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        checkState(parentPublicKey.length == 33, &quot;Parent pubkey must be 33 bytes, but is &quot; + parentPublicKey.length);</span>
+<span class="fc" id="L182">        ByteBuffer data = ByteBuffer.allocate(37);</span>
+<span class="fc" id="L183">        data.put(parentPublicKey);</span>
+<span class="fc" id="L184">        data.putInt(childNumber.i());</span>
+<span class="fc" id="L185">        byte[] i = HDUtils.hmacSha512(parent.getChainCode(), data.array());</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">        checkState(i.length == 64, i.length);</span>
+<span class="fc" id="L187">        byte[] il = Arrays.copyOfRange(i, 0, 32);</span>
+<span class="fc" id="L188">        byte[] chainCode = Arrays.copyOfRange(i, 32, 64);</span>
+<span class="fc" id="L189">        BigInteger ilInt = new BigInteger(1, il);</span>
+<span class="fc" id="L190">        assertLessThanN(ilInt, &quot;Illegal derived key: I_L &gt;= n&quot;);</span>
+
+<span class="fc" id="L192">        final BigInteger N = ECKey.CURVE.getN();</span>
+        ECPoint Ki;
+<span class="pc bpc" id="L194" title="1 of 3 branches missed.">        switch (mode) {</span>
+            case NORMAL:
+<span class="fc" id="L196">                Ki = ECKey.publicPointFromPrivate(ilInt).add(parent.getPubKeyPoint());</span>
+<span class="fc" id="L197">                break;</span>
+            case WITH_INVERSION:
+                // This trick comes from Gregory Maxwell. Check the homomorphic properties of our curve hold. The
+                // below calculations should be redundant and give the same result as NORMAL but if the precalculated
+                // tables have taken a bit flip will yield a different answer. This mode is used when vending a key
+                // to perform a last-ditch sanity check trying to catch bad RAM.
+<span class="fc" id="L203">                Ki = ECKey.publicPointFromPrivate(ilInt.add(RAND_INT).mod(N));</span>
+<span class="fc" id="L204">                BigInteger additiveInverse = RAND_INT.negate().mod(N);</span>
+<span class="fc" id="L205">                Ki = Ki.add(ECKey.publicPointFromPrivate(additiveInverse));</span>
+<span class="fc" id="L206">                Ki = Ki.add(parent.getPubKeyPoint());</span>
+<span class="fc" id="L207">                break;</span>
+<span class="nc" id="L208">            default: throw new AssertionError();</span>
+        }
+
+<span class="fc" id="L211">        assertNonInfinity(Ki, &quot;Illegal derived key: derived public key equals infinity.&quot;);</span>
+<span class="fc" id="L212">        return new RawKeyBytes(Ki.getEncoded(true), chainCode);</span>
+    }
+
+    private static void assertNonZero(BigInteger integer, String errorMessage) {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (integer.equals(BigInteger.ZERO))</span>
+<span class="nc" id="L217">            throw new HDDerivationException(errorMessage);</span>
+<span class="fc" id="L218">    }</span>
+
+    private static void assertNonInfinity(ECPoint point, String errorMessage) {
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (point.equals(ECKey.CURVE.getCurve().getInfinity()))</span>
+<span class="nc" id="L222">            throw new HDDerivationException(errorMessage);</span>
+<span class="fc" id="L223">    }</span>
+
+    private static void assertLessThanN(BigInteger integer, String errorMessage) {
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if (integer.compareTo(ECKey.CURVE.getN()) &gt; 0)</span>
+<span class="nc" id="L227">            throw new HDDerivationException(errorMessage);</span>
+<span class="fc" id="L228">    }</span>
+
+    public static class RawKeyBytes {
+        public final byte[] keyBytes, chainCode;
+
+<span class="fc" id="L233">        public RawKeyBytes(byte[] keyBytes, byte[] chainCode) {</span>
+<span class="fc" id="L234">            this.keyBytes = keyBytes;</span>
+<span class="fc" id="L235">            this.chainCode = chainCode;</span>
+<span class="fc" id="L236">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

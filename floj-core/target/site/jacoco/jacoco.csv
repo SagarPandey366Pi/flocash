@@ -1,0 +1,452 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+bitcoinj,org.bitcoinj.params,Networks,3,60,1,5,1,18,2,7,1,5
+bitcoinj,org.bitcoinj.params,RegTestParams,37,42,3,1,11,14,5,3,3,3
+bitcoinj,org.bitcoinj.params,AbstractFLONetParams,28,203,5,15,7,42,7,14,2,9
+bitcoinj,org.bitcoinj.params,MainNetParams,0,1473,0,2,0,38,0,4,0,3
+bitcoinj,org.bitcoinj.params,TestNet3Params,91,134,16,2,18,32,9,5,1,4
+bitcoinj,org.bitcoinj.params,TestNet2Params,2,100,1,1,1,29,2,2,1,2
+bitcoinj,org.bitcoinj.params,UnitTestParams,2,96,0,2,1,27,1,3,1,2
+bitcoinj,org.bitcoinj.core.listeners,AbstractPeerDataEventListener,4,5,0,0,2,3,2,3,2,3
+bitcoinj,org.bitcoinj.core.listeners,AbstractPeerEventListener,13,0,0,0,9,0,9,0,9,0
+bitcoinj,org.bitcoinj.core.listeners,AbstractBlockChainListener,8,0,0,0,5,0,5,0,5,0
+bitcoinj,org.bitcoinj.core.listeners,AbstractPeerConnectionEventListener,3,3,0,0,3,1,3,1,3,1
+bitcoinj,org.bitcoinj.core.listeners,DownloadProgressTracker,168,0,20,0,40,0,19,0,9,0
+bitcoinj,org.bitcoinj.signers,TransactionSigner.ProposedTransaction,0,11,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.signers,CustomTransactionSigner,27,94,3,5,8,22,3,5,0,4
+bitcoinj,org.bitcoinj.signers,LocalTransactionSigner,9,124,0,8,4,31,0,8,0,4
+bitcoinj,org.bitcoinj.signers,CustomTransactionSigner.SignatureAndKey,0,12,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.signers,StatelessTransactionSigner,4,3,0,0,2,1,2,1,2,1
+bitcoinj,org.bitcoinj.signers,TransactionSigner.MissingSignatureException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.signers,MissingSigResolutionSigner,8,141,2,24,3,32,4,14,2,3
+bitcoinj,org.bitcoinj.wallet.listeners,AbstractWalletEventListener,25,0,0,0,16,0,9,0,9,0
+bitcoinj,org.bitcoinj.wallet.listeners,AbstractKeyChainEventListener,1,3,0,0,1,1,1,1,1,1
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException,0,8,0,0,0,4,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocol,125,411,18,34,29,96,18,20,2,10
+bitcoinj,org.bitcoinj.protocols.payments,PaymentSession,205,324,20,38,43,64,30,27,13,15
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocol.Ack,9,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidPaymentURL,8,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidPaymentRequestURL,8,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidVersion,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.PkiVerificationException,8,7,0,0,4,3,2,1,2,1
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocol.PkiVerificationData,26,19,0,0,8,7,1,1,1,1
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.Expired,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidPkiType,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidPkiData,8,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentSession.new Callable() {...},65,0,0,0,15,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentSession.new Callable() {...},38,0,0,0,6,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidOutputs,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocolException.InvalidNetwork,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.payments,PaymentProtocol.Output,0,9,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.uri,RequiredFieldValidationException,5,4,0,0,2,2,1,1,1,1
+bitcoinj,org.bitcoinj.uri,FLOURIParseException,0,9,0,0,0,4,0,2,0,2
+bitcoinj,org.bitcoinj.uri,FLOURI,41,557,4,58,8,113,4,42,0,15
+bitcoinj,org.bitcoinj.uri,OptionalFieldValidationException,4,5,0,0,2,2,1,1,1,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientState,39,372,5,19,11,96,5,26,0,19
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerListener.ServerHandler,0,42,0,0,0,6,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV2ServerState.new FutureCallback() {...},0,39,0,0,0,9,0,3,0,3
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClient.InitStep,9,89,0,0,0,9,2,2,2,2
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannel.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,StoredClientChannel,118,50,5,2,7,16,4,3,1,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClient,144,990,25,72,25,253,28,44,3,16
+bitcoinj,org.bitcoinj.protocols.channels,StoredPaymentChannelServerStates,163,392,12,20,30,93,15,18,4,13
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelCloseException,0,20,0,0,0,5,0,3,0,3
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientConnection,46,68,0,0,10,13,5,5,5,5
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannels.Builder,513,98,67,7,138,29,65,8,29,7
+bitcoinj,org.bitcoinj.protocols.channels,PaymentIncrementAck,0,15,0,0,0,6,0,3,0,3
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannels.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV1ClientState,16,487,8,18,3,104,8,24,0,19
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannels.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientConnection.new IPaymentChannelClient.ClientConnection() {...},23,40,1,1,3,7,2,4,1,4
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientConnection.new ProtobufConnection.Listener() {...},7,33,0,0,2,9,0,4,0,4
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientState.IncrementedPayment,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerListener.new StreamConnectionFactory() {...},0,21,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClient.new Object() {...},10,69,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClient.new Runnable() {...},0,19,0,0,0,5,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.new Descriptors.FileDescriptor.InternalDescriptorAssigner() {...},8,0,0,0,3,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannel.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannel.Builder,677,355,87,19,166,101,98,15,45,15
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerListener,0,55,0,0,0,14,0,3,0,3
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientState.new WalletCoinsReceivedEventListener() {...},8,56,1,5,0,12,1,4,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientState.new FutureCallback() {...},4,10,0,0,2,3,1,2,1,2
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannels,144,223,10,17,32,60,29,20,21,14
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannel,178,507,31,45,40,130,50,38,23,23
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerListener.ServerHandler.new PaymentChannelServer.ServerConnection() {...},5,43,1,1,1,10,1,5,0,5
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerListener.ServerHandler.new ProtobufConnection.Listener() {...},11,64,2,2,2,14,2,4,0,4
+bitcoinj,org.bitcoinj.protocols.channels,StoredPaymentChannelClientStates.new TimerTask() {...},5,32,0,0,2,7,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,StoredPaymentChannelServerStates.new TimerTask() {...},5,21,0,0,2,5,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer.InitStep,9,59,0,0,0,6,2,2,2,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerState.new FutureCallback() {...},21,38,0,0,6,7,1,2,1,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerState,12,520,8,36,2,106,8,29,0,15
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannel,214,648,47,56,52,160,67,42,23,29
+bitcoinj,org.bitcoinj.protocols.channels,ServerState,89,0,0,0,12,0,4,0,4,0
+bitcoinj,org.bitcoinj.protocols.channels,ServerConnectionEventHandler,19,7,2,0,7,2,2,2,1,2
+bitcoinj,org.bitcoinj.protocols.channels,StoredPaymentChannelClientStates,248,552,23,39,40,128,24,28,4,17
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelCloseException.CloseReason,9,109,0,0,0,11,2,2,2,2
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannels,144,223,10,17,32,60,29,20,21,14
+bitcoinj,org.bitcoinj.protocols.channels,StateMachine,51,71,3,5,4,14,4,6,1,5
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServerState.State,5,93,0,0,0,9,1,3,1,3
+bitcoinj,org.bitcoinj.protocols.channels,ValueOutOfRangeException,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV2ServerState,44,358,3,15,7,78,2,22,0,15
+bitcoinj,org.bitcoinj.protocols.channels,ClientState.StoredClientPaymentChannels.Builder,513,98,68,6,138,29,66,7,29,7
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV1ServerState,60,446,7,21,9,93,5,23,1,13
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClientState.State,5,103,0,0,0,10,1,3,1,3
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.new Descriptors.FileDescriptor.InternalDescriptorAssigner() {...},8,0,0,0,3,0,2,0,2,0
+bitcoinj,org.bitcoinj.protocols.channels,ServerState.StoredServerPaymentChannel.Builder,498,283,61,17,122,82,72,15,35,13
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV1ServerState.new FutureCallback() {...},0,39,0,0,0,9,0,3,0,3
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelV2ClientState,9,390,4,12,1,83,5,19,1,15
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer.new FutureCallback() {...},10,28,0,2,3,4,1,3,1,2
+bitcoinj,org.bitcoinj.protocols.channels,StoredServerChannel,80,102,4,11,6,33,4,11,1,6
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer.new Runnable() {...},0,21,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer.new Object() {...},6,41,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer.new FutureCallback() {...},14,41,1,1,4,9,2,2,1,2
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelClient.VersionSelector,14,76,5,9,2,11,5,10,1,6
+bitcoinj,org.bitcoinj.protocols.channels,ClientState,101,0,0,0,12,0,4,0,4,0
+bitcoinj,org.bitcoinj.protocols.channels,PaymentChannelServer,177,808,25,61,32,213,26,37,1,16
+bitcoinj,org.bitcoinj.core,StoredBlock,47,175,6,12,3,34,8,14,2,11
+bitcoinj,org.bitcoinj.core,PeerGroup.new Object() {...},3,23,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.core,PeerGroup.new FutureCallback() {...},14,35,0,2,4,7,1,3,1,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new PeerConnectedEventListener() {...},0,37,0,2,0,6,0,3,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new PeerConnectedEventListener() {...},0,37,0,2,0,6,0,3,0,2
+bitcoinj,org.bitcoinj.core,TransactionOutputChanges,0,195,0,8,0,37,0,7,0,3
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},0,25,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,UTXO,87,282,14,8,10,59,12,13,3,11
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},22,39,4,4,8,8,3,3,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,22,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,65,0,2,0,12,0,3,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Object() {...},2,17,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.core,GetAddrMessage,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.core,GetBlocksMessage,99,118,17,5,10,26,12,8,3,6
+bitcoinj,org.bitcoinj.core,Peer.8.new FutureCallback() {...},7,15,0,0,2,3,1,2,1,2
+bitcoinj,org.bitcoinj.core,FullPrunedBlockChain.Verifier,0,49,0,2,0,12,0,3,0,2
+bitcoinj,org.bitcoinj.core,Transaction.SigHash,9,104,0,0,0,13,2,3,2,3
+bitcoinj,org.bitcoinj.core,PeerGroup.LocalhostCheckState,9,49,0,0,0,5,2,2,2,2
+bitcoinj,org.bitcoinj.core,TxConfidenceTable,84,146,7,9,17,41,6,9,1,6
+bitcoinj,org.bitcoinj.core,UTXOProviderException,16,0,0,0,8,0,4,0,4,0
+bitcoinj,org.bitcoinj.core,CheckpointManager,483,0,40,0,101,0,30,0,10,0
+bitcoinj,org.bitcoinj.core,NetworkParameters,79,285,18,26,22,76,22,41,9,32
+bitcoinj,org.bitcoinj.core,PrunedException,11,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.core,BloomFilter,121,705,25,63,16,116,29,36,4,16
+bitcoinj,org.bitcoinj.core,VersionMessage,339,345,42,12,40,66,30,11,6,8
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},0,25,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},20,121,8,12,6,24,8,6,0,3
+bitcoinj,org.bitcoinj.core,InventoryItem,18,50,5,5,1,9,6,3,1,3
+bitcoinj,org.bitcoinj.core,TransactionInput.ConnectionResult,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.core,VerificationException.EmptyInputsOrOutputs,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,MessageSerializer,0,29,0,0,0,5,0,5,0,5
+bitcoinj,org.bitcoinj.core,TransactionBroadcast,27,213,4,10,3,51,4,14,0,11
+bitcoinj,org.bitcoinj.core,VerificationException.DuplicatedOutPoint,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,AddressMessage,52,162,5,9,11,31,9,8,4,6
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.new Runnable() {...},54,0,0,0,7,0,2,0,2,0
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.new Runnable() {...},36,0,0,0,6,0,2,0,2,0
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.new Runnable() {...},33,0,2,0,7,0,3,0,2,0
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.new NewBestBlockListener() {...},0,27,0,2,0,5,0,3,0,2
+bitcoinj,org.bitcoinj.core,Block,189,1479,29,115,40,305,29,112,6,63
+bitcoinj,org.bitcoinj.core,TransactionConfidence.Source,5,43,0,0,0,4,1,3,1,3
+bitcoinj,org.bitcoinj.core,UTXOsMessage,132,283,14,26,10,53,19,12,5,6
+bitcoinj,org.bitcoinj.core,WrongNetworkException,0,22,0,0,0,5,0,1,0,1
+bitcoinj,org.bitcoinj.core,Coin,63,270,3,25,9,49,12,37,9,26
+bitcoinj,org.bitcoinj.core,FullPrunedBlockChain,200,1015,25,103,46,221,29,55,4,16
+bitcoinj,org.bitcoinj.core,VerificationException,0,13,0,0,0,6,0,3,0,3
+bitcoinj,org.bitcoinj.core,TransactionBroadcast.ConfidenceChange,6,86,5,3,0,12,4,2,0,2
+bitcoinj,org.bitcoinj.core,RejectedTransactionException,6,11,0,0,2,4,2,1,2,1
+bitcoinj,org.bitcoinj.core,Utils.Pair,0,16,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},9,47,1,3,3,12,1,3,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},27,30,1,1,9,9,1,2,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},0,20,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,VerificationException.UnexpectedCoinbaseInput,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,PeerGroup.new KeyChainEventListener() {...},0,12,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,RejectMessage.RejectCode,7,137,1,3,1,14,2,5,1,4
+bitcoinj,org.bitcoinj.core,PeerGroup.new ScriptsChangeEventListener() {...},6,6,0,0,2,1,1,1,1,1
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},63,242,15,25,8,46,13,10,0,3
+bitcoinj,org.bitcoinj.core,PeerGroup.new Runnable() {...},11,0,0,0,3,0,2,0,2,0
+bitcoinj,org.bitcoinj.core,PeerGroup.new Comparator() {...},0,35,1,1,0,6,1,2,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.new WalletCoinsReceivedEventListener() {...},6,38,2,6,1,8,2,4,0,2
+bitcoinj,org.bitcoinj.core,Transaction.Purpose,5,83,0,0,0,8,1,3,1,3
+bitcoinj,org.bitcoinj.core,HeadersMessage,45,115,6,8,7,26,6,8,1,6
+bitcoinj,org.bitcoinj.core,PeerGroup,1436,2361,113,151,281,507,130,119,46,71
+bitcoinj,org.bitcoinj.core,ChildMessage,0,86,0,10,0,28,0,15,0,10
+bitcoinj,org.bitcoinj.core,StoredUndoableBlock,38,30,6,0,6,12,7,4,4,4
+bitcoinj,org.bitcoinj.core,AbstractBlockChain,278,1413,27,133,55,298,31,92,7,36
+bitcoinj,org.bitcoinj.core,DummySerializer,65,10,0,0,13,4,13,3,13,3
+bitcoinj,org.bitcoinj.core,Context,47,113,3,5,11,40,4,12,1,11
+bitcoinj,org.bitcoinj.core,NotFoundMessage,0,22,0,0,0,8,0,4,0,4
+bitcoinj,org.bitcoinj.core,PartialMerkleTree,123,477,22,46,16,89,19,30,3,12
+bitcoinj,org.bitcoinj.core,ECKey.KeyIsEncryptedException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.core,Transaction.new Comparator() {...},0,42,0,6,0,9,0,5,0,2
+bitcoinj,org.bitcoinj.core,Transaction.new Comparator() {...},0,26,0,2,0,5,0,3,0,2
+bitcoinj,org.bitcoinj.core,AddressFormatException,3,4,0,0,2,2,1,1,1,1
+bitcoinj,org.bitcoinj.core,VerificationException.LargerThanMaxBlockSize,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,TransactionOutPoint,73,220,11,17,14,56,10,22,2,16
+bitcoinj,org.bitcoinj.core,TransactionConfidence.Listener.ChangeReason,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.core,VerificationException.ExcessiveValue,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,ECKey.new Comparator() {...},18,3,4,0,3,1,3,1,1,1
+bitcoinj,org.bitcoinj.core,ECKey.new Comparator() {...},0,14,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,PeerGroup.PeerStartupListener,0,17,0,0,0,5,0,3,0,3
+bitcoinj,org.bitcoinj.core,VersionAck,0,6,0,0,0,4,0,2,0,2
+bitcoinj,org.bitcoinj.core,GetDataMessage,5,42,0,0,2,11,1,6,1,6
+bitcoinj,org.bitcoinj.core,RejectMessage,70,160,19,5,6,32,14,9,2,9
+bitcoinj,org.bitcoinj.core,InventoryItem.Type,5,53,0,0,0,5,1,3,1,3
+bitcoinj,org.bitcoinj.core,PartialMerkleTree.ValuesUsed,0,9,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,ScriptException,5,4,0,0,2,2,1,1,1,1
+bitcoinj,org.bitcoinj.core,AlertMessage,104,170,6,6,28,38,20,11,14,11
+bitcoinj,org.bitcoinj.core,Block.VerifyFlag,5,23,0,0,0,2,1,3,1,3
+bitcoinj,org.bitcoinj.core,Transaction,237,2100,37,229,44,423,36,178,5,76
+bitcoinj,org.bitcoinj.core,Pong,0,28,0,0,0,11,0,5,0,5
+bitcoinj,org.bitcoinj.core,EmptyMessage,18,9,0,0,8,4,4,2,4,2
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.NewBlockType,9,29,0,0,0,3,2,2,2,2
+bitcoinj,org.bitcoinj.core,Sha256Hash,34,197,4,12,9,42,6,26,3,21
+bitcoinj,org.bitcoinj.core,TxConfidenceTable.WeakConfidenceReference,0,9,0,0,0,3,0,1,0,1
+bitcoinj,org.bitcoinj.core,PeerSocketHandler,63,319,10,20,7,89,10,16,0,11
+bitcoinj,org.bitcoinj.core,TransactionConfidence,171,281,18,22,33,79,15,36,2,27
+bitcoinj,org.bitcoinj.core,Address,21,193,4,20,5,45,4,22,0,14
+bitcoinj,org.bitcoinj.core,TxConfidenceTable.new LinkedHashMap() {...},0,18,0,2,0,2,0,3,0,2
+bitcoinj,org.bitcoinj.core,FLOSerializer.FLOPacketHeader,0,86,2,6,0,17,2,3,0,1
+bitcoinj,org.bitcoinj.core,InsufficientMoneyException,6,22,0,0,3,5,1,2,1,2
+bitcoinj,org.bitcoinj.core,NetworkParameters.ProtocolVersion,9,59,0,0,0,9,2,3,2,3
+bitcoinj,org.bitcoinj.core,PeerException,13,0,0,0,6,0,3,0,3,0
+bitcoinj,org.bitcoinj.core,UnknownMessage,31,0,2,0,4,0,3,0,2,0
+bitcoinj,org.bitcoinj.core,GetHeadersMessage,87,11,16,0,9,4,11,2,3,2
+bitcoinj,org.bitcoinj.core,Peer.new Function() {...},1,28,2,2,0,4,2,2,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,18,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,TransactionBroadcast.new PreMessageReceivedEventListener() {...},0,72,1,5,0,12,1,4,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,10,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,TransactionBroadcast.new TransactionBroadcast() {...},3,11,0,0,1,2,1,2,1,2
+bitcoinj,org.bitcoinj.core,Peer.new FutureCallback() {...},25,26,0,0,6,5,1,2,1,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,18,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,TransactionBroadcast.new Runnable() {...},0,18,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,Peer.new FutureCallback() {...},6,19,0,0,2,3,1,2,1,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,22,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,Peer.new Runnable() {...},0,32,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,Peer.new FutureCallback() {...},6,108,0,8,2,13,1,6,1,2
+bitcoinj,org.bitcoinj.core,AbstractBlockChain.OrphanBlock,7,30,8,4,0,7,6,1,0,1
+bitcoinj,org.bitcoinj.core,InventoryMessage,1,69,1,3,0,15,1,7,0,6
+bitcoinj,org.bitcoinj.core,Base58,6,310,3,41,2,61,4,25,1,6
+bitcoinj,org.bitcoinj.core,UnsafeByteArrayOutputStream,16,114,5,13,5,21,7,10,2,6
+bitcoinj,org.bitcoinj.core,PeerGroup.ChainDownloadSpeedCalculator,328,83,26,8,48,15,15,7,2,3
+bitcoinj,org.bitcoinj.core,PeerGroup.FilterRecalculateMode,5,43,0,0,0,4,1,3,1,3
+bitcoinj,org.bitcoinj.core,TransactionConfidence.new Runnable() {...},0,22,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.core,TransactionConfidence.new TransactionConfidence.Listener() {...},0,29,0,2,0,5,0,3,0,2
+bitcoinj,org.bitcoinj.core,TransactionConfidence.new Object() {...},40,0,0,0,1,0,1,0,1,0
+bitcoinj,org.bitcoinj.core,MemoryPoolMessage,1,4,0,0,1,2,1,2,1,2
+bitcoinj,org.bitcoinj.core,TransactionInput,137,589,25,43,19,128,23,50,4,35
+bitcoinj,org.bitcoinj.core,FLOSerializer,85,600,9,55,11,114,11,39,2,16
+bitcoinj,org.bitcoinj.core,BlockChain,28,147,5,7,5,42,8,15,3,14
+bitcoinj,org.bitcoinj.core,VarInt,2,177,1,17,1,35,1,15,0,6
+bitcoinj,org.bitcoinj.core,ProtocolException,0,13,0,0,0,6,0,3,0,3
+bitcoinj,org.bitcoinj.core,BloomFilter.BloomUpdate,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.core,TransactionInput.ConnectMode,9,29,0,0,0,3,2,2,2,2
+bitcoinj,org.bitcoinj.core,GetUTXOsMessage,52,113,12,6,6,23,10,7,3,5
+bitcoinj,org.bitcoinj.core,Utils,259,1199,33,73,60,182,39,65,12,39
+bitcoinj,org.bitcoinj.core,ECKey.MissingPrivateKeyException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.core,ECKey,390,1322,75,107,84,276,73,96,8,70
+bitcoinj,org.bitcoinj.core,Peer,848,2263,92,209,173,504,99,140,20,68
+bitcoinj,org.bitcoinj.core,ListMessage,66,196,6,13,10,42,8,13,2,8
+bitcoinj,org.bitcoinj.core,VerificationException.BlockVersionOutOfDate,0,13,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,VerificationException.CoinbaseScriptSizeOutOfRange,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,Peer.GetDataRequest,0,9,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.core,VerificationException.NegativeValueOutput,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,Message,111,440,12,30,28,99,14,37,5,25
+bitcoinj,org.bitcoinj.core,PeerGroup.PeerListener,21,27,4,2,4,7,4,2,1,2
+bitcoinj,org.bitcoinj.core,VersionedChecksummedBytes,25,147,6,10,2,26,8,9,2,7
+bitcoinj,org.bitcoinj.core,Ping,0,56,0,4,0,21,0,9,0,7
+bitcoinj,org.bitcoinj.core,TransactionOutput,123,496,22,50,12,108,23,46,1,32
+bitcoinj,org.bitcoinj.core,FilteredBlock,90,140,15,5,11,32,13,11,4,10
+bitcoinj,org.bitcoinj.core,VerificationException.CoinbaseHeightMismatch,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.core,PeerAddress,117,313,7,21,34,58,18,24,11,17
+bitcoinj,org.bitcoinj.core,TransactionConfidence.ConfidenceType,9,70,0,0,0,10,2,3,2,3
+bitcoinj,org.bitcoinj.core,Peer.PendingPing,0,43,1,1,0,11,1,2,0,2
+bitcoinj,org.bitcoinj.core,ECKey.ECDSASignature,19,166,7,13,4,34,7,11,0,8
+bitcoinj,org.bitcoinj.core,DumpedPrivateKey,28,125,8,18,2,21,9,12,1,7
+bitcoinj,org.bitcoinj.core,TransactionBroadcast.EnoughAvailablePeers,22,124,2,4,4,20,2,3,0,2
+bitcoinj,org.bitcoinj.net.discovery,SeedPeers,30,130,3,7,7,23,4,9,1,7
+bitcoinj,org.bitcoinj.net.discovery,HttpDiscovery.Details,0,9,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.net.discovery,MultiplexingDiscovery.new Callable() {...},28,0,0,0,2,0,2,0,2,0
+bitcoinj,org.bitcoinj.net.discovery,TorDiscovery,516,0,46,0,108,0,33,0,10,0
+bitcoinj,org.bitcoinj.net.discovery,TorDiscovery.Lookup,9,0,0,0,4,0,1,0,1,0
+bitcoinj,org.bitcoinj.net.discovery,DnsDiscovery,66,0,6,0,12,0,7,0,4,0
+bitcoinj,org.bitcoinj.net.discovery,TorDiscovery.new Callable() {...},27,0,0,0,2,0,2,0,2,0
+bitcoinj,org.bitcoinj.net.discovery,TorDiscovery.new FutureCallback() {...},17,0,0,0,5,0,3,0,3,0
+bitcoinj,org.bitcoinj.net.discovery,TorDiscovery.new Callable() {...},23,0,0,0,2,0,2,0,2,0
+bitcoinj,org.bitcoinj.net.discovery,DnsDiscovery.DnsSeedDiscovery,65,0,4,0,15,0,6,0,4,0
+bitcoinj,org.bitcoinj.net.discovery,HttpDiscovery,225,0,14,0,47,0,14,0,7,0
+bitcoinj,org.bitcoinj.net.discovery,MultiplexingDiscovery,243,0,22,0,51,0,17,0,6,0
+bitcoinj,org.bitcoinj.net.discovery,PeerDiscoveryException,12,4,0,0,6,2,3,1,3,1
+bitcoinj,org.bitcoinj.script,Script.VerifyFlag,0,118,0,0,0,11,0,4,0,4
+bitcoinj,org.bitcoinj.script,ScriptBuilder,52,853,15,75,10,173,17,65,2,35
+bitcoinj,org.bitcoinj.script,Script.ScriptType,9,49,0,0,0,5,2,2,2,2
+bitcoinj,org.bitcoinj.script,Script,557,3366,116,546,89,729,109,313,5,55
+bitcoinj,org.bitcoinj.script,ScriptChunk,124,278,26,52,16,53,21,30,2,10
+bitcoinj,org.bitcoinj.script,ScriptOpCodes,14,944,1,5,2,233,2,6,1,4
+bitcoinj,org.bitcoinj.utils,BtcAutoFormat.Style.new BtcAutoFormat.Style() {...},0,15,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.utils,BtcAutoFormat.Style.new BtcAutoFormat.Style() {...},0,21,0,0,0,6,0,2,0,2
+bitcoinj,org.bitcoinj.utils,BtcFormat.Builder.Variant.new BtcFormat.Builder.Variant() {...},0,14,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.utils,ExponentialBackoff,15,46,0,0,1,12,1,5,1,5
+bitcoinj,org.bitcoinj.utils,ContextPropagatingThreadFactory.new Runnable() {...},8,20,0,0,3,5,0,2,0,2
+bitcoinj,org.bitcoinj.utils,VersionTally,0,123,0,14,0,29,0,12,0,5
+bitcoinj,org.bitcoinj.utils,ContextPropagatingThreadFactory,0,48,0,2,0,15,0,5,0,4
+bitcoinj,org.bitcoinj.utils,Threading.UserThread,5,54,1,3,2,20,1,5,0,4
+bitcoinj,org.bitcoinj.utils,BtcFormat.ScaleMatcher,0,12,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.utils,Fiat,189,109,16,10,24,21,27,13,16,11
+bitcoinj,org.bitcoinj.utils,BaseTaggableObject,0,64,1,7,0,17,1,8,0,5
+bitcoinj,org.bitcoinj.utils,MonetaryFormat,83,1075,24,80,12,154,24,51,1,22
+bitcoinj,org.bitcoinj.utils,Threading.new ThreadFactory() {...},13,3,0,0,4,1,1,1,1,1
+bitcoinj,org.bitcoinj.utils,Threading.new Executor() {...},0,6,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.utils,Threading.new Runnable() {...},0,10,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.utils,BtcAutoFormat,19,133,6,10,3,29,6,8,1,5
+bitcoinj,org.bitcoinj.utils,BtcFormat.Builder.Variant,9,49,0,0,0,5,2,3,2,3
+bitcoinj,org.bitcoinj.utils,BtcFixedFormat,42,254,6,18,7,29,6,21,1,10
+bitcoinj,org.bitcoinj.utils,ExponentialBackoff.Params,2,42,2,2,0,12,2,2,0,2
+bitcoinj,org.bitcoinj.utils,ExchangeRate,41,138,8,12,5,24,9,7,1,5
+bitcoinj,org.bitcoinj.utils,DaemonThreadFactory,26,0,2,0,10,0,4,0,3,0
+bitcoinj,org.bitcoinj.utils,BtcFormat.Builder,15,201,2,20,2,44,2,21,0,12
+bitcoinj,org.bitcoinj.utils,ListenerRegistration,0,45,1,7,0,12,1,5,0,2
+bitcoinj,org.bitcoinj.utils,BtcAutoFormat.Style,9,29,0,0,0,3,2,2,2,2
+bitcoinj,org.bitcoinj.utils,BriefLogFormatter,78,35,3,1,19,11,4,4,2,4
+bitcoinj,org.bitcoinj.utils,BlockFileLoader,138,185,21,21,37,43,18,10,2,5
+bitcoinj,org.bitcoinj.utils,BtcFormat,92,1371,10,74,13,219,13,100,3,60
+bitcoinj,org.bitcoinj.utils,Threading,13,48,1,1,5,18,4,6,3,6
+bitcoinj,org.bitcoinj.store,LevelDBFullPrunedBlockStore.BloomFilter,36,242,3,9,10,44,2,12,0,8
+bitcoinj,org.bitcoinj.store,BlockStoreException,9,4,0,0,4,2,2,1,2,1
+bitcoinj,org.bitcoinj.store,LevelDBFullPrunedBlockStore.LRUCache,2,19,1,1,0,5,1,2,0,2
+bitcoinj,org.bitcoinj.store,LevelDBBlockStore,45,172,1,5,12,50,2,14,1,12
+bitcoinj,org.bitcoinj.store,PostgresFullPrunedBlockStore,390,0,18,0,88,0,18,0,9,0
+bitcoinj,org.bitcoinj.store,MySQLFullPrunedBlockStore,82,0,0,0,22,0,10,0,10,0
+bitcoinj,org.bitcoinj.store,H2FullPrunedBlockStore,42,70,0,0,11,17,3,5,3,5
+bitcoinj,org.bitcoinj.store,StoredTransactionOutPoint,20,69,5,5,1,15,6,6,1,6
+bitcoinj,org.bitcoinj.store,LevelDBFullPrunedBlockStore.KeyType,9,99,0,0,0,2,2,2,2,2
+bitcoinj,org.bitcoinj.store,TransactionalHashMap,5,246,3,33,1,52,3,23,0,8
+bitcoinj,org.bitcoinj.store,MemoryFullPrunedBlockStore,43,337,3,19,11,79,4,28,1,20
+bitcoinj,org.bitcoinj.store,ChainFileLockedException,8,0,0,0,4,0,2,0,2,0
+bitcoinj,org.bitcoinj.store,MemoryBlockStore,39,67,4,4,7,20,6,5,2,5
+bitcoinj,org.bitcoinj.store,TransactionalMultiKeyHashMap,0,91,0,6,0,25,0,11,0,8
+bitcoinj,org.bitcoinj.store,SPVBlockStore,142,433,18,24,18,117,18,15,1,11
+bitcoinj,org.bitcoinj.store,MemoryBlockStore.new LinkedHashMap() {...},2,14,1,1,0,2,1,2,0,2
+bitcoinj,org.bitcoinj.store,DatabaseFullPrunedBlockStore,1090,1431,99,73,221,379,78,66,11,47
+bitcoinj,org.bitcoinj.store,SPVBlockStore.new LinkedHashMap() {...},8,6,2,0,1,1,2,1,1,1
+bitcoinj,org.bitcoinj.store,SPVBlockStore.new LinkedHashMap() {...},2,12,1,1,0,2,1,2,0,2
+bitcoinj,org.bitcoinj.store,LevelDBFullPrunedBlockStore,701,1650,81,117,165,403,71,69,5,36
+bitcoinj,org.bitcoinj.store,MemoryFullPrunedBlockStore.StoredBlockAndWasUndoableFlag,0,9,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.store,WindowsMMapHack,3,9,1,1,1,3,2,1,1,1
+bitcoinj,org.bitcoinj.crypto,DeterministicKey.new Comparator() {...},12,3,0,0,3,1,1,1,1,1
+bitcoinj,org.bitcoinj.crypto,TrustStoreLoader.FileTrustStoreLoader,24,0,2,0,6,0,3,0,2,0
+bitcoinj,org.bitcoinj.crypto,LazyECPoint,116,114,4,16,26,25,30,14,26,8
+bitcoinj,org.bitcoinj.crypto,BIP38PrivateKey,106,516,22,42,15,82,23,18,1,8
+bitcoinj,org.bitcoinj.crypto,HDKeyDerivation.new Object() {...},2,17,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,HDKeyDerivation,41,421,13,18,9,81,14,15,1,12
+bitcoinj,org.bitcoinj.crypto,MnemonicException.MnemonicChecksumException,0,3,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,X509Utils,37,130,3,21,8,30,4,11,1,2
+bitcoinj,org.bitcoinj.crypto,MnemonicException.MnemonicLengthException,0,4,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,HDUtils,11,157,3,9,0,29,4,13,1,10
+bitcoinj,org.bitcoinj.crypto,EncryptedData,42,43,5,5,3,8,7,2,2,2
+bitcoinj,org.bitcoinj.crypto,DeterministicKey,113,1046,27,105,17,204,30,90,3,51
+bitcoinj,org.bitcoinj.crypto,ChildNumber,23,104,3,13,3,19,5,15,2,10
+bitcoinj,org.bitcoinj.crypto,BIP38PrivateKey.BadPassphraseException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,TransactionSignature,26,302,2,60,6,54,3,40,1,11
+bitcoinj,org.bitcoinj.crypto,DeterministicHierarchy,95,120,9,9,14,29,9,9,3,6
+bitcoinj,org.bitcoinj.crypto,PBKDF2SHA512,14,165,1,9,4,37,2,7,1,3
+bitcoinj,org.bitcoinj.crypto,HDDerivationException,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.crypto,HDKeyDerivation.PublicDeriveMode,5,33,0,0,0,3,1,3,1,3
+bitcoinj,org.bitcoinj.crypto,LinuxSecureRandom,89,0,4,0,29,0,7,0,5,0
+bitcoinj,org.bitcoinj.crypto,MnemonicException.MnemonicWordException,0,6,0,0,0,3,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,MnemonicCode,31,415,6,44,9,88,6,29,1,9
+bitcoinj,org.bitcoinj.crypto,LinuxSecureRandom.LinuxSecureRandomProvider,12,0,0,0,3,0,1,0,1,0
+bitcoinj,org.bitcoinj.crypto,DRMWorkaround,71,34,1,3,16,10,2,3,1,2
+bitcoinj,org.bitcoinj.crypto,KeyCrypterScrypt,56,321,10,12,10,70,11,14,2,12
+bitcoinj,org.bitcoinj.crypto,MnemonicException,0,7,0,0,0,4,0,2,0,2
+bitcoinj,org.bitcoinj.crypto,TrustStoreLoader.DefaultTrustStoreLoader,74,27,4,2,20,10,4,3,1,3
+bitcoinj,org.bitcoinj.crypto,TrustStoreLoader,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.crypto,KeyCrypterException,0,9,0,0,0,4,0,2,0,2
+bitcoinj,org.bitcoinj.crypto,HDKeyDerivation.RawKeyBytes,0,9,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DecryptingKeyBag,2,78,1,7,1,18,1,9,0,6
+bitcoinj,org.bitcoinj.wallet,DefaultRiskAnalysis.Analyzer,0,11,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,UnreadableWalletException,5,4,0,0,2,2,1,1,1,1
+bitcoinj,org.bitcoinj.wallet,UnreadableWalletException.WrongNetwork,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.wallet,WalletFiles,10,177,2,10,4,42,3,11,1,7
+bitcoinj,org.bitcoinj.wallet,MarriedKeyChain,130,382,13,27,19,90,14,26,4,16
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,17,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,22,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new TransactionConfidence.Listener() {...},7,36,0,2,0,10,0,3,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new LinkedHashMap() {...},2,12,1,1,0,2,1,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,20,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},27,0,0,0,3,0,2,0,2,0
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,17,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,32,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Runnable() {...},0,32,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.ExceededMaxTransactionSize,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,AllowUnconfirmedCoinSelector,0,13,0,2,0,5,0,4,0,3
+bitcoinj,org.bitcoinj.wallet,SendRequest,125,190,13,5,21,49,13,7,4,7
+bitcoinj,org.bitcoinj.wallet,FilteringCoinSelector,21,34,3,3,4,10,3,3,1,2
+bitcoinj,org.bitcoinj.wallet,UnreadableWalletException.FutureVersion,0,4,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,RedeemData,2,61,2,8,0,13,2,7,0,4
+bitcoinj,org.bitcoinj.wallet,Wallet.FreeStandingTransactionOutput,12,28,0,0,2,7,2,3,2,3
+bitcoinj,org.bitcoinj.wallet,Wallet.CompletionException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,Wallet.MultipleOpReturnRequested,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,Wallet.SendResult,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,BasicKeyChain.State,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.wallet,WalletProtobufSerializer.new WalletProtobufSerializer.WalletFactory() {...},0,9,0,0,0,2,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,WalletProtobufSerializer.new Object() {...},36,245,0,0,0,7,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,MarriedKeyChain.Builder,27,102,6,10,3,20,5,8,0,5
+bitcoinj,org.bitcoinj.wallet,WalletTransaction.Pool,5,53,0,0,0,5,1,3,1,3
+bitcoinj,org.bitcoinj.wallet,RiskAnalysis.Result,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.wallet,Wallet.BalanceType,9,49,0,0,0,5,2,2,2,2
+bitcoinj,org.bitcoinj.wallet,WalletTransaction,0,17,0,0,0,6,0,3,0,3
+bitcoinj,org.bitcoinj.wallet,DeterministicUpgradeRequiresPassword,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,Wallet.FeeCalculation,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DeterministicSeed,66,304,18,20,5,68,19,27,2,25
+bitcoinj,org.bitcoinj.wallet,Wallet.DustySendRequested,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,CoinSelection,0,9,0,0,0,4,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DeterministicKeyChain.new Object() {...},4,29,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,BasicKeyChain.new Runnable() {...},0,20,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet,1705,7762,203,797,301,1778,196,553,32,211
+bitcoinj,org.bitcoinj.wallet,DeterministicKeyChain.Builder,122,25,19,1,23,9,16,5,6,5
+bitcoinj,org.bitcoinj.wallet,WalletFiles.new Callable() {...},3,50,2,2,1,9,2,2,0,2
+bitcoinj,org.bitcoinj.wallet,DeterministicUpgradeRequiredException,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DefaultRiskAnalysis,69,314,17,53,16,82,14,32,1,10
+bitcoinj,org.bitcoinj.wallet,Wallet.BalanceFutureRequest,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,KeyChainGroup,68,1528,22,182,12,335,24,139,2,59
+bitcoinj,org.bitcoinj.wallet,Wallet.TxOffsetPair,0,15,0,0,0,5,0,2,0,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new FutureCallback() {...},5,11,0,0,2,3,1,2,1,2
+bitcoinj,org.bitcoinj.wallet,Wallet.new Object() {...},4,29,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DeterministicKeyChain,362,2173,43,168,52,479,46,138,7,71
+bitcoinj,org.bitcoinj.wallet,Wallet.CouldNotAdjustDownwards,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.wallet,DefaultRiskAnalysis.RuleViolation,9,69,0,0,0,7,2,2,2,2
+bitcoinj,org.bitcoinj.wallet,BasicKeyChain,244,1052,31,113,42,228,27,85,3,37
+bitcoinj,org.bitcoinj.wallet,AllRandomKeysRotating,3,0,0,0,1,0,1,0,1,0
+bitcoinj,org.bitcoinj.wallet,WalletProtobufSerializer,324,1434,42,159,69,340,44,93,3,21
+bitcoinj,org.bitcoinj.wallet,DefaultCoinSelector,0,106,1,19,0,24,1,14,0,5
+bitcoinj,org.bitcoinj.wallet,KeyChain.KeyPurpose,5,53,0,0,0,5,1,3,1,3
+bitcoinj,org.bitcoinj.wallet,DefaultKeyChainFactory,20,35,2,4,3,9,2,4,0,3
+bitcoinj,org.bitcoinj.wallet,Wallet.MissingSigsMode,9,39,0,0,0,4,2,2,2,2
+bitcoinj,org.bitcoinj.wallet,KeyTimeCoinSelector,25,91,4,10,7,23,4,7,0,4
+bitcoinj,org.bitcoinj.wallet,DefaultCoinSelector.new Comparator() {...},0,59,0,4,0,14,0,4,0,2
+bitcoinj,org.bitcoinj.wallet,UnreadableWalletException.BadPassword,4,0,0,0,2,0,1,0,1,0
+bitcoinj,org.bitcoinj.net,FilterMerger.Result,0,3,0,0,0,1,0,1,0,1
+bitcoinj,org.bitcoinj.net,AbstractTimeoutHandler.new TimerTask() {...},0,10,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.net,AbstractTimeoutHandler,0,58,0,6,0,17,0,8,0,5
+bitcoinj,org.bitcoinj.net,BlockingClientManager,76,55,7,3,17,13,8,5,4,4
+bitcoinj,org.bitcoinj.net,NioServer,146,139,4,10,14,43,2,10,0,5
+bitcoinj,org.bitcoinj.net,NioClientManager,202,203,15,15,33,56,11,13,2,7
+bitcoinj,org.bitcoinj.net,NioClient,11,39,0,0,4,8,2,2,2,2
+bitcoinj,org.bitcoinj.net,ConnectionHandler,55,373,10,34,13,99,10,22,0,10
+bitcoinj,org.bitcoinj.net,NioClientManager.new Executor() {...},0,14,0,0,0,3,0,2,0,2
+bitcoinj,org.bitcoinj.net,NioClientManager.PendingConnect,0,18,0,0,0,2,0,1,0,1
+bitcoinj,org.bitcoinj.net,FilterMerger,24,168,6,16,3,34,6,10,1,4
+bitcoinj,org.bitcoinj.net,NioClient.new FutureCallback() {...},8,10,0,0,2,2,1,2,1,2
+bitcoinj,org.bitcoinj.net,NioClient.Handler,9,66,3,3,4,22,4,6,1,6
+bitcoinj,org.bitcoinj.net,BlockingClient,7,142,2,6,2,38,2,8,0,6
+bitcoinj,org.bitcoinj.net,BlockingClient.new Thread() {...},36,102,3,7,4,18,2,5,0,2
+bitcoinj,org.bitcoinj.net,ProtobufConnection,117,221,12,12,21,54,11,12,1,10
+bitcoinj,org.bitcoinj.kits,WalletAppKit,922,0,114,0,201,0,91,0,34,0
+bitcoinj,org.bitcoinj.kits,WalletAppKit.new FutureCallback() {...},35,0,2,0,6,0,4,0,3,0
+bitcoinj,org.bitcoinj.kits,WalletAppKit.new Thread() {...},21,0,0,0,7,0,2,0,2,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.SignedPeerSeeds,422,0,39,0,112,0,57,0,36,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeedData.Builder,432,0,46,0,126,0,53,0,30,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeeds,526,0,51,0,136,0,67,0,40,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.SignedPeerSeeds.Builder,394,0,42,0,110,0,49,0,28,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos,98,0,0,0,14,0,4,0,4,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.new Descriptors.FileDescriptor.InternalDescriptorAssigner() {...},8,0,0,0,3,0,2,0,2,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeeds.Builder,844,0,100,0,232,0,96,0,46,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeedData,462,0,45,0,127,0,61,0,37,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeeds.new AbstractParser() {...},10,0,0,0,2,0,2,0,2,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.PeerSeedData.new AbstractParser() {...},10,0,0,0,2,0,2,0,2,0
+bitcoinj,org.bitcoin.crawler,PeerSeedProtos.SignedPeerSeeds.new AbstractParser() {...},10,0,0,0,2,0,2,0,2,0
