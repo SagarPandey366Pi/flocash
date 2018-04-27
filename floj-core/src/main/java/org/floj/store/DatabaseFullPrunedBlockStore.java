@@ -508,7 +508,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
                 results.close();
             } catch (SQLException ex) {
                 throw new BlockStoreException("Database block store is not compatible with the current release.  " +
-                        "See bitcoinj release notes for further information: " + ex.getMessage());
+                        "See floj release notes for further information: " + ex.getMessage());
             } finally {
                 if (ps != null && !ps.isClosed()) {
                     ps.close();
@@ -675,7 +675,7 @@ public abstract class DatabaseFullPrunedBlockStore implements FullPrunedBlockSto
                 bos.write(0xFF & (numTxn >> 16));
                 bos.write(0xFF & (numTxn >> 24));
                 for (Transaction tx : undoableBlock.getTransactions())
-                    tx.bitcoinSerialize(bos);
+                    tx.floSerialize(bos);
                 transactions = bos.toByteArray();
             }
             bos.close();

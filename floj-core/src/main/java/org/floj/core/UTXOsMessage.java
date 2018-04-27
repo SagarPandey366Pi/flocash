@@ -77,7 +77,7 @@ public class UTXOsMessage extends Message {
     }
 
     @Override
-    protected void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    protected void floSerializeToStream(OutputStream stream) throws IOException {
         Utils.uint32ToByteStreamLE(height, stream);
         stream.write(chainHead.getBytes());
         stream.write(new VarInt(hits.length).encode());
@@ -88,7 +88,7 @@ public class UTXOsMessage extends Message {
             Transaction tx = output.getParentTransaction();
             Utils.uint32ToByteStreamLE(tx != null ? tx.getVersion() : 0L, stream);  // Version
             Utils.uint32ToByteStreamLE(heights[i], stream);  // Height
-            output.bitcoinSerializeToStream(stream);
+            output.floSerializeToStream(stream);
         }
     }
 

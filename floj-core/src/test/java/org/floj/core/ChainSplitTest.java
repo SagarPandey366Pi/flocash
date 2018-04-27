@@ -285,7 +285,7 @@ public class ChainSplitTest {
     }
 
     private Block roundtrip(Block b2) throws ProtocolException {
-        return PARAMS.getDefaultSerializer().makeBlock(b2.bitcoinSerialize());
+        return PARAMS.getDefaultSerializer().makeBlock(b2.floSerialize());
     }
 
     @Test

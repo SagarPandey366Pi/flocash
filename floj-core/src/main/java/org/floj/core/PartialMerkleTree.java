@@ -102,7 +102,7 @@ public class PartialMerkleTree extends Message {
     }
 
     @Override
-    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    public void floSerializeToStream(OutputStream stream) throws IOException {
         uint32ToByteStreamLE(transactionCount, stream);
 
         stream.write(new VarInt(hashes.size()).encode());

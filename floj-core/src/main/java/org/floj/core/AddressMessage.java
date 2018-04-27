@@ -87,12 +87,12 @@ public class AddressMessage extends Message {
     }
 
     @Override
-    protected void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    protected void floSerializeToStream(OutputStream stream) throws IOException {
         if (addresses == null)
             return;
         stream.write(new VarInt(addresses.size()).encode());
         for (PeerAddress addr : addresses) {
-            addr.bitcoinSerialize(stream);
+            addr.floSerialize(stream);
         }
     }
 

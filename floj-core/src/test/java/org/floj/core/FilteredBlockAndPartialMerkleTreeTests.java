@@ -104,7 +104,7 @@ public class FilteredBlockAndPartialMerkleTreeTests extends TestWithPeerGroup {
         assertTrue(txesMatched.contains(Sha256Hash.wrap("63194f18be0af63f2c6bc9dc0f777cbefed3d9415c4af83f3ee3a3d669c00cb5")));
 
         // Check round tripping.
-        assertEquals(block, new FilteredBlock(PARAMS, block.bitcoinSerialize()));
+        assertEquals(block, new FilteredBlock(PARAMS, block.floSerialize()));
     }
 
     @Test

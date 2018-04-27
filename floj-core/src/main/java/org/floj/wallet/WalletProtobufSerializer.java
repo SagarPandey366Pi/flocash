@@ -678,7 +678,7 @@ public class WalletProtobufSerializer {
             tx.setMemo(txProto.getMemo());
 
         // Transaction should now be complete.
-//        byte[] bytes2=tx.bitcoinSerialize();
+//        byte[] bytes2=tx.floSerialize();
 //        BigInteger b2=new BigInteger(bytes2);
 //        System.out.println("tx     :"+b2.toString(16));
         Sha256Hash protoHash = byteStringToHash(txProto.getHash());

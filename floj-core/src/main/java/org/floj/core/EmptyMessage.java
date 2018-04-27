@@ -43,7 +43,7 @@ public abstract class EmptyMessage extends Message {
     }
 
     @Override
-    protected final void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    protected final void floSerializeToStream(OutputStream stream) throws IOException {
     }
 
     @Override
@@ -51,10 +51,10 @@ public abstract class EmptyMessage extends Message {
     }
 
     /* (non-Javadoc)
-      * @see Message#bitcoinSerialize()
+      * @see Message#floSerialize()
       */
     @Override
-    public byte[] bitcoinSerialize() {
+    public byte[] floSerialize() {
         return new byte[0];
     }
 }

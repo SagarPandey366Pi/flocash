@@ -140,13 +140,13 @@ public class Transaction extends ChildMessage {
      * FLO data variable
      * Variable length string
      * Variable length string can be stored using a variable length integer followed by the string itself. 
-     * https://en.flo.it/wiki/Protocol_documentation#Variable_length_string
+     * https://en.bitcoin.it/wiki/Protocol_documentation#Variable_length_string
      * 
      *     Field Size 	Description 	Data type 	Comments
      *    ? 			length 			var_int 	Length of the string 
      *    ? 			string 			char[] 		The string itself (can be empty) 
      * 
-     * https://en.flo.it/wiki/Protocol_documentation#Variable_length_integer
+     * https://en.bitcoin.it/wiki/Protocol_documentation#Variable_length_integer
      * 
      * 		Value 			Storage length 	Format
 	 *		< 0xFD 			1 				uint8_t
@@ -619,6 +619,8 @@ public class Transaction extends ChildMessage {
         lockTime = readUint32();
         optimalEncodingMessageSize += 4;
         
+        //only read floData if tx version>=2
+        if(version>=2) {
         // read floData size
         long floDataSize=readVarInt();
         // add the bytes needed to store the size of the floData bytes
@@ -628,6 +630,7 @@ public class Transaction extends ChildMessage {
         floData=readBytes((int)floDataSize);
         // add the number of floData bytes, if any
         optimalEncodingMessageSize += floDataSize;
+        }
         
         length = cursor - offset;
     }
@@ -1033,12 +1036,12 @@ public class Transaction extends ChildMessage {
         // The SIGHASH flags are used in the design of contracts, please see this page for a further understanding of
         // the purposes of the code in this method:
         //
-        //   https://en.flo.it/wiki/Contracts
+        //   https://en.bitcoin.it/wiki/Contracts
 
         try {
             // Create a copy of this transaction to operate upon because we need make changes to the inputs and outputs.
             // It would not be thread-safe to change the attributes of the transaction object itself.
-            Transaction tx = this.params.getDefaultSerializer().makeTransaction(this.bitcoinSerialize());
+            Transaction tx = this.params.getDefaultSerializer().makeTransaction(this.floSerialize());
 
             // Clear input scripts in preparation for signing. If we're signing a fresh
             // transaction that step isn't very helpful, but it doesn't add much cost relative to the actual
@@ -1101,7 +1104,7 @@ public class Transaction extends ChildMessage {
             }
 
             ByteArrayOutputStream bos = new UnsafeByteArrayOutputStream(tx.length == UNKNOWN_LENGTH ? 256 : tx.length + 4);
-            tx.bitcoinSerialize(bos);
+            tx.floSerialize(bos);
             // We also have to write a hash type (sigHashType is actually an unsigned char)
             uint32ToByteStreamLE(0x000000ff & sigHashType, bos);
             // Note that this is NOT reversed to ensure it will be signed correctly. If it were to be printed out
@@ -1116,22 +1119,24 @@ public class Transaction extends ChildMessage {
     }
 
     @Override
-    protected void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    protected void floSerializeToStream(OutputStream stream) throws IOException {
         uint32ToByteStreamLE(version, stream);
         stream.write(new VarInt(inputs.size()).encode());
         for (TransactionInput in : inputs)
-            in.bitcoinSerialize(stream);
+            in.floSerialize(stream);
         stream.write(new VarInt(outputs.size()).encode());
         for (TransactionOutput out : outputs)
-            out.bitcoinSerialize(stream);
+            out.floSerialize(stream);
         uint32ToByteStreamLE(lockTime, stream);
         
+        if(version>=2) {
         //write VarInt of floData.length
         VarInt size=new VarInt(floData.length);
         stream.write(size.encode());
         //if length > 0 output the floData bytes
         if(floData.length>0) {
         	stream.write(floData);
+	        }
         }
     }
 
@@ -1173,19 +1178,21 @@ public class Transaction extends ChildMessage {
         return floData;
     }
     
-    public void setFloData(byte[] value) {
+    public void setFloData(byte[] value) throws ProtocolException {
     	if(value.length>MAX_FLO_DATA_SIZE) {
+    		throw new ProtocolException("FLO Data cannot be > "+MAX_FLO_DATA_SIZE+", received: " + value.length);
     		//limit FLO data size by truncating
-    		floData=Arrays.copyOfRange(value, 0, MAX_FLO_DATA_SIZE);
+//    		floData=Arrays.copyOfRange(value, 0, MAX_FLO_DATA_SIZE);
     	} else {
     		floData=value;
     	}
     }
     
-    public void setFloData(String value) {
+    public void setFloData(String value) throws ProtocolException {
     	//limit FLO data size by truncating
     	if(value.length()>MAX_FLO_DATA_SIZE) {
-    		floData=value.substring(0, MAX_FLO_DATA_SIZE).getBytes();
+    		throw new ProtocolException("FLO Data cannot be > "+MAX_FLO_DATA_SIZE+", received: " + value.length());
+//    		floData=value.substring(0, MAX_FLO_DATA_SIZE).getBytes();
     	} else {
     		floData=value.getBytes();
     	}
@@ -1424,7 +1431,7 @@ public class Transaction extends ChildMessage {
     /**
      * <p>Returns true if this transaction is considered finalized and can be placed in a block. Non-finalized
      * transactions won't be included by miners and can be replaced with newer versions using sequence numbers.
-     * This is useful in certain types of <a href="http://en.flo.it/wiki/Contracts">contracts</a>, such as
+     * This is useful in certain types of <a href="http://en.bitcoin.it/wiki/Contracts">contracts</a>, such as
      * micropayment channels.</p>
      *
      * <p>Note that currently the replacement feature is disabled in FLO Core and will need to be

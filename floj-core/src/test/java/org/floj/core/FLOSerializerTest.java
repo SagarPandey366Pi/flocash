@@ -69,7 +69,7 @@ public class FLOSerializerTest {
     public void testAddr() throws Exception {
         final NetworkParameters params = MainNetParams.get();
         MessageSerializer serializer = params.getDefaultSerializer();
-        // the actual data from https://en.flo.it/wiki/Protocol_specification#addr
+        // the actual data from https://en.bitcoin.it/wiki/Protocol_specification#addr
         AddressMessage addressMessage = (AddressMessage) serializer.deserialize(ByteBuffer.wrap(ADDRESS_MESSAGE_BYTES));
         assertEquals(1, addressMessage.getAddresses().size());
         PeerAddress peerAddress = addressMessage.getAddresses().get(0);

@@ -32,14 +32,14 @@ import java.util.Map;
 
 /**
  * <p>Methods to serialize and de-serialize messages to the FLO network format as defined in
- * <a href="https://en.flo.it/wiki/Protocol_specification">the protocol specification</a>.</p>
+ * <a href="https://en.bitcoin.it/wiki/Protocol_specification">the protocol specification</a>.</p>
  *
  * <p>To be able to serialize and deserialize new Message subclasses the following criteria needs to be met.</p>
  *
  * <ul>
  * <li>The proper Class instance needs to be mapped to its message name in the names variable below</li>
  * <li>There needs to be a constructor matching: NetworkParameters params, byte[] payload</li>
- * <li>Message.bitcoinSerializeToStream() needs to be properly subclassed</li>
+ * <li>Message.floSerializeToStream() needs to be properly subclassed</li>
  * </ul>
  */
 public class FLOSerializer extends MessageSerializer {
@@ -119,7 +119,7 @@ public class FLOSerializer extends MessageSerializer {
         if (name == null) {
             throw new Error("FLOSerializer doesn't currently know how to serialize " + message.getClass());
         }
-        serialize(name, message.bitcoinSerialize(), out);
+        serialize(name, message.floSerialize(), out);
     }
 
     /**

@@ -94,7 +94,7 @@ public class Threading {
         private LinkedBlockingQueue<Runnable> tasks;
 
         public UserThread() {
-            super("bitcoinj user thread");
+            super("floj user thread");
             setDaemon(true);
             tasks = new LinkedBlockingQueue<Runnable>();
             start();

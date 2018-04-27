@@ -132,11 +132,11 @@ public class PaymentSessionTest {
     @Test
     @Ignore("certificate expired")
     public void testPkiVerification() throws Exception {
-        InputStream in = getClass().getResourceAsStream("pki_test.bitcoinpaymentrequest");
+        InputStream in = getClass().getResourceAsStream("pki_test.flopaymentrequest");
         Protos.PaymentRequest paymentRequest = Protos.PaymentRequest.newBuilder().mergeFrom(in).build();
         PaymentProtocol.PkiVerificationData pkiData = PaymentProtocol.verifyPaymentRequestPki(paymentRequest,
                 new TrustStoreLoader.DefaultTrustStoreLoader().getKeyStore());
-        assertEquals("www.bitcoincore.org", pkiData.displayName);
+        assertEquals("www.flocore.org", pkiData.displayName);
         assertEquals("The USERTRUST Network, Salt Lake City, US", pkiData.rootAuthorityName);
     }
 

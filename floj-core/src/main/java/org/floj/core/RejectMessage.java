@@ -97,7 +97,7 @@ public class RejectMessage extends Message {
     }
 
     @Override
-    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    public void floSerializeToStream(OutputStream stream) throws IOException {
         byte[] messageBytes = message.getBytes("UTF-8");
         stream.write(new VarInt(messageBytes.length).encode());
         stream.write(messageBytes);

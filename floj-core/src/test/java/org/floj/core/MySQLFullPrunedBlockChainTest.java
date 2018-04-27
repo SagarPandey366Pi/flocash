@@ -36,8 +36,8 @@ public class MySQLFullPrunedBlockChainTest extends AbstractFullPrunedBlockChainT
 
     // Replace these with your mysql location/credentials and remove @Ignore to test
     private static final String DB_HOSTNAME = "localhost";
-    private static final String DB_NAME = "bitcoinj_test";
-    private static final String DB_USERNAME = "bitcoinj";
+    private static final String DB_NAME = "floj_test";
+    private static final String DB_USERNAME = "floj";
     private static final String DB_PASSWORD = "password";
 
     @Override

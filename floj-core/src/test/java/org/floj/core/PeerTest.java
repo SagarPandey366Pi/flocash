@@ -969,7 +969,7 @@ public class PeerTest extends TestWithNetworkConnections {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         serializer.serialize("inv", new InventoryMessage(PARAMS) {
             @Override
-            public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+            public void floSerializeToStream(OutputStream stream) throws IOException {
                 // Add some hashes.
                 addItem(new InventoryItem(InventoryItem.Type.Transaction, Sha256Hash.of(new byte[]{1})));
                 addItem(new InventoryItem(InventoryItem.Type.Transaction, Sha256Hash.of(new byte[]{2})));
@@ -977,12 +977,12 @@ public class PeerTest extends TestWithNetworkConnections {
 
                 // Write out a copy that's truncated in the middle.
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                super.bitcoinSerializeToStream(bos);
+                super.floSerializeToStream(bos);
                 byte[] bits = bos.toByteArray();
                 bits = Arrays.copyOf(bits, bits.length / 2);
                 stream.write(bits);
             }
-        }.bitcoinSerialize(), out);
+        }.floSerialize(), out);
         writeTarget.writeTarget.writeBytes(out.toByteArray());
         try {
             result.get();

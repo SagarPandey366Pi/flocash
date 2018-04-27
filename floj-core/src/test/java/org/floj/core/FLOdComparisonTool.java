@@ -62,7 +62,7 @@ public class FLOdComparisonTool {
 
     private static NetworkParameters params;
     private static FullPrunedBlockChain chain;
-    private static Sha256Hash bitcoindChainHead;
+    private static Sha256Hash flodChainHead;
     private static volatile InventoryMessage mostRecentInv = null;
 
     static class BlockWrapper {
@@ -71,7 +71,7 @@ public class FLOdComparisonTool {
 
     public static void main(String[] args) throws Exception {
         BriefLogFormatter.init();
-        System.out.println("USAGE: bitcoinjBlockStoreLocation runExpensiveTests(1/0) [port=18444]");
+        System.out.println("USAGE: flojBlockStoreLocation runExpensiveTests(1/0) [port=18444]");
         boolean runExpensiveTests = args.length > 1 && Integer.parseInt(args[1]) == 1;
 
         params = RegTestParams.get();
@@ -98,8 +98,8 @@ public class FLOdComparisonTool {
         VersionMessage ver = new VersionMessage(params, 42);
         ver.appendToSubVer("BlockAcceptanceComparisonTool", "1.1", null);
         ver.localServices = VersionMessage.NODE_NETWORK;
-        final Peer bitcoind = new Peer(params, ver, new BlockChain(params, new MemoryBlockStore(params)), new PeerAddress(params, InetAddress.getLocalHost()));
-        Preconditions.checkState(bitcoind.getVersionMessage().hasBlockChain());
+        final Peer flod = new Peer(params, ver, new BlockChain(params, new MemoryBlockStore(params)), new PeerAddress(params, InetAddress.getLocalHost()));
+        Preconditions.checkState(flod.getVersionMessage().hasBlockChain());
 
         final BlockWrapper currentBlock = new BlockWrapper();
 
@@ -107,7 +107,7 @@ public class FLOdComparisonTool {
         final Set<Sha256Hash> blocksPendingSend = Collections.synchronizedSet(new HashSet<Sha256Hash>());
         final AtomicInteger unexpectedInvs = new AtomicInteger(0);
         final SettableFuture<Void> connectedFuture = SettableFuture.create();
-        bitcoind.addConnectedEventListener(Threading.SAME_THREAD, new PeerConnectedEventListener() {
+        flod.addConnectedEventListener(Threading.SAME_THREAD, new PeerConnectedEventListener() {
             @Override
             public void onPeerConnected(Peer peer, int peerCount) {
                 if (!peer.getPeerVersionMessage().subVer.contains("Satoshi")) {
@@ -121,46 +121,46 @@ public class FLOdComparisonTool {
                                        "************************************************************************************************************************");
                     System.out.println();
                 }
-                log.info("bitcoind connected");
+                log.info("flod connected");
                 // Make sure bitcoind has no blocks
-                bitcoind.setDownloadParameters(0, false);
-                bitcoind.startBlockChainDownload();
+                flod.setDownloadParameters(0, false);
+                flod.startBlockChainDownload();
                 connectedFuture.set(null);
             }
         });
 
-        bitcoind.addDisconnectedEventListener(Threading.SAME_THREAD, new PeerDisconnectedEventListener() {
+        flod.addDisconnectedEventListener(Threading.SAME_THREAD, new PeerDisconnectedEventListener() {
             @Override
             public void onPeerDisconnected(Peer peer, int peerCount) {
-                log.error("bitcoind node disconnected!");
+                log.error("flod node disconnected!");
                 System.exit(1);
             }
         });
 
-        bitcoind.addPreMessageReceivedEventListener(Threading.SAME_THREAD, new PreMessageReceivedEventListener() {
+        flod.addPreMessageReceivedEventListener(Threading.SAME_THREAD, new PreMessageReceivedEventListener() {
             @Override
             public Message onPreMessageReceived(Peer peer, Message m) {
                 if (m instanceof HeadersMessage) {
                     if (!((HeadersMessage) m).getBlockHeaders().isEmpty()) {
                         Block b = Iterables.getLast(((HeadersMessage) m).getBlockHeaders());
-                        log.info("Got header from bitcoind " + b.getHashAsString());
-                        bitcoindChainHead = b.getHash();
+                        log.info("Got header from flod " + b.getHashAsString());
+                        flodChainHead = b.getHash();
                     } else
-                        log.info("Got empty header message from bitcoind");
+                        log.info("Got empty header message from flod");
                     return null;
                 } else if (m instanceof Block) {
-                    log.error("bitcoind sent us a block it already had, make sure bitcoind has no blocks!");
+                    log.error("flod sent us a block it already had, make sure flod has no blocks!");
                     System.exit(1);
                 } else if (m instanceof GetDataMessage) {
                     for (InventoryItem item : ((GetDataMessage) m).items)
                         if (item.type == InventoryItem.Type.Block) {
                             log.info("Requested " + item.hash);
                             if (currentBlock.block.getHash().equals(item.hash))
-                                bitcoind.sendMessage(currentBlock.block);
+                                flod.sendMessage(currentBlock.block);
                             else {
                                 Block nextBlock = preloadedBlocks.get(item.hash);
                                 if (nextBlock != null)
-                                    bitcoind.sendMessage(nextBlock);
+                                    flod.sendMessage(nextBlock);
                                 else {
                                     blocksPendingSend.add(item.hash);
                                     log.info("...which we will not provide yet");
@@ -200,11 +200,11 @@ public class FLOdComparisonTool {
                         }
                         if (!found)
                             sendHeaders = headers;
-                        bitcoind.sendMessage(new HeadersMessage(params, sendHeaders));
+                        flod.sendMessage(new HeadersMessage(params, sendHeaders));
                         InventoryMessage i = new InventoryMessage(params);
                         for (Block b : sendHeaders)
                             i.addBlock(b);
-                        bitcoind.sendMessage(i);
+                        flod.sendMessage(i);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -220,10 +220,10 @@ public class FLOdComparisonTool {
             }
         });
         
-        bitcoindChainHead = params.getGenesisBlock().getHash();
+        flodChainHead = params.getGenesisBlock().getHash();
         
         // bitcoind MUST be on localhost or we will get banned as a DoSer
-        new NioClient(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), args.length > 2 ? Integer.parseInt(args[2]) : params.getPort()), bitcoind, 1000);
+        new NioClient(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), args.length > 2 ? Integer.parseInt(args[2]) : params.getPort()), flod, 1000);
 
         connectedFuture.get();
 
@@ -288,27 +288,27 @@ public class FLOdComparisonTool {
                     blocksRequested.remove(nextBlock.getHash());
                 InventoryMessage message = new InventoryMessage(params);
                 message.addBlock(nextBlock);
-                bitcoind.sendMessage(message);
+                flod.sendMessage(message);
                 log.info("Sent inv with block " + nextBlock.getHashAsString());
                 if (blocksPendingSend.contains(nextBlock.getHash())) {
-                    bitcoind.sendMessage(nextBlock);
+                    flod.sendMessage(nextBlock);
                     log.info("Sent full block " + nextBlock.getHashAsString());
                 }
                 // bitcoind doesn't request blocks inline so we can't rely on a ping for synchronization
                 for (int i = 0; !shouldntRequest && !blocksRequested.contains(nextBlock.getHash()); i++) {
                     int SLEEP_TIME = 1;
                     if (i % 1000/SLEEP_TIME == 1000/SLEEP_TIME - 1)
-                        log.error("bitcoind still hasn't requested block " + block.ruleName + " with hash " + nextBlock.getHash());
+                        log.error("flod still hasn't requested block " + block.ruleName + " with hash " + nextBlock.getHash());
                     Thread.sleep(SLEEP_TIME);
                     if (i > 60000/SLEEP_TIME) {
-                        log.error("bitcoind failed to request block " + block.ruleName);
+                        log.error("flod failed to request block " + block.ruleName);
                         System.exit(1);
                     }
                 }
                 if (shouldntRequest) {
                     Thread.sleep(100);
                     if (blocksRequested.contains(nextBlock.getHash())) {
-                        log.error("ERROR: bitcoind re-requested block " + block.ruleName + " with hash " + nextBlock.getHash());
+                        log.error("ERROR: flod re-requested block " + block.ruleName + " with hash " + nextBlock.getHash());
                         rulesSinceFirstFail++;
                     }
                 }
@@ -317,25 +317,25 @@ public class FLOdComparisonTool {
                     blocksRequested.remove(nextBlock.getHash());
                 //bitcoind.sendMessage(nextBlock);
                 locator.clear();
-                locator.add(bitcoindChainHead);
-                bitcoind.sendMessage(new GetHeadersMessage(params, locator, hashTo));
-                bitcoind.ping().get();
-                if (!chain.getChainHead().getHeader().getHash().equals(bitcoindChainHead)) {
+                locator.add(flodChainHead);
+                flod.sendMessage(new GetHeadersMessage(params, locator, hashTo));
+                flod.ping().get();
+                if (!chain.getChainHead().getHeader().getHash().equals(flodChainHead)) {
                     rulesSinceFirstFail++;
-                    log.error("ERROR: bitcoind and bitcoinj acceptance differs on block \"" + block.ruleName + "\"");
+                    log.error("ERROR: flod and floj acceptance differs on block \"" + block.ruleName + "\"");
                 }
                 if (block.sendOnce)
                     preloadedBlocks.remove(nextBlock.getHash());
                 log.info("Block \"" + block.ruleName + "\" completed processing");
             } else if (rule instanceof MemoryPoolState) {
                 MemoryPoolMessage message = new MemoryPoolMessage();
-                bitcoind.sendMessage(message);
-                bitcoind.ping().get();
+                flod.sendMessage(message);
+                flod.ping().get();
                 if (mostRecentInv == null && !((MemoryPoolState) rule).mempool.isEmpty()) {
-                    log.error("ERROR: bitcoind had an empty mempool, but we expected some transactions on rule " + rule.ruleName);
+                    log.error("ERROR: flod had an empty mempool, but we expected some transactions on rule " + rule.ruleName);
                     rulesSinceFirstFail++;
                 } else if (mostRecentInv != null && ((MemoryPoolState) rule).mempool.isEmpty()) {
-                    log.error("ERROR: bitcoind had a non-empty mempool, but we expected an empty one on rule " + rule.ruleName);
+                    log.error("ERROR: flod had a non-empty mempool, but we expected an empty one on rule " + rule.ruleName);
                     rulesSinceFirstFail++;
                 } else if (mostRecentInv != null) {
                     Set<InventoryItem> originalRuleSet = new HashSet<InventoryItem>(((MemoryPoolState)rule).mempool);
@@ -345,8 +345,8 @@ public class FLOdComparisonTool {
                             matches = false;
                     if (matches)
                         continue;
-                    log.error("bitcoind's mempool didn't match what we were expecting on rule " + rule.ruleName);
-                    log.info("  bitcoind's mempool was: ");
+                    log.error("flod's mempool didn't match what we were expecting on rule " + rule.ruleName);
+                    log.info("  flod's mempool was: ");
                     for (InventoryItem item : mostRecentInv.items)
                         log.info("    " + item.hash);
                     log.info("  The expected mempool was: ");
@@ -356,9 +356,9 @@ public class FLOdComparisonTool {
                 }
                 mostRecentInv = null;
             } else if (rule instanceof UTXORule) {
-                if (bitcoind.getPeerVersionMessage().isGetUTXOsSupported()) {
+                if (flod.getPeerVersionMessage().isGetUTXOsSupported()) {
                     UTXORule r = (UTXORule) rule;
-                    UTXOsMessage result = bitcoind.getUTXOs(r.query).get();
+                    UTXOsMessage result = flod.getUTXOs(r.query).get();
                     if (!result.equals(r.result)) {
                         log.error("utxo result was not what we expected.");
                         log.error("Wanted  {}", r.result);
@@ -378,7 +378,7 @@ public class FLOdComparisonTool {
         }
 
         if (unexpectedInvs.get() > 0)
-            log.error("ERROR: Got " + unexpectedInvs.get() + " unexpected invs from bitcoind");
+            log.error("ERROR: Got " + unexpectedInvs.get() + " unexpected invs from flod");
         log.info("Done testing.");
         System.exit(rulesSinceFirstFail > 0 || unexpectedInvs.get() > 0 ? 1 : 0);
     }

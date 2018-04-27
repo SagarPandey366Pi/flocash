@@ -142,7 +142,7 @@ public class BlockTest {
     public void testHeaderParse() throws Exception {
         Block block = PARAMS.getDefaultSerializer().makeBlock(blockBytes);
         Block header = block.cloneAsHeader();
-        Block reparsed = PARAMS.getDefaultSerializer().makeBlock(header.bitcoinSerialize());
+        Block reparsed = PARAMS.getDefaultSerializer().makeBlock(header.floSerialize());
         assertEquals(reparsed, header);
     }
 
@@ -153,18 +153,18 @@ public class BlockTest {
         //
         // NB: This tests the flo serialization protocol.
         Block block = PARAMS.getDefaultSerializer().makeBlock(blockBytes);
-        assertTrue(Arrays.equals(blockBytes, block.bitcoinSerialize()));
+        assertTrue(Arrays.equals(blockBytes, block.floSerialize()));
     }
     
     @Test
     public void testUpdateLength() {
         NetworkParameters params = UnitTestParams.get();
         Block block = params.getGenesisBlock().createNextBlockWithCoinbase(Block.BLOCK_VERSION_GENESIS, new ECKey().getPubKey(), Block.BLOCK_HEIGHT_GENESIS);
-        assertEquals(block.bitcoinSerialize().length, block.length);
+        assertEquals(block.floSerialize().length, block.length);
         final int origBlockLen = block.length;
         Transaction tx = new Transaction(params);
         // this is broken until the transaction has > 1 input + output (which is required anyway...)
-        //assertTrue(tx.length == tx.bitcoinSerialize().length && tx.length == 8);
+        //assertTrue(tx.length == tx.floSerialize().length && tx.length == 8);
         byte[] outputScript = new byte[10];
         Arrays.fill(outputScript, (byte) ScriptOpCodes.OP_FALSE);
         tx.addOutput(new TransactionOutput(params, null, Coin.SATOSHI, outputScript));

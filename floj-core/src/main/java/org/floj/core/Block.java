@@ -274,7 +274,7 @@ public class Block extends Message {
     public int getOptimalEncodingMessageSize() {
         if (optimalEncodingMessageSize != 0)
             return optimalEncodingMessageSize;
-        optimalEncodingMessageSize = bitcoinSerialize().length;
+        optimalEncodingMessageSize = floSerialize().length;
         return optimalEncodingMessageSize;
     }
 
@@ -317,7 +317,7 @@ public class Block extends Message {
         if (transactions != null) {
             stream.write(new VarInt(transactions.size()).encode());
             for (Transaction tx : transactions) {
-                tx.bitcoinSerialize(stream);
+                tx.floSerialize(stream);
             }
         }
     }
@@ -327,7 +327,7 @@ public class Block extends Message {
      * and transactions
      */
     @Override
-    public byte[] bitcoinSerialize() {
+    public byte[] floSerialize() {
         // we have completely cached byte array.
         if (headerBytesValid && transactionBytesValid) {
             Preconditions.checkNotNull(payload, "Bytes should never be null if headerBytesValid && transactionBytesValid");
@@ -354,7 +354,7 @@ public class Block extends Message {
     }
 
     @Override
-    protected void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    protected void floSerializeToStream(OutputStream stream) throws IOException {
         writeHeader(stream);
         // We may only have enough data to write the header.
         writeTransactions(stream);

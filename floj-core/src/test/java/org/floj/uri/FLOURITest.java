@@ -381,9 +381,9 @@ public class FLOURITest {
     @Test
     public void testPaymentProtocolReq() throws Exception {
         // Non-backwards compatible form ...
-        FLOURI uri = new FLOURI(TestNet3Params.get(), "flo:?r=https%3A%2F%2Fbitcoincore.org%2F%7Egavin%2Ff.php%3Fh%3Db0f02e7cea67f168e25ec9b9f9d584f9");
-        assertEquals("https://bitcoincore.org/~gavin/f.php?h=b0f02e7cea67f168e25ec9b9f9d584f9", uri.getPaymentRequestUrl());
-        assertEquals(ImmutableList.of("https://bitcoincore.org/~gavin/f.php?h=b0f02e7cea67f168e25ec9b9f9d584f9"),
+        FLOURI uri = new FLOURI(TestNet3Params.get(), "flo:?r=https%3A%2F%2Fflocore.org%2F%7Egavin%2Ff.php%3Fh%3Db0f02e7cea67f168e25ec9b9f9d584f9");
+        assertEquals("https://flocore.org/~gavin/f.php?h=b0f02e7cea67f168e25ec9b9f9d584f9", uri.getPaymentRequestUrl());
+        assertEquals(ImmutableList.of("https://flocore.org/~gavin/f.php?h=b0f02e7cea67f168e25ec9b9f9d584f9"),
                 uri.getPaymentRequestUrls());
         assertNull(uri.getAddress());
     }
@@ -391,9 +391,9 @@ public class FLOURITest {
     @Test
     public void testMultiplePaymentProtocolReq() throws Exception {
         FLOURI uri = new FLOURI(MAINNET,
-                "flo:?r=https%3A%2F%2Fbitcoincore.org%2F%7Egavin&r1=bt:112233445566");
-        assertEquals(ImmutableList.of("bt:112233445566", "https://bitcoincore.org/~gavin"), uri.getPaymentRequestUrls());
-        assertEquals("https://bitcoincore.org/~gavin", uri.getPaymentRequestUrl());
+                "flo:?r=https%3A%2F%2Fflocore.org%2F%7Egavin&r1=bt:112233445566");
+        assertEquals(ImmutableList.of("bt:112233445566", "https://flocore.org/~gavin"), uri.getPaymentRequestUrls());
+        assertEquals("https://flocore.org/~gavin", uri.getPaymentRequestUrl());
     }
 
     @Test

@@ -262,7 +262,7 @@ public class ChildKeyDerivationTest {
     @Test
     public void reserialization() {
         // This is the public encoding of the key with path m/0H/1/2H from BIP32 published test vector 1:
-        // https://en.flo.it/wiki/BIP_0032_TestVectors
+        // https://en.bitcoin.it/wiki/BIP_0032_TestVectors
         String encoded =
             "xpub6D4BDPcP2GT577Vvch3R8wDkScZWzQzMMUm3PWbmWvVJrZwQY4VUNgqFJPMM3No2dFDFGTsxxpG5uJh7n7epu4trkrX7x7DogT5Uv6fcLW5";
         DeterministicKey key = DeterministicKey.deserializeB58(encoded, MainNetParams.get());

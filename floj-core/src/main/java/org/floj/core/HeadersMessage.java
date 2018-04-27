@@ -57,10 +57,10 @@ public class HeadersMessage extends Message {
     }
 
     @Override
-    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    public void floSerializeToStream(OutputStream stream) throws IOException {
         stream.write(new VarInt(blockHeaders.size()).encode());
         for (Block header : blockHeaders) {
-            header.cloneAsHeader().bitcoinSerializeToStream(stream);
+            header.cloneAsHeader().floSerializeToStream(stream);
             stream.write(0);
         }
     }

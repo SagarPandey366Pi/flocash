@@ -124,7 +124,7 @@ public class BIP38PrivateKeyTest {
     }
 
     @Test
-    public void bitcoinpaperwallet_testnet() throws Exception {
+    public void flopaperwallet_testnet() throws Exception {
         // values taken from bitcoinpaperwallet.com
         BIP38PrivateKey encryptedKey = BIP38PrivateKey.fromBase58(TESTNET,
                 "6PRPhQhmtw6dQu6jD8E1KS4VphwJxBS9Eh9C8FQELcrwN3vPvskv9NKvuL");

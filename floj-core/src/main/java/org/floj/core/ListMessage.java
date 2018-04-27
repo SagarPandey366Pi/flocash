@@ -109,7 +109,7 @@ public abstract class ListMessage extends Message {
     }
 
     @Override
-    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    public void floSerializeToStream(OutputStream stream) throws IOException {
         stream.write(new VarInt(items.size()).encode());
         for (InventoryItem i : items) {
             // Write out the type code.

@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.floj.core.PeerGroupTest
--------------------------------------------------------------------------------
-Tests run: 42, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 5.845 sec - in org.floj.core.PeerGroupTest

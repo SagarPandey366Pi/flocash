@@ -246,7 +246,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         // Send the refund tx from client to server and get back the signature.
         Transaction refund;
         if (useRefunds()) {
-            refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().bitcoinSerialize());
+            refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().floSerialize());
             byte[] refundSig = serverV1State().provideRefundTransaction(refund, myKey.getPubKey());
             assertEquals(PaymentChannelServerState.State.WAITING_FOR_MULTISIG_CONTRACT, serverState.getState());
             // This verifies that the refund can spend the multi-sig output when run.
@@ -259,7 +259,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         assertEquals(PaymentChannelClientState.State.PROVIDE_MULTISIG_CONTRACT_TO_SERVER, clientState.getState());
 
         // Validate the multisig contract looks right.
-        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().bitcoinSerialize());
+        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().floSerialize());
         assertEquals(PaymentChannelClientState.State.READY, clientState.getState());
         assertEquals(2, multisigContract.getOutputs().size());   // One multi-sig, one change.
         Script script = multisigContract.getOutput(0).getScriptPubKey();
@@ -317,7 +317,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         final TxFuturePair pair2 = broadcasts.take();
         Transaction closeTx = pair2.tx;
         pair2.future.set(closeTx);
-        final Transaction reserializedCloseTx = new Transaction(PARAMS, closeTx.bitcoinSerialize());
+        final Transaction reserializedCloseTx = new Transaction(PARAMS, closeTx.floSerialize());
         assertEquals(PaymentChannelServerState.State.CLOSED, serverState.getState());
         // ... and on the client side.
         wallet.receivePending(reserializedCloseTx, null);
@@ -373,7 +373,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         if (useRefunds()) {
             // Send the refund tx from client to server and get back the signature.
-            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().bitcoinSerialize());
+            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().floSerialize());
             byte[] refundSig = serverV1State().provideRefundTransaction(refund, myKey.getPubKey());
             assertEquals(PaymentChannelServerState.State.WAITING_FOR_MULTISIG_CONTRACT, serverState.getState());
             // This verifies that the refund can spend the multi-sig output when run.
@@ -384,7 +384,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         assertEquals(PaymentChannelClientState.State.PROVIDE_MULTISIG_CONTRACT_TO_SERVER, clientState.getState());
 
         // Validate the multisig contract looks right.
-        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().bitcoinSerialize());
+        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().floSerialize());
         assertEquals(PaymentChannelClientState.State.READY, clientState.getState());
         assertEquals(2, multisigContract.getOutputs().size());   // One multi-sig, one change.
         Script script = multisigContract.getOutput(0).getScriptPubKey();
@@ -479,7 +479,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         if (useRefunds()) {
             // Test refund transaction with any number of issues
-            byte[] refundTxBytes = clientV1State().getIncompleteRefundTransaction().bitcoinSerialize();
+            byte[] refundTxBytes = clientV1State().getIncompleteRefundTransaction().floSerialize();
             Transaction refund = new Transaction(PARAMS, refundTxBytes);
             refund.addOutput(Coin.ZERO, new ECKey().toAddress(PARAMS));
             try {
@@ -571,7 +571,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         try { clientState.incrementPaymentBy(Coin.SATOSHI, null); fail(); } catch (IllegalStateException e) {}
 
-        byte[] multisigContractSerialized = clientState.getContract().bitcoinSerialize();
+        byte[] multisigContractSerialized = clientState.getContract().floSerialize();
 
         Transaction multisigContract = new Transaction(PARAMS, multisigContractSerialized);
         multisigContract.clearOutputs();
@@ -750,7 +750,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         if (useRefunds()) {
             // Send the refund tx from client to server and get back the signature.
-            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().bitcoinSerialize());
+            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().floSerialize());
             byte[] refundSig = serverV1State().provideRefundTransaction(refund, myKey.getPubKey());
             assertEquals(PaymentChannelServerState.State.WAITING_FOR_MULTISIG_CONTRACT, serverState.getState());
             // This verifies that the refund can spend the multi-sig output when run.
@@ -761,7 +761,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         assertEquals(PaymentChannelClientState.State.PROVIDE_MULTISIG_CONTRACT_TO_SERVER, clientState.getState());
 
         // Get the multisig contract
-        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().bitcoinSerialize());
+        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().floSerialize());
         assertEquals(PaymentChannelClientState.State.READY, clientState.getState());
 
         // Provide the server with the multisig contract and simulate successful propagation/acceptance.
@@ -849,7 +849,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         if (useRefunds()) {
             // Send the refund tx from client to server and get back the signature.
-            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().bitcoinSerialize());
+            Transaction refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().floSerialize());
             byte[] refundSig = serverV1State().provideRefundTransaction(refund, myKey.getPubKey());
             assertEquals(PaymentChannelServerState.State.WAITING_FOR_MULTISIG_CONTRACT, serverState.getState());
             // This verifies that the refund can spend the multi-sig output when run.
@@ -860,7 +860,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         assertEquals(PaymentChannelClientState.State.PROVIDE_MULTISIG_CONTRACT_TO_SERVER, clientState.getState());
 
         // Validate the multisig contract looks right.
-        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().bitcoinSerialize());
+        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().floSerialize());
         assertEquals(PaymentChannelV1ClientState.State.READY, clientState.getState());
         assertEquals(2, multisigContract.getOutputs().size());   // One multi-sig, one change.
         Script script = multisigContract.getOutput(0).getScriptPubKey();
@@ -937,7 +937,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
 
         Transaction refund;
         if (useRefunds()) {
-            refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().bitcoinSerialize());
+            refund = new Transaction(PARAMS, clientV1State().getIncompleteRefundTransaction().floSerialize());
             // Send the refund tx from client to server and get back the signature.
             byte[] refundSig = serverV1State().provideRefundTransaction(refund, myKey.getPubKey());
             assertEquals(PaymentChannelV1ServerState.State.WAITING_FOR_MULTISIG_CONTRACT, serverState.getState());
@@ -951,7 +951,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         assertEquals(PaymentChannelClientState.State.PROVIDE_MULTISIG_CONTRACT_TO_SERVER, clientState.getState());
 
         // Validate the multisig contract looks right.
-        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().bitcoinSerialize());
+        Transaction multisigContract = new Transaction(PARAMS, clientState.getContract().floSerialize());
         assertEquals(PaymentChannelClientState.State.READY, clientState.getState());
         assertEquals(2, multisigContract.getOutputs().size());   // One multi-sig, one change.
         Script script = multisigContract.getOutput(0).getScriptPubKey();
@@ -1001,7 +1001,7 @@ public class PaymentChannelStateTest extends TestWithWallet {
         doubleSpendContract.addInput(new TransactionInput(PARAMS, doubleSpendContract, new byte[0],
                 multisigContract.getInput(0).getOutpoint()));
         doubleSpendContract.addOutput(HALF_COIN, myKey);
-        doubleSpendContract = new Transaction(PARAMS, doubleSpendContract.bitcoinSerialize());
+        doubleSpendContract = new Transaction(PARAMS, doubleSpendContract.floSerialize());
 
         StoredBlock block = new StoredBlock(PARAMS.getGenesisBlock().createNextBlock(myKey.toAddress(PARAMS)), BigInteger.TEN, 1);
         serverWallet.receiveFromBlock(doubleSpendContract, block, AbstractBlockChain.NewBlockType.BEST_CHAIN, 0);

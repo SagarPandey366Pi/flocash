@@ -186,7 +186,7 @@ public class PostgresFullPrunedBlockStore extends DatabaseFullPrunedBlockStore {
                 bos.write(0xFF & (numTxn >> 16));
                 bos.write(0xFF & (numTxn >> 24));
                 for (Transaction tx : undoableBlock.getTransactions())
-                    tx.bitcoinSerialize(bos);
+                    tx.floSerialize(bos);
                 transactions = bos.toByteArray();
             }
             bos.close();

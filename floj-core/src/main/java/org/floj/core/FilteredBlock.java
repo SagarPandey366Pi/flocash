@@ -50,12 +50,12 @@ public class FilteredBlock extends Message {
     }
 
     @Override
-    public void bitcoinSerializeToStream(OutputStream stream) throws IOException {
+    public void floSerializeToStream(OutputStream stream) throws IOException {
         if (header.transactions == null)
-            header.bitcoinSerializeToStream(stream);
+            header.floSerializeToStream(stream);
         else
-            header.cloneAsHeader().bitcoinSerializeToStream(stream);
-        merkleTree.bitcoinSerializeToStream(stream);
+            header.cloneAsHeader().floSerializeToStream(stream);
+        merkleTree.floSerializeToStream(stream);
     }
 
     @Override

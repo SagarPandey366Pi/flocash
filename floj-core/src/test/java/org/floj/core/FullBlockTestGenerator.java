@@ -192,7 +192,7 @@ public class FullBlockTestGenerator {
                         outStream.write((int) (params.getPacketMagic() >>> 16));
                         outStream.write((int) (params.getPacketMagic() >>> 8));
                         outStream.write((int) params.getPacketMagic());
-                        byte[] block = ((BlockAndValidity)element).block.bitcoinSerialize();
+                        byte[] block = ((BlockAndValidity)element).block.floSerialize();
                         byte[] length = new byte[4];
                         Utils.uint32ToByteArrayBE(block.length, length, 0);
                         outStream.write(Utils.reverseBytes(length));
@@ -1091,7 +1091,7 @@ public class FullBlockTestGenerator {
 
         Block b56;
         try {
-            b56 = params.getDefaultSerializer().makeBlock(b57.block.bitcoinSerialize());
+            b56 = params.getDefaultSerializer().makeBlock(b57.block.floSerialize());
         } catch (ProtocolException e) {
             throw new RuntimeException(e); // Cannot happen.
         }
@@ -1132,7 +1132,7 @@ public class FullBlockTestGenerator {
 
         Block b56p2;
         try {
-            b56p2 = params.getDefaultSerializer().makeBlock(b57p2.block.bitcoinSerialize());
+            b56p2 = params.getDefaultSerializer().makeBlock(b57p2.block.floSerialize());
         } catch (ProtocolException e) {
             throw new RuntimeException(e); // Cannot happen.
         }
@@ -1250,14 +1250,14 @@ public class FullBlockTestGenerator {
             checkState(new VarInt(varIntBytes, 0).value == b64Original.block.getTransactions().size());
 
             for (Transaction transaction : b64Original.block.getTransactions())
-                transaction.bitcoinSerialize(stream);
+                transaction.floSerialize(stream);
             b64 = params.getSerializer(true).makeBlock(stream.toByteArray(), stream.size());
 
             // The following checks are checking to ensure block serialization functions in the way needed for this test
             // If they fail, it is likely not an indication of error, but an indication that this test needs rewritten
             checkState(stream.size() == b64Original.block.getMessageSize() + 8);
             checkState(stream.size() == b64.getMessageSize());
-            checkState(Arrays.equals(stream.toByteArray(), b64.bitcoinSerialize()));
+            checkState(Arrays.equals(stream.toByteArray(), b64.floSerialize()));
             checkState(b64.getOptimalEncodingMessageSize() == b64Original.block.getMessageSize());
         }
         blocks.add(new BlockAndValidity(b64, true, false, b64.getHash(), chainHeadHeight + 19, "b64"));
@@ -1379,7 +1379,7 @@ public class FullBlockTestGenerator {
         }
         b72.solve();
 
-        Block b71 = params.getDefaultSerializer().makeBlock(b72.block.bitcoinSerialize());
+        Block b71 = params.getDefaultSerializer().makeBlock(b72.block.floSerialize());
         b71.addTransaction(b72.block.getTransactions().get(2));
         checkState(b71.getHash().equals(b72.getHash()));
         blocks.add(new BlockAndValidity(b71, false, true, b69.getHash(), chainHeadHeight + 21, "b71"));

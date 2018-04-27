@@ -54,7 +54,7 @@ public class Context {
      * @param params The network parameters that will be associated with this context.
      */
     public Context(NetworkParameters params) {
-        log.info("Creating bitcoinj {} context.", VersionMessage.BITCOINJ_VERSION);
+        log.info("Creating floj {} context.", VersionMessage.BITCOINJ_VERSION);
         this.confidenceTable = new TxConfidenceTable();
         this.params = params;
         lastConstructed = this;
@@ -95,14 +95,14 @@ public class Context {
         Context tls = slot.get();
         if (tls == null) {
             if (isStrictMode) {
-                log.error("Thread is missing a bitcoinj context.");
+                log.error("Thread is missing a floj context.");
                 log.error("You should use Context.propagate() or a ContextPropagatingThreadFactory.");
                 throw new IllegalStateException("missing context");
             }
             if (lastConstructed == null)
-                throw new IllegalStateException("You must construct a Context object before using bitcoinj!");
+                throw new IllegalStateException("You must construct a Context object before using floj!");
             slot.set(lastConstructed);
-            log.error("Performing thread fixup: you are accessing bitcoinj via a thread that has not had any context set on it.");
+            log.error("Performing thread fixup: you are accessing floj via a thread that has not had any context set on it.");
             log.error("This error has been corrected for, but doing this makes your app less robust.");
             log.error("You should use Context.propagate() or a ContextPropagatingThreadFactory.");
             log.error("Please refer to the user guide for more information about this.");

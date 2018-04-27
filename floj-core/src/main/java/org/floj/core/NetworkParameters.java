@@ -720,14 +720,14 @@ public abstract class NetworkParameters {
         BLOOM_FILTER(70000),
         CURRENT(70002);
 
-        private final int bitcoinProtocol;
+        private final int floProtocol;
 
-        ProtocolVersion(final int bitcoinProtocol) {
-            this.bitcoinProtocol = bitcoinProtocol;
+        ProtocolVersion(final int floProtocol) {
+            this.floProtocol = floProtocol;
         }
 
         public int getFLOProtocolVersion() {
-            return bitcoinProtocol;
+            return floProtocol;
         }
     }
 }

@@ -65,7 +65,7 @@ public class ClickableFLOAddress extends AnchorPane {
 
     public ClickableFLOAddress() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("bitcoin_address.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("flo_address.fxml"));
             loader.setRoot(this);
             loader.setController(this);
             // The following line is supposed to help Scene Builder, although it doesn't seem to be needed for me.
