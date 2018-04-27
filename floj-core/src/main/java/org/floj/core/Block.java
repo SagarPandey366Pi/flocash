@@ -577,15 +577,16 @@ public class Block extends Message {
         // To prevent this attack from being possible, elsewhere we check that the difficultyTarget
         // field is of the right value. This requires us to have the preceeding blocks.
         BigInteger target = getDifficultyTargetAsInteger();
-        
-        BigInteger h = getPowHash().toBigInteger();
+
+        Sha256Hash powHash = getPowHash();
+        BigInteger h = powHash.toBigInteger();
 //        System.out.println("powHash: "+h.toString(16));
 //        System.out.println("target : "+target.toString(16));
 //        BigInteger h = getHash().toBigInteger();
         if (h.compareTo(target) > 0) {
             // Proof of work check failed!
             if (throwException)
-                throw new VerificationException("Hash is higher than target: " + getHashAsString() + " vs "
+                throw new VerificationException("Hash is higher than target: " + powHash.toString() + " vs "
                         + target.toString(16));
             else
                 return false;
