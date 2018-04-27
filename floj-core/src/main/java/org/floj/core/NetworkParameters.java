@@ -184,9 +184,9 @@ public abstract class NetworkParameters {
             return nTargetTimespan_Version1;
         // V2
         if (height < nHeight_Difficulty_Version3)
-            return nInterval_Version2 * nPowTargetSpacing;
+            return nAveragingInterval_Version2 * nPowTargetSpacing;
         // V3
-        return nInterval_Version3 * nPowTargetSpacing;
+        return nAveragingInterval_Version3 * nPowTargetSpacing;
     }
 
     public long DifficultyAdjustmentInterval(int height) {
@@ -233,95 +233,6 @@ public abstract class NetworkParameters {
             return nAveragingInterval_Version2;
         // V3
         return nAveragingInterval_Version3;
-    }
-    
-    public long GetNextWorkRequired(final StoredBlock storedPrev, final Block nextBlock, 
-    		final BlockStore blockStore) throws BlockStoreException {
-    	Block prev = storedPrev.getHeader();
-    	
-        long nProofOfWorkLimit=Utils.encodeCompactBits(maxTarget); // UintToArith256(params.powLimit).GetCompact();
-
-        // Only change once per difficulty adjustment interval
-    	int height=storedPrev.getHeight()+1;
-        if((height % DifficultyAdjustmentInterval(height))!=0) {
-        	
-        	
-            if(fPowAllowMinDifficultyBlocks) {
-                // Special difficulty rule for testnet:
-                // If the new block's timestamp is more than 2* 10 minutes
-                // then allow mining of a min-difficulty block.
-            	
-                if(nextBlock.getTimeSeconds() > (prev.getTimeSeconds()+TargetTimespan(height)*2)) {
-                    return nProofOfWorkLimit;
-                } else {
-                    // Return the last non-special-min-difficulty-rules-block
-                	StoredBlock cursor = blockStore.get(prev.getHash());
-                    while (cursor!=null && (cursor.getHeight() % DifficultyAdjustmentInterval(cursor.getHeight()+1))!=0 && cursor.getHeader().getDifficultyTarget()==nProofOfWorkLimit)
-                    	cursor=blockStore.get(cursor.getHeader().getPrevBlockHash());
-                    return cursor.getHeader().getDifficultyTarget();
-                }
-            }
-            return storedPrev.getHeader().getDifficultyTarget();
-        }
-
-        long averagingInterval = AveragingInterval(height);
-        // Go back by what we want to be 14 days worth of blocks
-        // FLO: This fixes an issue where a 51% attack can change difficulty at will.
-        // Go back the full period unless it's the first retarget after genesis. Code courtesy of Art Forz
-        long blockstogoback = averagingInterval-1;
-        if (height != averagingInterval)
-            blockstogoback = averagingInterval;
-
-        // Go back by what we want to be 14 days worth of blocks
-        StoredBlock cursor = blockStore.get(prev.getHash()); //const CBlockIndex* pindexFirst = storedPrev;
-        for(int i=0; cursor!=null && i<blockstogoback; i++)
-        	cursor=blockStore.get(cursor.getHeader().getPrevBlockHash()); //pindexFirst = pindexFirst->pprev;
-
-        assert(cursor!=null);
-
-        return CalculateNextWorkRequired(storedPrev, cursor.getHeader().getTimeSeconds());
-    }
-
-    public long CalculateNextWorkRequired(final StoredBlock storedPrev, long nFirstBlockTime) {
-        if (fPowNoRetargeting)
-            return storedPrev.getHeader().getDifficultyTarget();
-        
-        int height=storedPrev.getHeight()+1;
-        final long nMinActualTimespan = MinActualTimespan(height);
-        final long nMaxActualTimespan = MaxActualTimespan(height);
-
-        // Limit adjustment step
-        long nActualTimespan = storedPrev.getHeader().getTimeSeconds() - nFirstBlockTime;
-        if (nActualTimespan < nMinActualTimespan)
-            nActualTimespan = nMinActualTimespan;
-        if (nActualTimespan > nMaxActualTimespan)
-            nActualTimespan = nMaxActualTimespan;
-
-        // Retarget
-        BigInteger bnNew;
-//        BigInteger bnOld;
-        bnNew=Utils.decodeCompactBits(storedPrev.getHeader().getDifficultyTarget()); //.SetCompact(storedPrev.getHeader().getDifficultyTarget());
-//        bnOld = bnNew;
-        // FLO: intermediate uint256 can overflow by 1 bit
-        final BigInteger bnPowLimit=maxTarget;  // const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
-        boolean fShift = bnNew.compareTo(bnPowLimit.subtract(BigInteger.ONE))>0; //bnNew.bits() > bnPowLimit.bits() - 1;
-        if(fShift)
-            bnNew.shiftRight(1); // bnNew >>= 1;
-        bnNew=bnNew.multiply(BigInteger.valueOf(nActualTimespan)); // bnNew *= nActualTimespan;
-        bnNew=bnNew.divide(BigInteger.valueOf(AveragingInterval(height)*nPowTargetSpacing)); // bnNew /= params.AveragingInterval(storedPrev.getHeight()+1) * params.nPowTargetSpacing;
-        if(fShift)
-        	bnNew.shiftLeft(1); // bnNew <<= 1;
-
-        if(bnNew.compareTo(bnPowLimit)>0) // (bnNew > bnPowLimit)
-            bnNew = bnPowLimit;
-
-//        /// debug print
-//        LogPrintf("GetNextWorkRequired RETARGET\n");
-//        LogPrintf("Params().TargetTimespan() = %d    nActualTimespan = %d\n", params.TargetTimespan(storedPrev.getHeight()+1), nActualTimespan);
-//        LogPrintf("Before: %08x  %s\n", storedPrev.getHeader().getDifficultyTarget(), bnOld.ToString());
-//        LogPrintf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.ToString());
-
-        return Utils.encodeCompactBits(bnNew); //bnNew.GetCompact();
     }
 
     /**
