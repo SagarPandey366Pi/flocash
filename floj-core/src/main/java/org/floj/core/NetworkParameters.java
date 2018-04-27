@@ -235,7 +235,7 @@ public abstract class NetworkParameters {
         return nAveragingInterval_Version3;
     }
     
-    long GetNextWorkRequired(final StoredBlock storedPrev, final Block nextBlock, 
+    public long GetNextWorkRequired(final StoredBlock storedPrev, final Block nextBlock, 
     		final BlockStore blockStore) throws BlockStoreException {
     	Block prev = storedPrev.getHeader();
     	
@@ -282,7 +282,7 @@ public abstract class NetworkParameters {
         return CalculateNextWorkRequired(storedPrev, cursor.getHeader().getTimeSeconds());
     }
 
-    long CalculateNextWorkRequired(final StoredBlock storedPrev, long nFirstBlockTime) {
+    public long CalculateNextWorkRequired(final StoredBlock storedPrev, long nFirstBlockTime) {
         if (fPowNoRetargeting)
             return storedPrev.getHeader().getDifficultyTarget();
         
@@ -548,7 +548,7 @@ public abstract class NetworkParameters {
         return true;
     }
 
-    /** How many blocks pass between difficulty adjustment periods. FLO standardises this to be 2015. */
+    /** How many blocks pass between difficulty adjustment periods. Bitcoin standardises this to be 2015. */
     public int getInterval() {
         return interval;
     }

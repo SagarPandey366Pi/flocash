@@ -58,9 +58,10 @@ public abstract class AbstractFLONetParams extends NetworkParameters {
      * @return If this is a difficulty transition point
      */
     protected boolean isDifficultyTransitionPoint(StoredBlock storedPrev) {
-    	//flo where interval is fixed to 2016
+    	//bitcoin where interval is fixed to 2016
     	//return ((storedPrev.getHeight() + 1) % this.getInterval()) == 0;
 
+    	//see if this is an adjustment interfval
     	int height=storedPrev.getHeight() + 1;
     	return (height % this.DifficultyAdjustmentInterval(height)) == 0;
     }
@@ -80,61 +81,66 @@ public abstract class AbstractFLONetParams extends NetworkParameters {
                         Long.toHexString(prev.getDifficultyTarget()));
             return;
         }
-
-        // We need to find a block far back in the chain. For flo, it's OK that this is expensive because it only occurs every
-        // two weeks after the initial block chain download.
-        final Stopwatch watch = Stopwatch.createStarted();
-        StoredBlock cursor = blockStore.get(prev.getHash());
-        //this.getInterval() = 2016; 2016-1=2015
         
-        // get block right after previous transition block
-        for (int i = 0; i < this.getInterval() - 1; i++) {
-            if (cursor == null) {
-                // This should never happen. If it does, it means we are following an incorrect or busted chain.
-                throw new VerificationException(
-                        "Difficulty transition point but we did not find a way back to the genesis block.");
-            }
-            cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
-        }
-        watch.stop();
-        if (watch.elapsed(TimeUnit.MILLISECONDS) > 50)
-            log.info("Difficulty transition traversal took {}", watch);
+        //TODO: benefit from implementing this in FLO seems negligable as transition between blocks is adjusted every block, not every 2 weeks like in Bitcoin
 
-        // calculate how many seconds from that previous block to this block
-        Block blockIntervalAgo = cursor.getHeader();
-        int timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
-        // Limit the adjustment step.
-        // Get the target times span
-        final int targetTimespan = this.getTargetTimespan();
-        // Check if timespan < (2 weeks divided by 4, 1209600 / 4) or < 3.5 days
-        if (timespan < targetTimespan / 4)
-        	//divide timespan by 3.5 days (302,400 seconds)
-            timespan = targetTimespan / 4;
-        // Check if timespan < (2 weeks times by 4, 1209600 * 4) or < 56 days
-        if (timespan > targetTimespan * 4)
-        	//multiply timespan by 56 days (4,838,400 seconds)
-            timespan = targetTimespan * 4;
-
-        BigInteger newTarget = Utils.decodeCompactBits(prev.getDifficultyTarget());
-        newTarget = newTarget.multiply(BigInteger.valueOf(timespan));
-        newTarget = newTarget.divide(BigInteger.valueOf(targetTimespan));
-
-        if (newTarget.compareTo(this.getMaxTarget()) > 0) {
-            log.info("Difficulty hit proof of work limit: {}", newTarget.toString(16));
-            newTarget = this.getMaxTarget();
-        }
-
-        int accuracyBytes = (int) (nextBlock.getDifficultyTarget() >>> 24) - 3;
-        long receivedTargetCompact = nextBlock.getDifficultyTarget();
-
-        // The calculated difficulty is to a higher precision than received, so reduce here.
-        BigInteger mask = BigInteger.valueOf(0xFFFFFFL).shiftLeft(accuracyBytes * 8);
-        newTarget = newTarget.and(mask);
-        long newTargetCompact = Utils.encodeCompactBits(newTarget);
-
-        if (newTargetCompact != receivedTargetCompact)
-            throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
-                    Long.toHexString(newTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
+//        // We need to find a block far back in the chain. For Bitcoin, it's OK that this is expensive because it only occurs every
+//        // two weeks after the initial block chain download. For FLO this occurs every block when at V3
+//        final Stopwatch watch = Stopwatch.createStarted();
+//        StoredBlock cursor = blockStore.get(prev.getHash());
+//        //this.getInterval() = 2016; 2016-1=2015
+//        
+//        // get block right after previous transition block; V3 should skip this whole thing because DifficultyAdjustmentInterval is 1, so no block in between
+//        for (int i = 0; cursor!=null && i < this.DifficultyAdjustmentInterval(cursor.getHeight()) - 1; i++) {    // i < this.getInterval() - 1; i++) {   
+//            cursor = blockStore.get(cursor.getHeader().getPrevBlockHash());
+//        }
+//        if (cursor == null) {
+//            // This should never happen. If it does, it means we are following an incorrect or busted chain.
+//            throw new VerificationException(
+//                    "Difficulty transition point but we did not find a way back to the genesis block.");
+//        }
+//        watch.stop();
+//        if (watch.elapsed(TimeUnit.MILLISECONDS) > 50)
+//            log.info("Difficulty transition traversal took {}", watch);
+//
+//        // calculate how many seconds from that previous block to this block
+//        Block blockIntervalAgo = cursor.getHeader();
+//        int timespan = (int) (prev.getTimeSeconds() - blockIntervalAgo.getTimeSeconds());
+//        
+//        long targetTimespan= this.CalculateNextWorkRequired(storedPrev,timespan);
+//        
+////        // Limit the adjustment step.
+////        // Get the target times span
+////        final int targetTimespan = this.getTargetTimespan();
+////        // Check if timespan < (2 weeks divided by 4, 1209600 / 4) or < 3.5 days
+////        if (timespan < targetTimespan / 4)
+////        	//divide timespan by 3.5 days (302,400 seconds)
+////            timespan = targetTimespan / 4;
+////        // Check if timespan < (2 weeks times by 4, 1209600 * 4) or < 56 days
+////        if (timespan > targetTimespan * 4)
+////        	//multiply timespan by 56 days (4,838,400 seconds)
+////            timespan = targetTimespan * 4;
+//
+//        BigInteger newTarget = Utils.decodeCompactBits(prev.getDifficultyTarget());
+//        newTarget = newTarget.multiply(BigInteger.valueOf(timespan));
+//        newTarget = newTarget.divide(BigInteger.valueOf(targetTimespan));
+//
+//        if (newTarget.compareTo(this.getMaxTarget()) > 0) {
+//            log.info("Difficulty hit proof of work limit: {}", newTarget.toString(16));
+//            newTarget = this.getMaxTarget();
+//        }
+//
+//        int accuracyBytes = (int) (nextBlock.getDifficultyTarget() >>> 24) - 3;
+//        long receivedTargetCompact = nextBlock.getDifficultyTarget();
+//
+//        // The calculated difficulty is to a higher precision than received, so reduce here.
+//        BigInteger mask = BigInteger.valueOf(0xFFFFFFL).shiftLeft(accuracyBytes * 8);
+//        newTarget = newTarget.and(mask);
+//        long newTargetCompact = Utils.encodeCompactBits(newTarget);
+//
+//        if (newTargetCompact != receivedTargetCompact)
+//            throw new VerificationException("Network provided difficulty bits do not match what was calculated: " +
+//                    Long.toHexString(newTargetCompact) + " vs " + Long.toHexString(receivedTargetCompact));
     }
 
     @Override
