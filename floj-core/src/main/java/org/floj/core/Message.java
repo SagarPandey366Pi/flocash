@@ -286,8 +286,7 @@ public abstract class Message {
      * so FLOSerializer can avoid 1 instanceof checks + a casting.
      */
     public Sha256Hash getPowHash() {
-		// TODO Auto-generated method stub
-		return null;
+        throw new UnsupportedOperationException();
 	}
 
     /**
