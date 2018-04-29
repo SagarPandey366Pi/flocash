@@ -29,6 +29,35 @@ As an alternative, Eclipse Neon or [Oxygen](https://eclipse.org/oxygen/) or othe
 
 Now you are ready to [follow the tutorial](https://bitcoinj.github.io/getting-started).
 
+### Basic Android App
+
+A basic Android app would have something like this in it:
+```
+// Start up a basic app using a class that automates some boilerplate. Ensure we always have at least one key.
+kit = new WalletAppKit(params, new File("."), filePrefix) {
+    @Override
+    protected void onSetupCompleted() {
+        // This is called in a background thread after startAndWait is called, as setting up various objects
+        // can do disk and network IO that may cause UI jank/stuttering in wallet apps if it were to be done
+        // on the main thread.
+        if (wallet().getKeyChainGroupSize() < 1)
+            wallet().importKey(new ECKey());
+    }
+};
+
+if (params == RegTestParams.get()) {
+    // Regression test mode is designed for testing and development only, so there's no public network for it.
+    // If you pick this mode, you're expected to be running a local "bitcoind -regtest" instance.
+    kit.connectToLocalHost();
+}
+
+// Download the block chain and wait until it's done.
+kit.startAsync();
+kit.awaitRunning();
+```
+
+This is the [basics of getting the wallet app kit working.](https://bitcoinj.github.io/getting-started-java)
+
 
 #### Building from the command line
 
