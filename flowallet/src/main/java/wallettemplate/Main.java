@@ -80,9 +80,12 @@ public class Main extends Application {
             // AquaFx.style();
         }
 
-        // Load the GUI. The MainController class will be automagically created and wired up.
-        URL location = getClass().getResource("main.fxml");
-        FXMLLoader loader = new FXMLLoader(location);
+        // Load the GUI. The MainController class will be automatically created and wired up.
+        //URL location = getClass().getResource("main.fxml");
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
+        System.out.println(Main.class.getResource("main.fxml"));
+        //controller = new MainController("MainController");
+        loader.setController(new MainController("MainController"));
         mainUI = loader.load();
         controller = loader.getController();
         // Configure the window with a StackPane so we can overlay things on top of the main UI, and a
@@ -95,12 +98,13 @@ public class Main extends Application {
         Scene scene = new Scene(uiStack);
         TextFieldValidator.configureScene(scene);   // Add CSS that we need.
         scene.getStylesheets().add(getClass().getResource("wallet.css").toString());
+        System.out.println(getClass().getResource("wallet.css").toString());
         uiStack.getChildren().add(notificationBar);
         mainWindow.setScene(scene);
 
         // Make log output concise.
         BriefLogFormatter.init();
-        // Tell bitcoinj to run event handlers on the JavaFX UI thread. This keeps things simple and means
+        // Tell bitcoin to run event handlers on the JavaFX UI thread. This keeps things simple and means
         // we cannot forget to switch threads when adding event handlers. Unfortunately, the DownloadListener
         // we give to the app kit is currently an exception and runs on a library thread. It'll get fixed in
         // a future version.
@@ -228,8 +232,12 @@ public class Main extends Application {
         try {
             checkGuiThread();
             // Load the UI from disk.
-            URL location = GuiUtils.getResource(name);
-            FXMLLoader loader = new FXMLLoader(location);
+            System.out.println("name::"+name);
+            //URL location = GuiUtils.getResource("wallet_settings.fxml");
+            //System.out.println("UI location::"+location);
+            //FXMLLoader loader = new FXMLLoader(location);
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("wallet_settings.fxml"));
+            System.out.println("UI Loader::"+loader);
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -256,6 +264,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
+        Application.launch(Main.class, new String[0]);
     }
 }

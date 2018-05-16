@@ -61,7 +61,12 @@ public class MainController {
     private FLOUIModel model = new FLOUIModel();
     private NotificationBarPane.Item syncItem;
 
-    // Called by FXMLLoader.
+    public MainController(String MainControl) {
+		// TODO Auto-generated constructor stub
+    	super();
+	}
+
+	// Called by FXMLLoader.
     public void initialize() {
         addressControl.setOpacity(0.0);
     }
@@ -151,6 +156,7 @@ public class MainController {
 
     public void settingsClicked(ActionEvent event) {
         Main.OverlayUI<WalletSettingsController> screen = Main.instance.overlayUI("wallet_settings.fxml");
+        System.out.println(Main.instance.overlayUI("wallet_settings.fxml"));
         screen.controller.initialize(null);
     }
     
