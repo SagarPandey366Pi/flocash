@@ -78,7 +78,7 @@ public class DeterministicSeed implements EncryptableItem {
      * @param passphrase A user supplied passphrase, or an empty string if there is no passphrase
      * @param creationTimeSeconds When the seed was originally created, UNIX time.
      */
-    public DeterministicSeed(List<String> mnemonicCode, @Nullable byte[] seed, String passphrase, long creationTimeSeconds) {
+    public DeterministicSeed(List<String> mnemonicCode,  byte[] seed, String passphrase, long creationTimeSeconds) {
         this((seed != null ? seed : MnemonicCode.toSeed(mnemonicCode, checkNotNull(passphrase))), mnemonicCode, creationTimeSeconds);
     }
 

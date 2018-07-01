@@ -76,15 +76,12 @@ public class Main extends Application {
 
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             // We could match the Mac Aqua style here, except that (a) Modena doesn't look that bad, and (b)
-            // the date picker widget is kinda broken in AquaFx and I can't be bothered fixing it.
+            // the date picker widget is kind of broken in AquaFx and I can't be bothered fixing it.
             // AquaFx.style();
         }
 
         // Load the GUI. The MainController class will be automatically created and wired up.
-        //URL location = getClass().getResource("main.fxml");
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
-        System.out.println(Main.class.getResource("main.fxml"));
-        //controller = new MainController("MainController");
         loader.setController(new MainController("MainController"));
         mainUI = loader.load();
         controller = loader.getController();
@@ -98,7 +95,6 @@ public class Main extends Application {
         Scene scene = new Scene(uiStack);
         TextFieldValidator.configureScene(scene);   // Add CSS that we need.
         scene.getStylesheets().add(getClass().getResource("wallet.css").toString());
-        System.out.println(getClass().getResource("wallet.css").toString());
         uiStack.getChildren().add(notificationBar);
         mainWindow.setScene(scene);
 
@@ -232,12 +228,7 @@ public class Main extends Application {
         try {
             checkGuiThread();
             // Load the UI from disk.
-            System.out.println("name::"+name);
-            //URL location = GuiUtils.getResource("wallet_settings.fxml");
-            //System.out.println("UI location::"+location);
-            //FXMLLoader loader = new FXMLLoader(location);
             FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("wallet_settings.fxml"));
-            System.out.println("UI Loader::"+loader);
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -255,6 +246,53 @@ public class Main extends Application {
         }
     }
 
+    //Changes by Sagar 
+    /** Loads the FXML file with the given name, blurs out the main UI and puts this one on top. */
+    public <T> OverlayUI<T> overlayUIsend(String name) {
+        try {
+            checkGuiThread();
+            // Load the UI from disk.
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("send_money.fxml"));
+            Pane ui = loader.load();
+            T controller = loader.getController();
+            OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
+            // Auto-magically set the overlayUI member, if it's there.
+            try {
+                if (controller != null)
+                    controller.getClass().getField("overlayUI").set(controller, pair);
+            } catch (IllegalAccessException | NoSuchFieldException ignored) {
+                ignored.printStackTrace();
+            }
+            pair.show();
+            return pair;
+        } catch (IOException e) {
+            throw new RuntimeException(e);  // Can't happen.
+        }
+    }
+    
+    public <T> OverlayUI<T> overlayUIreceive(String name) {
+        try {
+            checkGuiThread();
+            // Load the UI from disk.
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("flo_address.fxml"));
+            Pane ui = loader.load();
+            T controller = loader.getController();
+            OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
+            // Auto-magically set the overlayUI member, if it's there.
+            try {
+                if (controller != null)
+                    controller.getClass().getField("overlayUI").set(controller, pair);
+            } catch (IllegalAccessException | NoSuchFieldException ignored) {
+                ignored.printStackTrace();
+            }
+            pair.show();
+            return pair;
+        } catch (IOException e) {
+            throw new RuntimeException(e);  // Can't happen.
+        }
+    }
+    //Changes end by sagar
+    
     @Override
     public void stop() throws Exception {
         flo.stopAsync();

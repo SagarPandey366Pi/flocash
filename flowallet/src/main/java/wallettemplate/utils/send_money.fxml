@@ -28,12 +28,12 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="35.0" prefWidth="185.0" text="FLO Data">
+                  <Label prefHeight="35.0" prefWidth="185.0" text="floData">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="floData" prefHeight="25.0" prefWidth="509.0" promptText="Enter text data to stroe on the FLO blockchain" />
+                  <TextField fx:id="floData" prefHeight="25.0" prefWidth="509.0" promptText="Enter text data to store on the FLO blockchain" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="15.0">
@@ -43,7 +43,7 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
-              <TextField fx:id="address" maxWidth="1.7976931348623157E308" promptText="1EZEqFBd8yuc9ir2761987q7k3VcALC8YQ" HBox.hgrow="ALWAYS">
+              <TextField fx:id="address" maxWidth="1.7976931348623157E308" promptText="FCoHVd43f3JF3HG4K8C1S5YokHF9zYwFPE" HBox.hgrow="ALWAYS">
                 <VBox.margin>
                   <Insets />
                 </VBox.margin>

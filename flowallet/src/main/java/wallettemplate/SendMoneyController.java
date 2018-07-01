@@ -53,7 +53,7 @@ public class SendMoneyController {
     // Called by FXMLLoader
     public void initialize() {
         Coin balance = Main.flo.wallet().getBalance();
-        checkState(!balance.isZero());
+        //checkState(!balance.isZero());
         new FLOAddressValidator(Main.params, address, sendBtn);
         floData.setPromptText("Enter text data to store on the FLO blockchain (optional, "+Transaction.MAX_FLO_DATA_SIZE+" characters max)");
         new TextFieldValidator(amountEdit, text ->

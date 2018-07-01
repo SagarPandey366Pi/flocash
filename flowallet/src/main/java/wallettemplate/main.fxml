@@ -13,6 +13,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import wallettemplate.controls.*?>
+<?import wallettemplate.TooltipUtil?>
 
 <AnchorPane maxHeight="Infinity" maxWidth="Infinity" minHeight="200.0" minWidth="300.0" prefHeight="451.0" prefWidth="800.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <children>
@@ -34,12 +35,70 @@
         <Label font="$x1" text="FLO" textFill="$x2" />
       </children>
     </HBox>
-    <HBox fx:id="controlsBox" alignment="TOP_LEFT" fillHeight="true" layoutX="14.0" layoutY="347.0" minHeight="16.0" prefHeight="36.0" prefWidth="243.0" spacing="10.0" translateY="60.0" visible="true" AnchorPane.bottomAnchor="17.0">
-      <children>
-        <Button defaultButton="true" mnemonicParsing="false" onAction="#primaryClicked" styleClass="fat-button" text="Primary" />
-        <Button cancelButton="true" mnemonicParsing="false" styleClass="fat-button" text="Secondary" />
-      </children>
-    </HBox>
+	
+	<ImageView fitHeight="50.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="300.0" AnchorPane.rightAnchor="200.0">
+      <image>
+        <Image url="@cowork.png" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Co-Working" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+    
+    <ImageView fitHeight="70.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="285.0" AnchorPane.rightAnchor="110.0">
+      <image>
+        <Image url="@realestate.jpg" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Invest in Real-Estate" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+    
+    <ImageView fitHeight="60.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="285.0" AnchorPane.rightAnchor="30.0">
+      <image>
+        <Image url="@arttoken.jpg" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="get Art Tokens" />
+      </TooltipUtil.tooltip>      
+    </ImageView>
+
+	<ImageView fitHeight="100.0" fitWidth="400.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="170.0" AnchorPane.rightAnchor="80.0">
+      <image>
+        <Image url="@bali.jpg" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Travel to Bali" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+    
+    <ImageView fitHeight="60.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="200.0">
+      <image>
+        <Image url="@getfunded.png" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Get Funded" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+    
+    <ImageView fitHeight="50.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="120.0">
+      <image>
+        <Image url="@donateflo.png" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Donate FLO" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+        
+    <ImageView fitHeight="50.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="40.0">
+      <image>
+        <Image url="@tshirt.png" />
+      </image>
+      <TooltipUtil.tooltip>
+         <Tooltip text="Buy Tshirt" />
+      </TooltipUtil.tooltip>
+    </ImageView>
+    
     <ImageView fitHeight="243.0" fitWidth="243.0" opacity="0.28" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-36.0" AnchorPane.rightAnchor="-34.0">
       <effect>
         <ColorAdjust>
@@ -52,16 +111,65 @@
         <Image url="@flo_logo_plain.png" />
       </image>
     </ImageView>
+    
+    <ImageView fitHeight="243.0" fitWidth="243.0" opacity="0.28" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-10.0" AnchorPane.rightAnchor="600.0">
+      <effect>
+        <ColorAdjust>
+          <input>
+            <BoxBlur height="10.0" width="10.0" />
+          </input>
+        </ColorAdjust>
+      </effect>
+      <image>
+        <Image url="@200px-Padlock.svg.png" />
+      </image>
+    </ImageView>
+
+    <ImageView fitHeight="50.0" fitWidth="243.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="670.0">
+      <image>
+        <Image url="@366PiWebLogo.png" />
+      </image>
+    </ImageView>
+    
+    <Button onAction="#settingsClicked" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0" mnemonicParsing="false">
+    	<graphic>
+    		<ImageView fx:id="Setting" fitHeight="15.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
+     			<Image url="@settings.png" />
+     		</ImageView>
+    	</graphic>
+    	<TooltipUtil.tooltip>
+          <Tooltip text="setting" />
+        </TooltipUtil.tooltip>
+    </Button>
+    
+    <ImageView fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="50.0">
+            <image>
+                <Image url="@node.png"/>
+            </image>
+            <TooltipUtil.tooltip>
+                <Tooltip text="nodes present" />
+            </TooltipUtil.tooltip>
+    </ImageView>
+    
+    <ImageView fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="80.0">
+            <image>
+                <Image url="@sync.png"/>
+            </image>
+            <TooltipUtil.tooltip>
+                <Tooltip text="sync status" />
+            </TooltipUtil.tooltip>
+    </ImageView>
+        
     <ClickableFLOAddress fx:id="addressControl" layoutY="45.0" prefHeight="21.0" prefWidth="391.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="195.0" />
-    <StackPane layoutX="14.0" layoutY="81.0" prefHeight="249.0" prefWidth="572.0" style="-fx-border-color: lightgrey; -fx-border-style: dashed" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="81.0">
+    <StackPane layoutX="14.0" layoutY="81.0" prefHeight="249.0" prefWidth="250.0" style="-fx-border-color: white; -fx-border-style: dashed" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="80.0">
          <children>
-            <ListView fx:id="transactionsList" opacity="0.65" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="transactionsList" opacity="0.65" prefHeight="200.0" prefWidth="100.0" />
          </children>
     </StackPane>
     <HBox spacing="20" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="17.0">
        <children>
-           <Button onAction="#settingsClicked" style="-fx-base: white;" styleClass="fat-button" text="Settings" />
-           <Button id="sendMoneyOut" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#sendMoneyOut" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Send money out" />
+           <Button id="sendMoneyOut" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#sendMoneyOut" style="-fx-base: blue; -fx-font-weight: bold" styleClass="fat-button" text="Send FLO" />
+           <Button id="receiveMoney" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#receiveMoney" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Receive FLO" />
        </children>
     </HBox>
   </children>

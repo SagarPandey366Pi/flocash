@@ -148,7 +148,7 @@ public class WalletAppKit extends AbstractIdleService {
 
     /**
      * If set, the file is expected to contain a checkpoints file calculated with BuildCheckpoints. It makes initial
-     * block sync faster for new users - please refer to the documentation on the bitcoinj website for further details.
+     * block sync faster for new users - please refer to the documentation on the bit coin web site for further details.
      */
     public WalletAppKit setCheckpoints(InputStream checkpoints) {
         if (this.checkpoints != null)
@@ -270,6 +270,7 @@ public class WalletAppKit extends AbstractIdleService {
         try {
             File chainFile = new File(directory, filePrefix + ".spvchain");
             boolean chainFileExists = chainFile.exists();
+            System.out.println("chainFileExists::"+chainFileExists);
             vWalletFile = new File(directory, filePrefix + ".wallet");
             boolean shouldReplayWallet = (vWalletFile.exists() && !chainFileExists) || restoreFromSeed != null;
             vWallet = createOrLoadWallet(shouldReplayWallet);
@@ -303,9 +304,11 @@ public class WalletAppKit extends AbstractIdleService {
                 } else if (chainFileExists) {
                     log.info("Deleting the chain file in preparation from restore.");
                     vStore.close();
-                    if (!chainFile.delete())
-                        throw new IOException("Failed to delete chain file in preparation for restore.");
+                    System.out.println(chainFileExists);
+                    /*if (!chainFile.delete())
+                        throw new IOException("Failed to delete chain file in preparation for restore.");*/
                     vStore = new SPVBlockStore(params, chainFile);
+                    System.out.println(vStore);
                 }
             }
             vChain = new BlockChain(params, vStore);

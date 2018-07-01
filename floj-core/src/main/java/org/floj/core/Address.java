@@ -69,7 +69,7 @@ public class Address extends VersionedChecksummedBytes {
         try {
             return new Address(params, params.getP2SHHeader(), hash160);
         } catch (WrongNetworkException e) {
-            throw new RuntimeException(e);  // Cannot happen.
+            throw new RuntimeException(e);
         }
     }
 

@@ -15,7 +15,11 @@
 package wallettemplate;
 
 import org.floj.core.Utils;
+import org.floj.crypto.ChildNumber;
+import org.floj.crypto.DeterministicKey;
+import org.floj.crypto.HDUtils;
 import org.floj.crypto.MnemonicCode;
+import org.floj.wallet.DeterministicKeyChain;
 import org.floj.wallet.DeterministicSeed;
 
 import com.google.common.base.Splitter;
@@ -33,6 +37,8 @@ import org.spongycastle.crypto.params.KeyParameter;
 import wallettemplate.utils.TextFieldValidator;
 
 import javax.annotation.Nullable;
+
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -61,6 +67,7 @@ public class WalletSettingsController {
     // Note: NOT called by FXMLLoader!
     public void initialize(@Nullable KeyParameter aesKey) {
         DeterministicSeed seed = Main.flo.wallet().getKeyChainSeed();
+        log.info("Seed::::"+seed);
         if (aesKey == null) {
             if (seed.isEncrypted()) {
                 log.info("Wallet is encrypted, requesting password first.");
@@ -166,10 +173,20 @@ public class WalletSettingsController {
                 "Your wallet will now be resynced from the FLO network. This can take a long time for old wallets.");
         overlayUI.done();
         Main.instance.controller.restoreFromSeedAnimation();
-
-        long birthday = datePicker.getValue().atStartOfDay().toEpochSecond(ZoneOffset.UTC);
-        DeterministicSeed seed = new DeterministicSeed(Splitter.on(' ').splitToList(wordsArea.getText()), null, "", birthday);
-        // Shut down bitcoinj and restart it with the new seed.
+        
+        System.out.println("Mnemonics::"+Splitter.on(' ').split(wordsArea.getText()));
+        
+        //long birthday = datePicker.getValue().atStartOfDay().toEpochSecond(ZoneOffset.UTC);
+        DeterministicSeed seed = new DeterministicSeed(Splitter.on(' ').splitToList(wordsArea.getText()), null, "", 1409478661L);
+        
+        //Changes start by Sagar
+        DeterministicKeyChain chain = DeterministicKeyChain.builder().seed(seed).build();
+        List<ChildNumber> keyPath = HDUtils.parsePath("M/44H/60H/0H/0/0");
+        DeterministicKey key = chain.getKeyByPath(keyPath, true);
+        BigInteger privkey = key.getPrivKey();
+        //Changes End
+        
+        // Shut down bit-coin and restart it with the new seed.
         Main.flo.addListener(new Service.Listener() {
             @Override
             public void terminated(Service.State from) {

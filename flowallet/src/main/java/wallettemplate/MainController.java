@@ -35,10 +35,12 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 
 import org.fxmisc.easybind.EasyBind;
+
 import wallettemplate.controls.ClickableFLOAddress;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.FLOUIModel;
@@ -56,6 +58,7 @@ public class MainController {
     public Label balance;
     public Button sendMoneyOutBtn;
     public ClickableFLOAddress addressControl;
+    public ReceiveMoneyController receivecontrol;
     public ListView<Transaction> transactionsList;
 
     private FLOUIModel model = new FLOUIModel();
@@ -68,15 +71,16 @@ public class MainController {
 
 	// Called by FXMLLoader.
     public void initialize() {
-        addressControl.setOpacity(0.0);
+        addressControl.setOpacity(0.3);
     }
 
     public void onFLOSetup() {
         model.setWallet(flo.wallet());
+        receivecontrol.addressProperty().bind(model.addressProperty());
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.FLO.noCode().format(coin).toString()));
         // Don't let the user click send money when the wallet is empty.
-        sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));
+        //sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));//changes by sagar
 
         TorClient torClient = Main.flo.peerGroup().getTorClient();
         if (torClient != null) {
@@ -105,7 +109,7 @@ public class MainController {
         }
         model.syncProgressProperty().addListener(x -> {
             if (model.syncProgressProperty().get() >= 1.0) {
-                readyToGoAnimation();
+                //readyToGoAnimation();
                 if (syncItem != null) {
                     syncItem.cancel();
                     syncItem = null;
@@ -148,12 +152,23 @@ public class MainController {
     private void showFLOSyncMessage() {
         syncItem = Main.instance.notificationBar.pushItem("Synchronising with the FLO network", model.syncProgressProperty());
     }
-
+    
+    //changes start by sagar
     public void sendMoneyOut(ActionEvent event) {
         // Hide this UI and show the send money UI. This UI won't be clickable until the user dismisses send_money.
-        Main.instance.overlayUI("send_money.fxml");
+        Main.OverlayUI<SendMoneyController> sendScreen = Main.instance.overlayUIsend("send_money.fxml");
+        System.out.println(Main.instance.overlayUIsend("send_money.fxml"));
+        sendScreen.controller.initialize();
     }
-
+    public void receiveMoney(ActionEvent event)
+    {
+    	Stage primaryStage = null;
+    	System.out.println("In the receive Money");
+    	Main.OverlayUI<ReceiveMoneyController> receiveScreen = Main.instance.overlayUIreceive("flo_address.fxml");
+    	receiveScreen.controller.initialize();
+    }
+    //changes end by sagar
+    
     public void settingsClicked(ActionEvent event) {
         Main.OverlayUI<WalletSettingsController> screen = Main.instance.overlayUI("wallet_settings.fxml");
         System.out.println(Main.instance.overlayUI("wallet_settings.fxml"));

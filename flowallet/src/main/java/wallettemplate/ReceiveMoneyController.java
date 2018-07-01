@@ -1,18 +1,11 @@
-/*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package wallettemplate;
 
-package wallettemplate.controls;
+import static javafx.beans.binding.Bindings.convert;
+
+import java.awt.Desktop;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.URI;
 
 import org.floj.core.Address;
 import org.floj.uri.FLOURI;
@@ -35,57 +28,34 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
-import wallettemplate.Main;
-import wallettemplate.Main.OverlayUI;
 import wallettemplate.utils.GuiUtils;
 
-import java.awt.*;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.URI;
+public class ReceiveMoneyController{
 
-import static javafx.beans.binding.Bindings.convert;
+	public Label addressLabel;
+    public ContextMenu addressMenu;
+    public Label copyWidget;
+    public Label qrCode;
+    public SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
+    public StringExpression addressStr;
+    
+    public Main.OverlayUI overlayUI;
+    
+    public void initialize()
+    {
+    	AwesomeDude.setIcon(copyWidget, AwesomeIcon.COPY);
+        Tooltip.install(copyWidget, new Tooltip("Copy address to clipboard"));
 
-/**
- * A custom control that implements a clickable, copy-able FLO address. Clicking it opens a local wallet app. The
- * address looks like a blue hyperlink. Next to it there are two icons, one that copies to the clipboard and another
- * that shows a QRcode.
- */
-public class ClickableFLOAddress extends AnchorPane {
-    @FXML protected Label addressLabel;
-    @FXML protected ContextMenu addressMenu;
-    @FXML protected Label copyWidget;
-    @FXML protected Label qrCode;
+        AwesomeDude.setIcon(qrCode, AwesomeIcon.QRCODE);
+        Tooltip.install(qrCode, new Tooltip("Show a barcode scannable with a mobile phone for this address"));
 
-    protected SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
-    private StringExpression addressStr;
-
-    public void ClickableFLO() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("flo_address1.fxml"));
-        	loader.setRoot(this);
-            loader.setController(this);
-            // The following line is supposed to help Scene Builder, although it doesn't seem to be needed for me.
-            loader.setClassLoader(getClass().getClassLoader());
-            loader.load();
-
-            AwesomeDude.setIcon(copyWidget, AwesomeIcon.COPY);
-            Tooltip.install(copyWidget, new Tooltip("Copy address to clipboard"));
-
-            AwesomeDude.setIcon(qrCode, AwesomeIcon.QRCODE);
-            Tooltip.install(qrCode, new Tooltip("Show a barcode scannable with a mobile phone for this address"));
-
-            addressStr = convert(address);
-            addressLabel.textProperty().bind(addressStr);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        addressStr = convert(address);
+        addressLabel.textProperty().bind(addressStr);
     }
-
+    
     public String uri() {
         return FLOURI.convertToFLOURI(address.get(), null, Main.APP_NAME, null);
     }
@@ -150,7 +120,7 @@ public class ClickableFLOAddress extends AnchorPane {
         // non-centered on the screen. Finally fade/blur it in.
         Pane pane = new Pane(view);
         pane.setMaxSize(qrImage.getWidth(), qrImage.getHeight());
-        final Main.OverlayUI<ClickableFLOAddress> overlay = Main.instance.overlayUI(pane, this);
+        final Main.OverlayUI<ReceiveMoneyController> overlay = Main.instance.overlayUI(pane, this);
         view.setOnMouseClicked(event1 -> overlay.done());
     }
 }
