@@ -172,7 +172,7 @@ public class WalletSettingsController {
         informationalAlert("Wallet restore in progress",
                 "Your wallet will now be resynced from the FLO network. This can take a long time for old wallets.");
         overlayUI.done();
-        Main.instance.controller.restoreFromSeedAnimation();
+        Main.instance.mainController.restoreFromSeedAnimation();
         
         System.out.println("Mnemonics::"+Splitter.on(' ').split(wordsArea.getText()));
         

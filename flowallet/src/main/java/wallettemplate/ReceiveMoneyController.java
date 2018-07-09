@@ -4,11 +4,20 @@ import static javafx.beans.binding.Bindings.convert;
 
 import java.awt.Desktop;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import org.floj.core.Address;
 import org.floj.uri.FLOURI;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import de.jensd.fx.fontawesome.AwesomeDude;
 import de.jensd.fx.fontawesome.AwesomeIcon;
@@ -17,9 +26,11 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -29,6 +40,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Window;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
 import wallettemplate.utils.GuiUtils;
@@ -41,6 +53,11 @@ public class ReceiveMoneyController{
     public Label qrCode;
     public SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
     public StringExpression addressStr;
+    public Button cancelBtn;
+    public TextField emailField;
+    @FXML
+    public Button submitButton;
+    public ImageView ivPreview;
     
     public Main.OverlayUI overlayUI;
     
@@ -65,6 +82,7 @@ public class ReceiveMoneyController{
     }
 
     public void setAddress(Address address) {
+    	System.out.println("adddress" + address);
         this.address.set(address);
     }
 
@@ -72,6 +90,41 @@ public class ReceiveMoneyController{
         return address;
     }
 
+    public void cancel(ActionEvent event) {
+        overlayUI.done();
+    }
+    
+    public void getQRCodeImage(ActionEvent event)
+    {
+    	try {
+    	QRCodeWriter qrCodeWriter = new QRCodeWriter();
+    	final byte[] imageBytes = QRCode
+                .from(uri())
+                .withSize(320, 240)
+                .to(ImageType.PNG)
+                .stream()
+                .toByteArray();
+    	String filepath = "";
+    	String uril = imageBytes.toString();
+    	System.out.println("Uril::"+uril);
+    	BitMatrix bitMat = qrCodeWriter.encode(uril , BarcodeFormat.QR_CODE, 200, 200);
+    	ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
+    	Path path = FileSystems.getDefault().getPath(filepath);
+        MatrixToImageWriter.writeToStream(bitMat, "PNG", pngOutputStream);
+		} catch (WriterException | IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void handleSubmitButtonAction(ActionEvent event) 
+    {
+    Window owner = submitButton.getScene().getWindow();
+    if(emailField.getText().isEmpty()) {
+        showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Please enter your email id");
+        return;
+    }
+    }
+    
     @FXML
     protected void copyAddress(ActionEvent event) {
         // User clicked icon or menu item.
@@ -122,5 +175,14 @@ public class ReceiveMoneyController{
         pane.setMaxSize(qrImage.getWidth(), qrImage.getHeight());
         final Main.OverlayUI<ReceiveMoneyController> overlay = Main.instance.overlayUI(pane, this);
         view.setOnMouseClicked(event1 -> overlay.done());
+    }
+    
+    public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
     }
 }

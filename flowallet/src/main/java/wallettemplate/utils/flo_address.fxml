@@ -8,10 +8,13 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" style="" prefWidth="441.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="wallettemplate.ReceiveMoneyController">
+
+<AnchorPane id="AnchorPane" style="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="wallettemplate.ReceiveMoneyController">
   <children>
-    <HBox id="addressLabelBox" fx:id="box" alignment="CENTER_LEFT" layoutX="20.0" layoutY="20.0" prefHeight="21.0" prefWidth="391.0" spacing="10.0">
+    <VBox id="addressLabelBox" fx:id="box" alignment="CENTER_LEFT" layoutY="100.0" prefHeight="200.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
         <Label fx:id="addressLabel" onMouseClicked="#requestMoney" style="-fx-cursor: hand" text="&lt;address goes here&gt;" textFill="BLACK" underline="true">
           <contextMenu>
@@ -26,9 +29,30 @@
             </ContextMenu>
           </contextMenu>
         </Label>
-        <Label fx:id="copyWidget" onMouseClicked="#copyWidgetClicked" text="&lt;COPY&gt;" />
+        <Label fx:id="copyWidget" onMouseClicked="#copyWidgetClicked" text="COPY" />
         <Label fx:id="qrCode" onMouseClicked="#showQRCode" text="&lt;QR&gt;" />
-      </children>
-    </HBox>
+      </children> 
+    <HBox alignment="CENTER_LEFT" spacing="15.0">
+        <children>
+          <Label text="Email ID :">
+            <font>
+              <Font size="16.0" />
+            </font>
+          </Label>
+          <TextField fx:id="emailField" maxWidth="1.7976931348623157E308" promptText="abc@xyz.com" HBox.hgrow="ALWAYS">
+            <VBox.margin>
+              <Insets />
+            </VBox.margin>
+          </TextField>
+        </children>
+     </HBox>
+    
+    <HBox alignment="CENTER_RIGHT" fillHeight="true" prefHeight="30.0" prefWidth="600.0" spacing="15.0" VBox.vgrow="NEVER">
+          <children>
+            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="79.0" text="Cancel" />
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefWidth="79.0" text="Submit" />
+          </children>
+        </HBox>
+    </VBox>
   </children>
 </AnchorPane>

@@ -33,6 +33,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -60,9 +61,15 @@ public class MainController {
     public ClickableFLOAddress addressControl;
     public ReceiveMoneyController receivecontrol;
     public ListView<Transaction> transactionsList;
+    public Label label;
+    public Button button;
 
     private FLOUIModel model = new FLOUIModel();
-    private NotificationBarPane.Item syncItem;
+    public FLOUIModel getModel() {
+		return model;
+	}
+
+	private NotificationBarPane.Item syncItem;
 
     public MainController(String MainControl) {
 		// TODO Auto-generated constructor stub
@@ -76,7 +83,6 @@ public class MainController {
 
     public void onFLOSetup() {
         model.setWallet(flo.wallet());
-        receivecontrol.addressProperty().bind(model.addressProperty());
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.FLO.noCode().format(coin).toString()));
         // Don't let the user click send money when the wallet is empty.
@@ -162,10 +168,20 @@ public class MainController {
     }
     public void receiveMoney(ActionEvent event)
     {
-    	Stage primaryStage = null;
-    	System.out.println("In the receive Money");
     	Main.OverlayUI<ReceiveMoneyController> receiveScreen = Main.instance.overlayUIreceive("flo_address.fxml");
     	receiveScreen.controller.initialize();
+    }
+    
+    public void donateflo(ActionEvent event) {
+        Main.OverlayUI<DonateFloController> donatescreen = Main.instance.overlayUIdonateflo("donate_flo.fxml");
+        System.out.println(Main.instance.overlayUI("donate_flo.fxml"));
+        donatescreen.controller.initialize();
+    }
+    
+    public void balinights(ActionEvent event) {
+        Main.OverlayUI<DonateFloController> baliscreen = Main.instance.overlayUIdonateflo("bali_flo.fxml");
+        System.out.println(Main.instance.overlayUI("bali_flo.fxml"));
+        baliscreen.controller.initialize();
     }
     //changes end by sagar
     

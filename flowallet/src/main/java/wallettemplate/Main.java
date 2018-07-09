@@ -24,39 +24,65 @@ import org.floj.utils.BriefLogFormatter;
 import org.floj.utils.Threading;
 import org.floj.wallet.DeterministicSeed;
 
+import javafx.animation.FillTransition;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.util.Duration;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
 
 import javax.annotation.Nullable;
+import javax.lang.model.element.Parameterizable;
+import javax.naming.Binding;
+import javax.swing.JOptionPane;
+import javax.swing.JToggleButton;
+
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import static wallettemplate.utils.GuiUtils.*;
 
 public class Main extends Application {
     public static NetworkParameters params = MainNetParams.get(); //TestNet3Params.get(); //
     public static final String APP_NAME = "FloWallet";
-    private static final String WALLET_FILE_NAME = APP_NAME.replaceAll("[^a-zA-Z0-9.-]", "_") + "-"
-            + params.getPaymentProtocolId();
+    private static String WALLET_FILE_NAME = "";
 
     public static WalletAppKit flo;
     public static Main instance;
 
     private StackPane uiStack;
     private Pane mainUI;
-    public MainController controller;
+    public MainController mainController;
     public NotificationBarPane notificationBar;
-    public Stage mainWindow;
+    public static Stage mainWindow;
+    boolean isOn = false;
+    ToggleSwitch toggle = new ToggleSwitch();
 
     @Override
     public void start(Stage mainWindow) throws Exception {
@@ -69,7 +95,13 @@ public class Main extends Application {
     }
 
     private void realStart(Stage mainWindow) throws IOException {
-        this.mainWindow = mainWindow;
+    	if(getParameters().getRaw().get(0).equalsIgnoreCase("0")) {
+    		Main.params = TestNet3Params.get();
+    		isOn = true;
+    	}
+        Main.mainWindow = mainWindow;
+        WALLET_FILE_NAME = APP_NAME.replaceAll("[^a-zA-Z0-9.-]", "_") + "-"
+                + params.getPaymentProtocolId();
         instance = this;
         // Show the crash dialog for any exceptions that we don't handle and that hit the main loop.
         GuiUtils.handleCrashesOnThisThread();
@@ -84,7 +116,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
         loader.setController(new MainController("MainController"));
         mainUI = loader.load();
-        controller = loader.getController();
+        mainController = loader.getController();
         // Configure the window with a StackPane so we can overlay things on top of the main UI, and a
         // NotificationBarPane so we can slide messages and progress bars in from the bottom. Note that
         // ordering of the construction and connection matters here, otherwise we get (harmless) CSS error
@@ -97,7 +129,19 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("wallet.css").toString());
         uiStack.getChildren().add(notificationBar);
         mainWindow.setScene(scene);
-
+        
+        //Changes by Sagar for the toggle button
+        toggle.setTranslateX(265);
+        toggle.setTranslateY(200);
+        
+        Text text = new Text();
+        text.setFill(javafx.scene.paint.Color.BLACK);
+        text.setTranslateX(265);
+        text.setTranslateY(200);
+        text.textProperty().bind(Bindings.when(toggle.switchedOnProperty()).then("TestNet").otherwise("MainNet"));
+        uiStack.getChildren().addAll(toggle, text);
+        //Changes End
+        
         // Make log output concise.
         BriefLogFormatter.init();
         // Tell bitcoin to run event handlers on the JavaFX UI thread. This keeps things simple and means
@@ -128,7 +172,62 @@ public class Main extends Application {
 
         scene.getAccelerators().put(KeyCombination.valueOf("Shortcut+F"), () -> flo.peerGroup().getDownloadPeer().close());
     }
-
+    
+    public class ToggleSwitch extends Parent{
+    	
+    	private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(false);
+    	private TranslateTransition translateAnimation = new TranslateTransition(Duration.seconds(0.50));
+    	private FillTransition fillAnimation = new FillTransition(Duration.seconds(0.50));
+    	
+    	//private ParallelTransition animation = new ParallelTransition(translateAnimation, fillAnimation);
+    	
+    	public SimpleBooleanProperty switchedOnProperty(){
+    		return switchedOn;
+    	}
+    	
+    	public ToggleSwitch()
+    	{
+    		Rectangle background = new Rectangle(50,25);
+    		background.setArcHeight(20);
+    		background.setArcWidth(20);
+    		background.setFill(javafx.scene.paint.Color.WHITE);
+    		background.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
+    		
+    		Circle trigger = new Circle(10);
+    		trigger.setCenterX(10);
+    		trigger.setCenterY(10);
+    		trigger.setFill(javafx.scene.paint.Color.WHITE);
+    		trigger.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
+    		
+    		translateAnimation.setNode(trigger);
+    		fillAnimation.setShape(background);
+    		
+    		getChildren().addAll(background, trigger);
+/*    		Button button = new Button();
+    		translateAnimation.setNode(button);
+    		getChildren().add(button);*/
+    		
+    		setOnMouseClicked(event ->{
+    			try {
+    				isOn = isOn ? false : true;
+    				if(isOn)
+    				{
+    					JOptionPane.showMessageDialog(null, "Moving to TestNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
+    				}
+    				else
+    				{
+    					JOptionPane.showMessageDialog(null, "Moving to MainNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
+    				}
+    				String envVal = isOn ? "0" : "1" ;
+					Main.restartApplication(envVal);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		});
+    	}
+    }
+    
     public void setupWalletKit(@Nullable DeterministicSeed seed) {
         // If seed is non-null it means we are restoring from backup.
         flo = new WalletAppKit(params, new File("."), WALLET_FILE_NAME) {
@@ -137,7 +236,7 @@ public class Main extends Application {
                 // Don't make the user wait for confirmations for now, as the intention is they're sending it
                 // their own money!
                 flo.wallet().allowSpendingUnconfirmedTransactions();
-                Platform.runLater(controller::onFLOSetup);
+                Platform.runLater(mainController::onFLOSetup);
             }
         };
         // Now configure and start the appkit. This will take a second or two - we could show a temporary splash screen
@@ -149,13 +248,14 @@ public class Main extends Application {
 //            flo.useTor();
             // flo.setDiscovery(new HttpDiscovery(params, URI.create("http://localhost:8080/peers"), ECKey.fromPublicOnly(BaseEncoding.base16().decode("02cba68cfd0679d10b186288b75a59f9132b1b3e222f6332717cb8c4eb2040f940".toUpperCase()))));
         }
-        flo.setDownloadListener(controller.progressBarUpdater())
+        flo.setDownloadListener(mainController.progressBarUpdater())
                .setBlockingStartup(false)
                .setUserAgent(APP_NAME, "1.0");
         if (seed != null)
             flo.restoreWalletFromSeed(seed);
         
         //flo.awaitRunning();
+        System.out.println("Params::"+params);
     }
 
     private Node stopClickPane = new Pane();
@@ -180,7 +280,6 @@ public class Main extends Application {
                 zoomIn(ui);
             } else {
                 // Do a quick transition between the current overlay and the next.
-                // Bug here: we don't pay attention to changes in outsideClickDismisses.
                 explodeOut(currentOverlay.ui);
                 fadeOutAndRemove(uiStack, currentOverlay.ui);
                 uiStack.getChildren().add(ui);
@@ -277,6 +376,51 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("flo_address.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
+            ((ReceiveMoneyController)controller).addressProperty().bind(mainController.getModel().addressProperty());
+            OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
+            // Auto-magically set the overlayUI member, if it's there.
+            try {
+                if (controller != null)
+                    controller.getClass().getField("overlayUI").set(controller, pair);
+            } catch (IllegalAccessException | NoSuchFieldException ignored) {
+                ignored.printStackTrace();
+            }
+            pair.show();
+            return pair;
+        } catch (IOException e) {
+            throw new RuntimeException(e);  // Can't happen.
+        }
+    }
+    
+    public <T> OverlayUI<T> overlayUIdonateflo(String name) {
+    	try {
+            checkGuiThread();
+            // Load the UI from disk.
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("donate_flo.fxml"));
+            Pane ui = loader.load();
+            T controller = loader.getController();
+            OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
+            // Auto-magically set the overlayUI member, if it's there.
+            try {
+                if (controller != null)
+                    controller.getClass().getField("overlayUI").set(controller, pair);
+            } catch (IllegalAccessException | NoSuchFieldException ignored) {
+                ignored.printStackTrace();
+            }
+            pair.show();
+            return pair;
+        } catch (IOException e) {
+            throw new RuntimeException(e);  // Can't happen.
+        }
+    }
+    
+    public <T> OverlayUI<T> overlayUIbaliNights(String name) {
+    	try {
+            checkGuiThread();
+            // Load the UI from disk.
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("bali_flo.fxml"));
+            Pane ui = loader.load();
+            T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
             // Auto-magically set the overlayUI member, if it's there.
             try {
@@ -301,8 +445,38 @@ public class Main extends Application {
         Runtime.getRuntime().exit(0);
     }
 
+    public static void restartApplication(String envValue) throws IOException, URISyntaxException
+    {
+    	System.out.println("HO");
+        
+        StringBuilder cmd = new StringBuilder();
+        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) 
+        {
+         cmd.append(jvmArg + " ");
+        }
+         
+        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+        cmd.append(Main.class.getName()).append(" "+envValue);
+        System.out.println("HO "+cmd.toString());
+        try
+        {
+         Runtime.getRuntime().exec(cmd.toString());
+        } 
+        catch (IOException e1) 
+        {
+         // TODO Auto-generated catch block
+         e1.printStackTrace();
+        }
+        System.exit(0);
+    }
+    
     public static void main(String[] args) {
-        //launch(args);
-        Application.launch(Main.class, new String[0]);
+        //9launch(args). 0;
+    	String defaultEnvironmentVal = "1";
+    	if(args.length > 0) { 
+    		  defaultEnvironmentVal = args[0];
+    		}
+        Application.launch(Main.class, defaultEnvironmentVal);
     }
 }

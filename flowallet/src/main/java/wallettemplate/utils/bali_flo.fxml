@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- fruitcombo.fxml 
+     place in same directory as FruitComboApplication.java 
+     ensure build system copies the fxml file to the build output path -->
+     
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="205.0" prefWidth="168.0" styleClass="layout" xmlns:fx="http://javafx.com/fxml" fx:controller="fruit.BaliNightsController">
+  <children>
+    <ComboBox fx:id="fruitCombo" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose">
+      <items>
+        <FXCollections fx:factory="observableArrayList">
+          <String fx:value="Apple" />
+          <String fx:value="Orange" />
+          <String fx:value="Pear" />
+        </FXCollections>
+      </items>
+    </ComboBox>
+    <Label id="fruitSelectorLabel" layoutX="15.0" layoutY="10.0" styleClass="bold-label" text="Fruit Selector" />
+    </children>
+</AnchorPane>
