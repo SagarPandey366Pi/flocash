@@ -937,6 +937,7 @@ public class Transaction extends ChildMessage {
      * transaction, and returns the new output.
      */
     public TransactionOutput addOutput(Coin value, ECKey pubkey) {
+    	System.out.println("PubKey:::"+pubkey);
         return addOutput(new TransactionOutput(params, this, value, pubkey));
     }
 

@@ -13,12 +13,12 @@
       <children>
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label text="From">
+                  <Label text="Donate FLO to:">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-              <TextField fx:id="address" maxWidth="1.7976931348623157E308" promptText="FCoHVd43f3JF3HG4K8C1S5YokHF9zYwFPE" HBox.hgrow="ALWAYS">
+              <TextField fx:id="address" editable="false" maxWidth="1.7976931348623157E308" text="oTeCfJebC6ba1zRP9nv31KdAKEwAddThvV" HBox.hgrow="ALWAYS">
                 <VBox.margin>
                   <Insets />
                 </VBox.margin>
@@ -33,7 +33,7 @@
         </HBox>
       </children>
       <effect>
-        <DropShadow />
+        <DropShadow/>
       </effect>
          <padding>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="205.0" prefWidth="168.0" styleClass="layout" xmlns:fx="http://javafx.com/fxml" fx:controller="fruit.BaliNightsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="205.0" prefWidth="168.0" styleClass="layout" xmlns:fx="http://javafx.com/fxml" fx:controller="wallettemplate.BaliNightsController">
   <children>
     <ComboBox fx:id="fruitCombo" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose">
       <items>

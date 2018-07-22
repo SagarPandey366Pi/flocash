@@ -49,8 +49,8 @@
     
     <HBox alignment="CENTER_RIGHT" fillHeight="true" prefHeight="30.0" prefWidth="600.0" spacing="15.0" VBox.vgrow="NEVER">
           <children>
-            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="79.0" text="Cancel" />
-            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefWidth="79.0" text="Submit" />
+            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#handleSubmitButtonAction" prefWidth="79.0" text="send" />
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" prefWidth="79.0" text="cancel" />
           </children>
         </HBox>
     </VBox>

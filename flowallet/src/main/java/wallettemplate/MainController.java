@@ -28,6 +28,7 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -86,7 +87,7 @@ public class MainController {
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.FLO.noCode().format(coin).toString()));
         // Don't let the user click send money when the wallet is empty.
-        //sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));//changes by sagar
+        sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));//changes by sagar
 
         TorClient torClient = Main.flo.peerGroup().getTorClient();
         if (torClient != null) {
@@ -106,7 +107,7 @@ public class MainController {
                 public void initializationCompleted() {
                     Platform.runLater(() -> {
                         syncItem.cancel();
-                        showFLOSyncMessage();
+                        showFLOSyncMessages();
                     });
                 }
             });
@@ -138,6 +139,18 @@ public class MainController {
 		            s.append("FLO Data: ");
 		            s.append(new String(tx.getFloData())); //convert to string first to retain actual byte values in string
 		            s.append('\n');
+		            s.append("Confidence: ");
+		            s.append(tx.getConfidence());
+		            s.append('\n');
+		            s.append("Hash: ");
+		            s.append(tx.getHash());
+		            s.append('\n');
+		            s.append("MessageSize:");
+		            s.append(tx.getMessageSize());
+		            s.append('\n');
+		            s.append("MapOfBlocks: ");
+		            s.append(tx.getAppearsInHashes());
+		            s.append('\n');
 		        }
 				if (value.isPositive()) {
 					return "Incoming payment of " + MonetaryFormat.FLO.format(value) + s;
@@ -159,11 +172,14 @@ public class MainController {
         syncItem = Main.instance.notificationBar.pushItem("Synchronising with the FLO network", model.syncProgressProperty());
     }
     
+    private void showFLOSyncMessages() {
+        syncItem = Main.instance.notificationBar.pushItem("Sync Completed", model.syncProgressProperty());
+    }
+    
     //changes start by sagar
     public void sendMoneyOut(ActionEvent event) {
         // Hide this UI and show the send money UI. This UI won't be clickable until the user dismisses send_money.
         Main.OverlayUI<SendMoneyController> sendScreen = Main.instance.overlayUIsend("send_money.fxml");
-        System.out.println(Main.instance.overlayUIsend("send_money.fxml"));
         sendScreen.controller.initialize();
     }
     public void receiveMoney(ActionEvent event)
@@ -174,20 +190,17 @@ public class MainController {
     
     public void donateflo(ActionEvent event) {
         Main.OverlayUI<DonateFloController> donatescreen = Main.instance.overlayUIdonateflo("donate_flo.fxml");
-        System.out.println(Main.instance.overlayUI("donate_flo.fxml"));
         donatescreen.controller.initialize();
     }
     
     public void balinights(ActionEvent event) {
-        Main.OverlayUI<DonateFloController> baliscreen = Main.instance.overlayUIdonateflo("bali_flo.fxml");
-        System.out.println(Main.instance.overlayUI("bali_flo.fxml"));
+        Main.OverlayUI<BaliNightsController> baliscreen = Main.instance.overlayUIdonateflo("bali_flo.fxml");
         baliscreen.controller.initialize();
     }
     //changes end by sagar
     
     public void settingsClicked(ActionEvent event) {
         Main.OverlayUI<WalletSettingsController> screen = Main.instance.overlayUI("wallet_settings.fxml");
-        System.out.println(Main.instance.overlayUI("wallet_settings.fxml"));
         screen.controller.initialize(null);
     }
     

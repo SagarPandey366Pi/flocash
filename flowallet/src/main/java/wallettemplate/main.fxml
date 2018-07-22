@@ -93,10 +93,10 @@
                 <Image url="@sync.png"/>
             </image>
             <TooltipUtil.tooltip>
-                <Tooltip text="sync status" />
+                <Tooltip text="Sync Completed" />
             </TooltipUtil.tooltip>
     </ImageView>
-     <Button fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#donateflo" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Donate FLO" />
+
     <ClickableFLOAddress fx:id="addressControl" layoutY="45.0" prefHeight="21.0" prefWidth="391.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="195.0" />
     <StackPane layoutX="14.0" layoutY="81.0" prefHeight="249.0" prefWidth="250.0" style="-fx-border-color: white; -fx-border-style: dashed" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="80.0">
          <children>
@@ -107,7 +107,7 @@
        <children>
            <Button id="sendMoneyOut" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#sendMoneyOut" style="-fx-base: rgb(102, 178, 255); -fx-font-weight: bold" styleClass="fat-button" text="Send FLO" />
            <Button id="receiveMoney" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#receiveMoney" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Receive FLO" />
-           <Button id="balinights" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#balinights" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Bali Nights" />
+           <Button id="donateflo" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#donateflo" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Donate FLO" />
        </children>
     </HBox>
   </children>

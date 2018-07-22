@@ -25,51 +25,36 @@ import org.floj.utils.Threading;
 import org.floj.wallet.DeterministicSeed;
 
 import javafx.animation.FillTransition;
-import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Duration;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
 
 import javax.annotation.Nullable;
-import javax.lang.model.element.Parameterizable;
-import javax.naming.Binding;
 import javax.swing.JOptionPane;
-import javax.swing.JToggleButton;
-
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-
 import static wallettemplate.utils.GuiUtils.*;
 
 public class Main extends Application {
-    public static NetworkParameters params = MainNetParams.get(); //TestNet3Params.get(); //
+    public static NetworkParameters params = TestNet3Params.get(); //MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
     public static final String APP_NAME = "FloWallet";
     private static String WALLET_FILE_NAME = "";
 
@@ -138,7 +123,7 @@ public class Main extends Application {
         text.setFill(javafx.scene.paint.Color.BLACK);
         text.setTranslateX(265);
         text.setTranslateY(200);
-        text.textProperty().bind(Bindings.when(toggle.switchedOnProperty()).then("TestNet").otherwise("MainNet"));
+        text.textProperty().bind(Bindings.when(toggle.switchedOnProperty()).then("MainNet").otherwise("TestNet"));
         uiStack.getChildren().addAll(toggle, text);
         //Changes End
         
@@ -212,11 +197,11 @@ public class Main extends Application {
     				isOn = isOn ? false : true;
     				if(isOn)
     				{
-    					JOptionPane.showMessageDialog(null, "Moving to TestNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
+    					JOptionPane.showMessageDialog(null, "Moving to MainNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
     				}
     				else
     				{
-    					JOptionPane.showMessageDialog(null, "Moving to MainNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
+    					JOptionPane.showMessageDialog(null, "Moving to TestNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
     				}
     				String envVal = isOn ? "0" : "1" ;
 					Main.restartApplication(envVal);
@@ -472,7 +457,7 @@ public class Main extends Application {
     }
     
     public static void main(String[] args) {
-        //9launch(args). 0;
+        //9launch(args);
     	String defaultEnvironmentVal = "1";
     	if(args.length > 0) { 
     		  defaultEnvironmentVal = args[0];

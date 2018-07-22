@@ -97,7 +97,7 @@ public class DonateFloController {
                 if (reason == TransactionConfidence.Listener.ChangeReason.SEEN_PEERS)
                     updateTitleForBroadcast();
             });
-            sendBtn.setDisable(true);
+            sendBtn.setDisable(false);
             address.setDisable(true);
             ((HBox)btcLabel.getParent()).getChildren().remove(btcLabel);
             updateTitleForBroadcast();
@@ -117,7 +117,7 @@ public class DonateFloController {
             // We only get here if the user found the right password. If they don't or they cancel, we end up back on
             // the main UI screen. By now the send money screen is history so we must recreate it.
             checkGuiThread();
-            Main.OverlayUI<SendMoneyController> screen = Main.instance.overlayUI("send_money.fxml");
+            Main.OverlayUI<DonateFloController> screen = Main.instance.overlayUI("donate_flo.fxml");
             //screen.controller.aesKey = cur;
             screen.controller.address.setText(addressStr);
             screen.controller.send(null);
