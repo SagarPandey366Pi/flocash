@@ -65,7 +65,6 @@ public class MainController {
     public Label label;
     public Button button;
     
-
     private FLOUIModel model = new FLOUIModel();
     public FLOUIModel getModel() {
 		return model;
