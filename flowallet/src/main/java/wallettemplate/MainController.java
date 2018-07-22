@@ -64,6 +64,7 @@ public class MainController {
     public ListView<Transaction> transactionsList;
     public Label label;
     public Button button;
+    
 
     private FLOUIModel model = new FLOUIModel();
     public FLOUIModel getModel() {
