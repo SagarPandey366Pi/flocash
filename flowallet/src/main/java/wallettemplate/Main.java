@@ -14,15 +14,32 @@
 
 package wallettemplate;
 
-import com.google.common.util.concurrent.*;
-import javafx.scene.input.*;
+import static wallettemplate.utils.GuiUtils.blurIn;
+import static wallettemplate.utils.GuiUtils.blurOut;
+import static wallettemplate.utils.GuiUtils.checkGuiThread;
+import static wallettemplate.utils.GuiUtils.explodeOut;
+import static wallettemplate.utils.GuiUtils.fadeIn;
+import static wallettemplate.utils.GuiUtils.fadeOutAndRemove;
+import static wallettemplate.utils.GuiUtils.informationalAlert;
+import static wallettemplate.utils.GuiUtils.zoomIn;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+
+import javax.annotation.Nullable;
+import javax.swing.JOptionPane;
 
 import org.floj.core.NetworkParameters;
 import org.floj.kits.WalletAppKit;
-import org.floj.params.*;
+import org.floj.params.MainNetParams;
+import org.floj.params.RegTestParams;
+import org.floj.params.TestNet3Params;
 import org.floj.utils.BriefLogFormatter;
 import org.floj.utils.Threading;
 import org.floj.wallet.DeterministicSeed;
+
+import com.google.common.util.concurrent.Service;
 
 import javafx.animation.FillTransition;
 import javafx.animation.TranslateTransition;
@@ -34,6 +51,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
@@ -41,20 +60,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import wallettemplate.CustomToggleSwitch.CustomToggleSwitchListener;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
 
-import javax.annotation.Nullable;
-import javax.swing.JOptionPane;
-import java.io.File;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.net.URISyntaxException;
-import static wallettemplate.utils.GuiUtils.*;
-
-public class Main extends Application {
-    public static NetworkParameters params = TestNet3Params.get(); //MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
+public class Main extends Application implements CustomToggleSwitchListener{
+    public static NetworkParameters params = MainNetParams.get(); //MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
     public static final String APP_NAME = "FloWallet";
     private static String WALLET_FILE_NAME = "";
 
@@ -68,6 +80,9 @@ public class Main extends Application {
     public static Stage mainWindow;
     boolean isOn = false;
     ToggleSwitch toggle = new ToggleSwitch();
+    CustomToggleSwitch customToggleSwitch = new CustomToggleSwitch(this);
+    private ImageView refreshData;
+    
 
     @Override
     public void start(Stage mainWindow) throws Exception {
@@ -101,6 +116,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
         loader.setController(new MainController("MainController"));
         mainUI = loader.load();
+        refreshData = (ImageView) mainUI.lookup("#refreshData");
         mainController = loader.getController();
         // Configure the window with a StackPane so we can overlay things on top of the main UI, and a
         // NotificationBarPane so we can slide messages and progress bars in from the bottom. Note that
@@ -116,15 +132,15 @@ public class Main extends Application {
         mainWindow.setScene(scene);
         
         //Changes by Sagar for the toggle button
-        toggle.setTranslateX(265);
-        toggle.setTranslateY(200);
+        customToggleSwitch.setTranslateX(mainUI.getWidth() - 80.0f);
+        customToggleSwitch.setTranslateY(mainUI.getHeight());
         
         Text text = new Text();
         text.setFill(javafx.scene.paint.Color.BLACK);
         text.setTranslateX(265);
         text.setTranslateY(200);
         text.textProperty().bind(Bindings.when(toggle.switchedOnProperty()).then("MainNet").otherwise("TestNet"));
-        uiStack.getChildren().addAll(toggle, text);
+        uiStack.getChildren().addAll(customToggleSwitch);
         //Changes End
         
         // Make log output concise.
@@ -430,7 +446,7 @@ public class Main extends Application {
         Runtime.getRuntime().exit(0);
     }
 
-    public static void restartApplication(String envValue) throws IOException, URISyntaxException
+    public static void restartApplication(String envValue) throws Exception
     {
     	System.out.println("HO");
         
@@ -448,7 +464,7 @@ public class Main extends Application {
         {
          Runtime.getRuntime().exec(cmd.toString());
         } 
-        catch (IOException e1) 
+        catch (Exception e1) 
         {
          // TODO Auto-generated catch block
          e1.printStackTrace();
@@ -462,6 +478,21 @@ public class Main extends Application {
     	if(args.length > 0) { 
     		  defaultEnvironmentVal = args[0];
     		}
+		System.out.println("nilabh env : "+ defaultEnvironmentVal);
+
         Application.launch(Main.class, defaultEnvironmentVal);
     }
+
+	@Override
+	public void onToggleSwitchClick(boolean enabled) {
+			try {
+				isOn = isOn ? false : true;
+				String envVal = isOn ? "0" : "1" ;
+				Main.restartApplication(envVal);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
 }
