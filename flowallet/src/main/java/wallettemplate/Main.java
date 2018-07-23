@@ -62,13 +62,15 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import wallettemplate.CustomToggleSwitch.CustomToggleSwitchListener;
 import wallettemplate.controls.NotificationBarPane;
+import wallettemplate.model.ParameterModel;
 import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
 
 public class Main extends Application implements CustomToggleSwitchListener{
-    public static NetworkParameters params = MainNetParams.get(); //MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
+    public static NetworkParameters params;//MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
     public static final String APP_NAME = "FloWallet";
     private static String WALLET_FILE_NAME = "";
+    private static ParameterModel parameterModel = ParameterModel.getInstance();
 
     public static WalletAppKit flo;
     public static Main instance;
@@ -87,6 +89,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
     @Override
     public void start(Stage mainWindow) throws Exception {
         try {
+        	params = parameterModel.getParameters();
             realStart(mainWindow);
         } catch (Throwable e) {
             GuiUtils.crashAlert(e);
@@ -96,8 +99,13 @@ public class Main extends Application implements CustomToggleSwitchListener{
 
     private void realStart(Stage mainWindow) throws IOException {
     	if(getParameters().getRaw().get(0).equalsIgnoreCase("0")) {
-    		Main.params = TestNet3Params.get();
+    		Main.params = MainNetParams.get();
     		isOn = true;
+    	}
+    	else
+    	{
+    		Main.params = TestNet3Params.get();
+    		isOn = false;
     	}
         Main.mainWindow = mainWindow;
         WALLET_FILE_NAME = APP_NAME.replaceAll("[^a-zA-Z0-9.-]", "_") + "-"
