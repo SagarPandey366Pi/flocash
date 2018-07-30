@@ -486,8 +486,6 @@ public class Main extends Application implements CustomToggleSwitchListener{
     	if(args.length > 0) { 
     		  defaultEnvironmentVal = args[0];
     		}
-		System.out.println("nilabh env : "+ defaultEnvironmentVal);
-
         Application.launch(Main.class, defaultEnvironmentVal);
     }
 

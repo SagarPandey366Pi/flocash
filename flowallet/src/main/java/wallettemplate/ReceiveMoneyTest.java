@@ -77,7 +77,7 @@ public class ReceiveMoneyTest {
        launch(args);
    }*/
 	   String myCodeText = "https://crunchify.com/";
-		String filePath = "C:/Users/sagar/Documents/366Pi/QR.png";
+		String filePath = "/resources/wallettemplate/QR.png";
 		int size = 250;
 		String fileType = "png";
 		File myFile = new File(filePath);
