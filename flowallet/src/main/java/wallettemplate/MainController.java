@@ -14,42 +14,37 @@
 
 package wallettemplate;
 
+import static wallettemplate.Main.flo;
+
 import org.floj.core.Address;
 import org.floj.core.Coin;
 import org.floj.core.Transaction;
 import org.floj.core.listeners.DownloadProgressTracker;
 import org.floj.utils.MonetaryFormat;
+import org.fxmisc.easybind.EasyBind;
 
 import com.subgraph.orchid.TorClient;
 import com.subgraph.orchid.TorInitializationListener;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
-
-import org.fxmisc.easybind.EasyBind;
-
 import wallettemplate.controls.ClickableFLOAddress;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.utils.FLOUIModel;
 import wallettemplate.utils.easing.EasingMode;
 import wallettemplate.utils.easing.ElasticInterpolator;
-
-import static wallettemplate.Main.flo;
 
 /**
  * Gets created auto-magically by FXMLLoader via reflection. The widget fields are set to the GUI controls they're named
@@ -65,7 +60,6 @@ public class MainController {
     public Label label;
     public Button button;
     
-
     private FLOUIModel model = new FLOUIModel();
     public FLOUIModel getModel() {
 		return model;

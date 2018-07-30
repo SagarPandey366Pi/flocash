@@ -68,6 +68,12 @@
       </image>
     </ImageView>
     
+    <ImageView fitHeight="500.0" fitWidth="280.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="130.0" AnchorPane.rightAnchor="10.0">
+      <image>
+        <Image url="@Metro_ui.png"/>
+      </image>
+    </ImageView>
+    
     <Button onAction="#settingsClicked" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0" mnemonicParsing="false">
     	<graphic>
     		<ImageView fx:id="Setting" fitHeight="15.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
@@ -88,7 +94,7 @@
             </TooltipUtil.tooltip>
     </ImageView>
     
-    <ImageView fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="80.0">
+    <ImageView id="refreshData" fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="80.0">
             <image>
                 <Image url="@sync.png"/>
             </image>
