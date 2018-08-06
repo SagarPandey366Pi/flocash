@@ -25,11 +25,7 @@ import static wallettemplate.utils.GuiUtils.zoomIn;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-
 import javax.annotation.Nullable;
-import javax.swing.JOptionPane;
-
 import org.floj.core.NetworkParameters;
 import org.floj.kits.WalletAppKit;
 import org.floj.params.MainNetParams;
@@ -40,26 +36,16 @@ import org.floj.utils.Threading;
 import org.floj.wallet.DeterministicSeed;
 
 import com.google.common.util.concurrent.Service;
-
-import javafx.animation.FillTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import wallettemplate.CustomToggleSwitch.CustomToggleSwitchListener;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.model.ParameterModel;
@@ -81,7 +67,6 @@ public class Main extends Application implements CustomToggleSwitchListener{
     public NotificationBarPane notificationBar;
     public static Stage mainWindow;
     boolean isOn = false;
-    ToggleSwitch toggle = new ToggleSwitch();
     CustomToggleSwitch customToggleSwitch = new CustomToggleSwitch(this);
     private ImageView refreshData;
     
@@ -98,6 +83,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
     }
 
     private void realStart(Stage mainWindow) throws IOException {
+    	System.out.println("isOn" + isOn);
     	if(getParameters().getRaw().get(0).equalsIgnoreCase("0")) {
     		Main.params = MainNetParams.get();
     		isOn = true;
@@ -142,12 +128,6 @@ public class Main extends Application implements CustomToggleSwitchListener{
         //Changes by Sagar for the toggle button
         customToggleSwitch.setTranslateX(mainUI.getWidth() - 80.0f);
         customToggleSwitch.setTranslateY(mainUI.getHeight());
-        
-        Text text = new Text();
-        text.setFill(javafx.scene.paint.Color.BLACK);
-        text.setTranslateX(265);
-        text.setTranslateY(200);
-        text.textProperty().bind(Bindings.when(toggle.switchedOnProperty()).then("MainNet").otherwise("TestNet"));
         uiStack.getChildren().addAll(customToggleSwitch);
         //Changes End
         
@@ -180,61 +160,6 @@ public class Main extends Application implements CustomToggleSwitchListener{
         flo.startAsync();
 
         scene.getAccelerators().put(KeyCombination.valueOf("Shortcut+F"), () -> flo.peerGroup().getDownloadPeer().close());
-    }
-    
-    public class ToggleSwitch extends Parent{
-    	
-    	private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(false);
-    	private TranslateTransition translateAnimation = new TranslateTransition(Duration.seconds(0.50));
-    	private FillTransition fillAnimation = new FillTransition(Duration.seconds(0.50));
-    	
-    	//private ParallelTransition animation = new ParallelTransition(translateAnimation, fillAnimation);
-    	
-    	public SimpleBooleanProperty switchedOnProperty(){
-    		return switchedOn;
-    	}
-    	
-    	public ToggleSwitch()
-    	{
-    		Rectangle background = new Rectangle(50,25);
-    		background.setArcHeight(20);
-    		background.setArcWidth(20);
-    		background.setFill(javafx.scene.paint.Color.WHITE);
-    		background.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
-    		
-    		Circle trigger = new Circle(10);
-    		trigger.setCenterX(10);
-    		trigger.setCenterY(10);
-    		trigger.setFill(javafx.scene.paint.Color.WHITE);
-    		trigger.setStroke(javafx.scene.paint.Color.LIGHTGRAY);
-    		
-    		translateAnimation.setNode(trigger);
-    		fillAnimation.setShape(background);
-    		
-    		getChildren().addAll(background, trigger);
-/*    		Button button = new Button();
-    		translateAnimation.setNode(button);
-    		getChildren().add(button);*/
-    		
-    		setOnMouseClicked(event ->{
-    			try {
-    				isOn = isOn ? false : true;
-    				if(isOn)
-    				{
-    					JOptionPane.showMessageDialog(null, "Moving to MainNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
-    				}
-    				else
-    				{
-    					JOptionPane.showMessageDialog(null, "Moving to TestNet", "Alert", JOptionPane.INFORMATION_MESSAGE);
-    				}
-    				String envVal = isOn ? "0" : "1" ;
-					Main.restartApplication(envVal);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-    		});
-    	}
     }
     
     public void setupWalletKit(@Nullable DeterministicSeed seed) {
@@ -453,35 +378,8 @@ public class Main extends Application implements CustomToggleSwitchListener{
         // Forcibly terminate the JVM because Orchid likes to spew non-daemon threads everywhere.
         Runtime.getRuntime().exit(0);
     }
-
-    public static void restartApplication(String envValue) throws Exception
-    {
-    	System.out.println("HO");
-        
-        StringBuilder cmd = new StringBuilder();
-        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
-        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) 
-        {
-         cmd.append(jvmArg + " ");
-        }
-         
-        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
-        cmd.append(Main.class.getName()).append(" "+envValue);
-        System.out.println("HO "+cmd.toString());
-        try
-        {
-         Runtime.getRuntime().exec(cmd.toString());
-        } 
-        catch (Exception e1) 
-        {
-         // TODO Auto-generated catch block
-         e1.printStackTrace();
-        }
-        System.exit(0);
-    }
-    
+ 
     public static void main(String[] args) {
-        //9launch(args);
     	String defaultEnvironmentVal = "1";
     	if(args.length > 0) { 
     		  defaultEnvironmentVal = args[0];
@@ -494,7 +392,9 @@ public class Main extends Application implements CustomToggleSwitchListener{
 			try {
 				isOn = isOn ? false : true;
 				String envVal = isOn ? "0" : "1" ;
-				Main.restartApplication(envVal);
+				System.out.println(envVal + " isOn " +isOn );
+				//Main.restartApplication(envVal);
+				RestartApplication.restartApplication(envVal);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
