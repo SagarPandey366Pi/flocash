@@ -41,6 +41,7 @@ public class RestartApplication{
     	for (int i = 1; i < mainCommand.length; i++) {
     	cmd.append(" ");
     	cmd.append(mainCommand[i]);
+    	System.out.println("Enviromental variable restart: "+envvar);
     	}
     	// execute the command in a shutdown hook, to be sure that all the
     	// resources have been disposed before restarting the application

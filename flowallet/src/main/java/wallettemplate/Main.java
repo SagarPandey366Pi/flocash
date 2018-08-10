@@ -83,7 +83,6 @@ public class Main extends Application implements CustomToggleSwitchListener{
     }
 
     private void realStart(Stage mainWindow) throws IOException {
-    	System.out.println("isOn" + isOn);
     	if(getParameters().getRaw().get(0).equalsIgnoreCase("0")) {
     		Main.params = MainNetParams.get();
     		isOn = true;
@@ -107,7 +106,8 @@ public class Main extends Application implements CustomToggleSwitchListener{
         }
 
         // Load the GUI. The MainController class will be automatically created and wired up.
-        FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
+        //FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader(Main.class.getClassLoader().getResource("fxml/main.fxml"));
         loader.setController(new MainController("MainController"));
         mainUI = loader.load();
         refreshData = (ImageView) mainUI.lookup("#refreshData");
@@ -121,7 +121,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
         uiStack = new StackPane();
         Scene scene = new Scene(uiStack);
         TextFieldValidator.configureScene(scene);   // Add CSS that we need.
-        scene.getStylesheets().add(getClass().getResource("wallet.css").toString());
+        scene.getStylesheets().add(Main.class.getClassLoader().getResource("fxml/wallet.css").toString());
         uiStack.getChildren().add(notificationBar);
         mainWindow.setScene(scene);
         
@@ -261,7 +261,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
         try {
             checkGuiThread();
             // Load the UI from disk.
-            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("wallet_settings.fxml"));
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getClassLoader().getResource("fxml/wallet_settings.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -285,7 +285,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
         try {
             checkGuiThread();
             // Load the UI from disk.
-            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("send_money.fxml"));
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getClassLoader().getResource("fxml/send_money.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -307,7 +307,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
         try {
             checkGuiThread();
             // Load the UI from disk.
-            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("flo_address.fxml"));
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getClassLoader().getResource("fxml/flo_address.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
             ((ReceiveMoneyController)controller).addressProperty().bind(mainController.getModel().addressProperty());
@@ -330,7 +330,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
     	try {
             checkGuiThread();
             // Load the UI from disk.
-            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("donate_flo.fxml"));
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getClassLoader().getResource("fxml/donate_flo.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -352,7 +352,7 @@ public class Main extends Application implements CustomToggleSwitchListener{
     	try {
             checkGuiThread();
             // Load the UI from disk.
-            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getResource("bali_flo.fxml"));
+            FXMLLoader loader = new FXMLLoader(GuiUtils.class.getClassLoader().getResource("fxml/bali_flo.fxml"));
             Pane ui = loader.load();
             T controller = loader.getController();
             OverlayUI<T> pair = new OverlayUI<T>(ui, controller);
@@ -392,11 +392,10 @@ public class Main extends Application implements CustomToggleSwitchListener{
 			try {
 				isOn = isOn ? false : true;
 				String envVal = isOn ? "0" : "1" ;
-				System.out.println(envVal + " isOn " +isOn );
+				System.out.println(envVal + " isOn: " +isOn );
 				//Main.restartApplication(envVal);
 				RestartApplication.restartApplication(envVal);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		
