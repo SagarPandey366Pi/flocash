@@ -188,8 +188,8 @@ public class MainController {
         donatescreen.controller.initialize();
     }
     
-    public void balinights(ActionEvent event) {
-        Main.OverlayUI<BaliNightsController> baliscreen = Main.instance.overlayUIdonateflo("bali_flo.fxml");
+    public void baliNight(ActionEvent event) {
+        Main.OverlayUI<BaliNightsController> baliscreen = Main.instance.overlayUIbaliNights("bali_flo.fxml");
         baliscreen.controller.initialize();
     }
     //changes end by sagar
