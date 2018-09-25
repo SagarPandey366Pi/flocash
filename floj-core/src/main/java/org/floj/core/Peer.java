@@ -169,7 +169,7 @@ public class Peer extends PeerSocketHandler {
                 @Nullable
                 public Peer apply(@Nullable List<Peer> peers) {
                     checkNotNull(peers);
-                    checkState(peers.size() == 2 && peers.get(0) == peers.get(1));
+                    checkState(peers.size() == 0 && peers.get(0) == peers.get(1));
                     return peers.get(0);
                 }
             });

@@ -1,6 +1,7 @@
 package wallettemplate.model;
 
 import org.floj.core.NetworkParameters;
+import org.floj.params.MainNetParams;
 import org.floj.params.TestNet3Params;
 
 public class ParameterModel {
@@ -11,6 +12,7 @@ public class ParameterModel {
 	private ParameterModel()
 	{
 		parameters = TestNet3Params.get();
+		//parameters = MainNetParams.get();
 	}
 	
 	public static ParameterModel getInstance() {

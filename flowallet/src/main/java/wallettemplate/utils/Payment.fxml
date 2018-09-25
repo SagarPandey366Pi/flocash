@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallettemplate.PaymentController">
+  <children>
+    <VBox alignment="CENTER_LEFT" layoutY="100.0" prefHeight="200.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <HBox minHeight="29.0" prefHeight="29.0" prefWidth="516.0" translateY="75.0">
+          <children>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="LEFT" prefWidth="123.0" text="Traveller Name:" translateX="-5.0" translateY="-50.0">
+            </Label>
+            <TextField fx:id="address" editable="true" prefWidth="426.0" promptText="Enter your name" HBox.hgrow="NEVER" translateY="-50"/>
+          </children>
+        </HBox>
+<!--         <HBox minHeight="29.0" prefHeight="29.0" prefWidth="516.0" translateY="75.0">
+        <children>
+           <Label alignment="BOTTOM_CENTER" contentDisplay="LEFT" prefWidth="123.0" text="Email:" translateX="-15.0" translateY="20">
+            </Label>
+            <TextField fx:id="email" editable="true" prefWidth="426.0" promptText="Enter your Mail id" HBox.hgrow="NEVER" translateY="20"/>
+          </children>
+          </HBox> -->
+        <HBox prefHeight="74.0" prefWidth="516.0" translateY="110.0">
+          <children>
+            <Label text="age:" translateX="25.0" translateY="-70.0"/>
+            <ComboBox translateX="0.0" translateY="-50">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1" />
+                    <String fx:value="2" />
+                    <String fx:value="3" />
+                    <String fx:value="4" />
+                    <String fx:value="5" />
+                    <String fx:value="6" />
+                    <String fx:value="7" />
+                    <String fx:value="8" />
+                    <String fx:value="9" />
+                    <String fx:value="10" />
+                    <String fx:value="11" />
+                    <String fx:value="12" />
+                    <String fx:value="13" />
+                    <String fx:value="14" />
+                    <String fx:value="15" />
+                    <String fx:value="16" />
+                    <String fx:value="17" />
+                    <String fx:value="18" />
+                    <String fx:value="19" />
+                    <String fx:value="20" />
+                    <String fx:value="21" />
+                    <String fx:value="22" />
+                    <String fx:value="23" />
+                    <String fx:value="24" />
+                    <String fx:value="25" />
+                    <String fx:value="26" />
+                    <String fx:value="27" />
+                    <String fx:value="28" />
+                    <String fx:value="29" />
+                    <String fx:value="30" />
+                    <String fx:value="31" />
+                    <String fx:value="32" />
+                    <String fx:value="33" />
+                    <String fx:value="34" />
+                    <String fx:value="35" />
+                    <String fx:value="36" />
+                    <String fx:value="37" />
+                    <String fx:value="38" />
+                    <String fx:value="39" />
+                    <String fx:value="40" />
+                    <String fx:value="41" />
+                    <String fx:value="42" />
+                    <String fx:value="43" />
+                    <String fx:value="44" />
+                    <String fx:value="45" />
+                    <String fx:value="46" />
+                    <String fx:value="47" />
+                    <String fx:value="48" />
+                    <String fx:value="49" />
+                    <String fx:value="50" />
+                    <String fx:value="51" />
+                    <String fx:value="52" />
+                    <String fx:value="53" />
+                    <String fx:value="54" />
+                    <String fx:value="55" />
+                    <String fx:value="56" />
+                    <String fx:value="57" />
+                    <String fx:value="58" />
+                    <String fx:value="59" />
+                    <String fx:value="60" />
+                    <String fx:value="61" />
+                    <String fx:value="62" />
+                    <String fx:value="63" />
+                    <String fx:value="64" />
+                    <String fx:value="65" />
+                    <String fx:value="66" />
+                    <String fx:value="67" />
+                    <String fx:value="68" />
+                    <String fx:value="69" />
+                    <String fx:value="70" />
+                    <String fx:value="71" />
+                    <String fx:value="72" />
+                    <String fx:value="73" />
+                    <String fx:value="74" />
+                    <String fx:value="75" />
+                    <String fx:value="76" />
+                    <String fx:value="77" />
+                    <String fx:value="78" />
+                    <String fx:value="79" />
+                    <String fx:value="80" />
+                    <String fx:value="81" />
+                    <String fx:value="82" />
+                    <String fx:value="83" />
+                    <String fx:value="84" />
+                    <String fx:value="85" />
+                    <String fx:value="86" />
+                    <String fx:value="87" />
+                    <String fx:value="88" />
+                    <String fx:value="89" />
+                    <String fx:value="90" />
+                    <String fx:value="91" />
+                    <String fx:value="92" />
+                    <String fx:value="93" />
+                    <String fx:value="94" />
+                    <String fx:value="95" />
+                    <String fx:value="96" />
+                    <String fx:value="97" />
+                    <String fx:value="98" />
+                    <String fx:value="99" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+            <Label text="Rooms:" translateX="25.0" translateY="-70.0"/>
+            <ComboBox translateX="-10.0" translateY="-50.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1" />
+                    <String fx:value="2" />
+                    <String fx:value="3" />
+                    <String fx:value="4" />
+                    <String fx:value="5" />
+                    <String fx:value="6" />
+                    <String fx:value="7" />
+                    <String fx:value="8" />
+                    <String fx:value="9" />
+                    <String fx:value="10" />
+                    <String fx:value="11" />
+                    <String fx:value="12" />
+                </FXCollections>
+                </items>
+                </ComboBox>
+          </children>
+        </HBox>
+        <HBox alignment="CENTER_RIGHT" fillHeight="true" prefHeight="30.0" prefWidth="600.0" spacing="15.0" VBox.vgrow="NEVER">
+          <children>
+            <Button fx:id="sendBtn" defaultButton="true" mnemonicParsing="false" onAction="#Pay" prefWidth="79.0" text="Pay" translateY="10" translateX="-100"/>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>
+
+

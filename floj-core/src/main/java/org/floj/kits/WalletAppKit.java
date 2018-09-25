@@ -272,6 +272,7 @@ public class WalletAppKit extends AbstractIdleService {
             boolean chainFileExists = chainFile.exists();
             System.out.println("chainFileExists::"+chainFileExists);
             vWalletFile = new File(directory, filePrefix + ".wallet");
+            //vWalletFile = new File(directory, filePrefix + ".dat");
             boolean shouldReplayWallet = (vWalletFile.exists() && !chainFileExists) || restoreFromSeed != null;
             vWallet = createOrLoadWallet(shouldReplayWallet);
 

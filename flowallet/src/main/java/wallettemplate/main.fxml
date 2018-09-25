@@ -45,7 +45,7 @@
         </ColorAdjust>
       </effect>
       <image>
-        <Image url="@../wallettemplate/flo_logo_plain.png" />
+        <Image url="@flo_logo_plain.png" />
       </image>
     </ImageView>
     
@@ -58,7 +58,7 @@
         </ColorAdjust>
       </effect>
       <image>
-        <Image url="@../wallettemplate/200px-Padlock.svg.png" />
+        <Image url="@200px-Padlock.svg.png" />
       </image>
     </ImageView>
 
@@ -70,14 +70,14 @@
     
     <ImageView fitHeight="500.0" fitWidth="280.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="130.0" AnchorPane.rightAnchor="10.0">
       <image>
-        <Image url="@../wallettemplate/Metro_ui.png"/>
+        <Image url="@Metro_ui.png"/>
       </image>
     </ImageView>
     
     <Button onAction="#settingsClicked" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0" mnemonicParsing="false">
     	<graphic>
     		<ImageView fx:id="Setting" fitHeight="15.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true">
-     			<Image url="@../wallettemplate/settings.png" />
+     			<Image url="@settings.png" />
      		</ImageView>
     	</graphic>
     	<TooltipUtil.tooltip>
@@ -85,18 +85,21 @@
         </TooltipUtil.tooltip>
     </Button>
     
-    <ImageView fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="50.0">
-            <image>
-                <Image url="@../wallettemplate/node.png"/>
-            </image>
-            <TooltipUtil.tooltip>
-                <Tooltip text="nodes present" />
-            </TooltipUtil.tooltip>
-    </ImageView>
+    <Button onAction="#nodePresent" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="45.0" mnemonicParsing="false">
+    	<graphic>
+    		<ImageView fx:id="node" fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="50.0">
+                <Image url="@node.png"/>
+             </ImageView>
+        </graphic>      
+        <TooltipUtil.tooltip>
+             <Tooltip text="nodes present" />
+        </TooltipUtil.tooltip>
+    </Button>
     
-    <ImageView id="refreshData" fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="80.0">
+    
+    <ImageView id="refreshData" fitHeight="25.0" fitWidth="20.0" opacity="0.8" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0">
             <image>
-                <Image url="@../wallettemplate/sync.png"/>
+                <Image url="@sync.png"/>
             </image>
             <TooltipUtil.tooltip>
                 <Tooltip text="Sync Completed" />
@@ -114,7 +117,7 @@
            <Button id="sendMoneyOut" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#sendMoneyOut" style="-fx-base: rgb(102, 178, 255); -fx-font-weight: bold" styleClass="fat-button" text="Send FLO" />
            <Button id="receiveMoney" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#receiveMoney" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Receive FLO" />
            <Button id="donateflo" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#donateflo" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Donate FLO" />
-           <!-- <Button id="baliNight" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#baliNight" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Bali" /> -->
+          <!--  <Button id="baliNight" fx:id="sendMoneyOutBtn" alignment="CENTER" mnemonicParsing="false" onAction="#baliNight" style="-fx-base: lightgreen; -fx-font-weight: bold" styleClass="fat-button" text="Bali" /> -->
        </children>
     </HBox>
   </children>

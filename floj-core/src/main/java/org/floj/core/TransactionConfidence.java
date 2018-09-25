@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.*;
 
 /**
  * <p>A TransactionConfidence object tracks data you can use to make a confidence decision about a transaction.
- * It also contains some pre-canned rules for common scenarios: if you aren't really sure what level of confidence
+ * It also contains some pre-scanned rules for common scenarios: if you aren't really sure what level of confidence
  * you need, these should prove useful. You can get a confidence object using {@link Transaction#getConfidence()}.
  * They cannot be constructed directly.</p>
  *
