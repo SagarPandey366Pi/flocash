@@ -75,10 +75,11 @@ public abstract class AbstractFLONetParams extends NetworkParameters {
         if (!isDifficultyTransitionPoint(storedPrev)) {
 
             // No ... so check the difficulty didn't actually change.
-            if (nextBlock.getDifficultyTarget() != prev.getDifficultyTarget())
+        	//changes by Sagar
+            /*if (nextBlock.getDifficultyTarget() != prev.getDifficultyTarget())
                 throw new VerificationException("Unexpected change in difficulty at height " + storedPrev.getHeight() +
                         ": " + Long.toHexString(nextBlock.getDifficultyTarget()) + " vs " +
-                        Long.toHexString(prev.getDifficultyTarget()));
+                        Long.toHexString(prev.getDifficultyTarget()));*/
             return;
         }
 

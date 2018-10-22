@@ -161,6 +161,7 @@ public class SendRequest {
     public static SendRequest to(Address destination, Coin value) {
         SendRequest req = new SendRequest();
         final NetworkParameters parameters = destination.getParameters();
+        System.out.println("NetworkParameters::"+parameters.toString());
         checkNotNull(parameters, "Address is for an unknown network");
         req.tx = new Transaction(parameters);
         req.tx.addOutput(value, destination);

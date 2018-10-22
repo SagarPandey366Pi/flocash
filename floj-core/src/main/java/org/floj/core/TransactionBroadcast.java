@@ -21,6 +21,7 @@ import com.google.common.base.*;
 import com.google.common.util.concurrent.*;
 
 import org.floj.core.listeners.PreMessageReceivedEventListener;
+import org.floj.params.MainNetParams;
 import org.floj.utils.*;
 import org.floj.wallet.Wallet;
 import org.slf4j.*;
@@ -46,6 +47,7 @@ public class TransactionBroadcast {
     private final Transaction tx;
     private int minConnections;
     private int numWaitingFor;
+    private NetworkParameters parameter;
 
     /** Used for shuffling the peers before broadcast: unit tests can replace this to make themselves deterministic. */
     @VisibleForTesting
@@ -58,7 +60,7 @@ public class TransactionBroadcast {
         this.peerGroup = peerGroup;
         this.tx = tx;
 //        this.minConnections = Math.max(1, peerGroup.getMinBroadcastConnections());
-        this.minConnections = 1;
+        this.minConnections = 0;
     }
 
     // Only for mock broadcasts.
@@ -112,8 +114,19 @@ public class TransactionBroadcast {
 
     public ListenableFuture<Transaction> broadcast() {
         peerGroup.addPreMessageReceivedEventListener(Threading.SAME_THREAD, rejectionListener);
+        //Changes by Sagar for Peer - start
         log.info("Waiting for {} peers required for broadcast, we have {} ...", minConnections, peerGroup.getConnectedPeers().size());
-        peerGroup.waitForPeers(minConnections).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        //peerGroup.waitForPeers(minConnections).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        if(parameter == MainNetParams.get())
+        {
+        	peerGroup.waitForPeers(minConnections).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        }
+        else
+        {
+        	//peerGroup.waitForPeers(1).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        	peerGroup.waitForPeers(minConnections).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        }
+      //Changes by Sagar for Peer - End
         return future;
     }
 
@@ -139,7 +152,7 @@ public class TransactionBroadcast {
             List<Peer> peers = peerGroup.getConnectedPeers();    // snapshots
             // Prepare to send the transaction by adding a listener that'll be called when confidence changes.
             // Only bother with this if we might actually hear back:
-            if (minConnections > 1)
+            if (minConnections >= 1)
                 tx.getConfidence().addEventListener(new ConfidenceChange());
             // FLO Core sends an inv in this case and then lets the peer request the tx data. We just
             // blast out the TX here for a couple of reasons. Firstly it's simpler: in the case where we have
@@ -150,7 +163,9 @@ public class TransactionBroadcast {
             // our version message, as SPV nodes cannot relay it doesn't give away any additional information
             // to skip the inv here - we wouldn't send invs anyway.
             int numConnected = peers.size();
+            System.out.println("Size of the peer::"+peers.size());
             int numToBroadcastTo = (int) Math.max(1, Math.round(Math.ceil(peers.size() / 2.0)));
+            System.out.println("numToBroadcastTo::"+numToBroadcastTo);
             numWaitingFor = (int) Math.ceil((peers.size() - numToBroadcastTo) / 2.0);
             Collections.shuffle(peers, random);
             peers = peers.subList(0, numToBroadcastTo);

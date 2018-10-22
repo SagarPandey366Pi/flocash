@@ -42,7 +42,7 @@ public class DonateFloController {
     public TextField address;
     public Label titleLabel;
     public Label btcLabel;
-    public TextField amountEdit;
+    public TextField amountEdit = new TextField();
    // public TextField floData;
 
     public Main.OverlayUI overlayUI;
@@ -52,13 +52,14 @@ public class DonateFloController {
 
     // Called by FXMLLoader
     public void initialize() {
+    	System.out.println("In BaliNights" + Main.params + " Address::" +  address + " Send Butoons::" + sendBtn);
         Coin balance = Main.flo.wallet().getBalance();
         //checkState(!balance.isZero());
         new FLOAddressValidator(Main.params, address, sendBtn);
         //floData.setPromptText("Enter text data to store on the FLO blockchain (optional, "+Transaction.MAX_FLO_DATA_SIZE+" characters max)");
-        /*new TextFieldValidator(amountEdit, text ->
+        new TextFieldValidator(amountEdit, text ->
                 !WTUtils.didThrow(() -> checkState(Coin.parseCoin(text).compareTo(balance) <= 0)));
-        amountEdit.setText(balance.toPlainString());*/
+        amountEdit.setText(balance.toPlainString());
     }
 
     public void cancel(ActionEvent event) {
@@ -69,6 +70,7 @@ public class DonateFloController {
         // Address exception cannot happen as we validated it beforehand.
         try {
             Coin amount = Coin.parseCoin(amountEdit.getText());
+            System.out.println("Amount:: " + amount);
             Address destination = Address.fromBase58(Main.params, address.getText());
             SendRequest req;
             if (amount.equals(Main.flo.wallet().getBalance()))

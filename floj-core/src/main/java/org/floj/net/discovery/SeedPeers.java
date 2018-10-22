@@ -99,6 +99,7 @@ public class SeedPeers implements PeerDiscovery {
         InetSocketAddress[] addresses = new InetSocketAddress[seedAddrs.length];
         for (int i = 0; i < seedAddrs.length; ++i) {
             addresses[i] = new InetSocketAddress(convertAddress(seedAddrs[i]), params.getPort());
+            System.out.println("Seed address present::" + addresses[i].toString());
         }
         return addresses;
     }
