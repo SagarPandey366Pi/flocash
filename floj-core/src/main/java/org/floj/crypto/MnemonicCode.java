@@ -48,7 +48,7 @@ public class MnemonicCode {
 
     private ArrayList<String> wordList;
 
-    //private static final String BIP39_ENGLISH_RESOURCE_NAME = "/resources/org/floj/crypto/mnemonic/wordlist/english.txt";
+   //private static final String BIP39_ENGLISH_RESOURCE_NAME = "/resources/org/floj/crypto/mnemonic/wordlist/english.txt";
     private static final String BIP39_ENGLISH_RESOURCE_NAME = "mnemonic/wordlist/english.txt";
     private static final String BIP39_ENGLISH_SHA256 = "ad90bf3beb7b0eb7e5acd74727dc0da96e0a280a258354e7293fb7e211ac03db";
 
@@ -78,7 +78,7 @@ public class MnemonicCode {
 
     private static InputStream openDefaultWords() throws IOException {
         InputStream stream = MnemonicCode.class.getResourceAsStream(BIP39_ENGLISH_RESOURCE_NAME);
-        System.out.println(MnemonicCode.class.getResourceAsStream(BIP39_ENGLISH_RESOURCE_NAME));
+        System.out.println("Mnemonic Code.class.English" + stream);
         if (stream == null)
             throw new FileNotFoundException(BIP39_ENGLISH_RESOURCE_NAME);
         return stream;
@@ -122,7 +122,7 @@ public class MnemonicCode {
      * Convert mnemonic word list to seed.
      */
     public static byte[] toSeed(List<String> words, String passphrase) {
-        checkNotNull(passphrase, "A null passphrase is not allowed.");
+        //checkNotNull(passphrase, "A null passphrase is not allowed.");
 
         // To create binary seed from mnemonic, we use PBKDF2 function
         // with mnemonic sentence (in UTF-8) used as a password and
@@ -132,10 +132,14 @@ public class MnemonicCode {
         // derived key is 512 bits (= 64 bytes).
         //
         String pass = Utils.join(words);
+        System.out.println("Paassss :" + pass);
+        
         String salt = "mnemonic" + passphrase;
-
+        System.out.println("Salt: " + salt);
+        
         final Stopwatch watch = Stopwatch.createStarted();
-        byte[] seed = PBKDF2SHA512.derive(pass, salt, PBKDF2_ROUNDS, 64);
+        byte[] seed = PBKDF2SHA512.derive(pass, salt, PBKDF2_ROUNDS, 32);//change by sagar from 64 to 32
+        log.info("seed: " + seed.toString());
         watch.stop();
         log.info("PBKDF2 took {}", watch);
         return seed;
@@ -145,9 +149,10 @@ public class MnemonicCode {
      * Convert mnemonic word list to original entropy value.
      */
     public byte[] toEntropy(List<String> words) throws MnemonicException.MnemonicLengthException, MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException {
-        if (words.size() % 3 > 0)
+        if (words.size() % 3 > 0) {
+        	System.out.println("Word Size: " + words.size());
             throw new MnemonicException.MnemonicLengthException("Word list size must be multiple of three words.");
-
+        }
         if (words.size() == 0)
             throw new MnemonicException.MnemonicLengthException("Word list is empty.");
 
@@ -196,8 +201,9 @@ public class MnemonicCode {
      */
     public List<String> toMnemonic(byte[] entropy) throws MnemonicException.MnemonicLengthException {
         if (entropy.length % 4 > 0)
+        	{System.out.println("Entropy length::"+entropy.length);
             throw new MnemonicException.MnemonicLengthException("Entropy length not multiple of 32 bits.");
-
+        	}
         if (entropy.length == 0)
             throw new MnemonicException.MnemonicLengthException("Entropy is empty.");
 
@@ -221,7 +227,7 @@ public class MnemonicCode {
         // words and use joined words as mnemonic sentence.
 
         ArrayList<String> words = new ArrayList<String>();
-        int nwords = concatBits.length / 11;
+        int nwords = concatBits.length / 44;
         for (int i = 0; i < nwords; ++i) {
             int index = 0;
             for (int j = 0; j < 11; ++j) {
@@ -239,6 +245,7 @@ public class MnemonicCode {
      * Check to see if a mnemonic word list is valid.
      */
     public void check(List<String> words) throws MnemonicException {
+    	System.out.println("Words in Mnemoniccode.java: " + words);
         toEntropy(words);
     }
 

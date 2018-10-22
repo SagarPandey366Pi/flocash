@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- fruitcombo.fxml 
-     place in same directory as FruitComboApplication.java 
-     ensure build system copies the fxml file to the build output path -->
      
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -13,17 +9,43 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="205.0" prefWidth="168.0" styleClass="layout" xmlns:fx="http://javafx.com/fxml" fx:controller="wallettemplate.BaliNightsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wallettemplate.BaliNightsController">
   <children>
-    <ComboBox fx:id="fruitCombo" layoutX="15.0" layoutY="33.0" prefWidth="90.0" promptText="choose">
-      <items>
-        <FXCollections fx:factory="observableArrayList">
-          <String fx:value="Apple" />
-          <String fx:value="Orange" />
-          <String fx:value="Pear" />
-        </FXCollections>
-      </items>
-    </ComboBox>
-    <Label id="fruitSelectorLabel" layoutX="15.0" layoutY="10.0" styleClass="bold-label" text="Fruit Selector" />
-    </children>
+    <VBox alignment="CENTER_LEFT" layoutY="100.0" prefHeight="200.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <HBox minHeight="29.0" prefHeight="29.0" prefWidth="516.0" translateY="75.0">
+          <children>
+            <Label alignment="BOTTOM_CENTER" contentDisplay="LEFT" prefWidth="123.0" text="Where:" translateX="-15.0" translateY="-20">
+            </Label>
+            <TextField fx:id="address" editable="false" prefWidth="426.0" text="Ranchi Mall Blockchain Alam Puri Art Museum, Spa and Resort" HBox.hgrow="NEVER" translateY="-20"/>
+          </children>
+        </HBox>
+        <Label text="Check-in" translateX="25.0" translateY="50.0" />
+          <DatePicker translateX="20.0" translateY="35.0" />
+        <Label text="Check-out" translateX="250.0" translateY="-40.0" />
+          <DatePicker translateX="250.0" translateY="-55.0" />
+        <HBox prefHeight="74.0" prefWidth="516.0" translateY="110.0">
+          <children>
+            <Label text="Travellers:" translateX="25.0" translateY="-160.0"/>
+            <ComboBox translateX="-45.0" translateY="-135.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="1 room 1 adult" />
+                    <String fx:value="1 room 2 adults" />
+                    <String fx:value="2 room 4 adults" />
+                    <String fx:value="3 room 6 adults" />
+                </FXCollections>
+              </items>
+            </ComboBox>
+          </children>
+        </HBox>
+        <HBox alignment="CENTER_RIGHT" fillHeight="true" prefHeight="30.0" prefWidth="600.0" spacing="15.0" VBox.vgrow="NEVER">
+          <children>
+            <Button fx:id="sendBtn" defaultButton="true" mnemonicParsing="false" onAction="#search" prefWidth="79.0" text="Search Hotel" translateY="-30" translateX="-100"/>
+            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="79.0" text="Cancel" translateY="-30" translateX="-100"/>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
 </AnchorPane>

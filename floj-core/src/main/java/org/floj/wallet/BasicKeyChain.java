@@ -115,6 +115,7 @@ public class BasicKeyChain implements EncryptableKeyChain {
                 keysToReturn.add(hashToKeys.values().iterator().next());
                 count++;
             }
+            System.out.println("Keys to return In Basic Key Chain:" + keysToReturn);
             return keysToReturn;
         } finally {
             lock.unlock();

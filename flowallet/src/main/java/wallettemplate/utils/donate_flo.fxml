@@ -11,14 +11,29 @@
   <children>
     <VBox alignment="CENTER_LEFT" layoutY="100.0" prefHeight="200.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
+      <HBox fx:id="topHBox" alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label text="Donate FLO to:">
+              <Label fx:id="titleLabel" text="Donate">
+                <font>
+                  <Font size="25.0" />
+                </font>
+              </Label>
+                  <TextField fx:id="amountEdit" />
+                  <Label fx:id="btcLabel" text="FLO">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-              <TextField fx:id="address" editable="false" maxWidth="1.7976931348623157E308" text="oTeCfJebC6ba1zRP9nv31KdAKEwAddThvV" HBox.hgrow="ALWAYS">
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
+               <children>
+                  <Label text="Donate FLO to:"><!-- oTeCfJebC6ba1zRP9nv31KdAKEwAddThvV -->
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+              <TextField fx:id="address" editable="false" maxWidth="1.7976931348623157E308" text="oXQjTAa1tL8MhXhga2xi9x851fuk1opZmp" HBox.hgrow="ALWAYS">
                 <VBox.margin>
                   <Insets />
                 </VBox.margin>

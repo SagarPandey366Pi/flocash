@@ -16,10 +16,20 @@ package wallettemplate;
 
 import static wallettemplate.Main.flo;
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 import org.floj.core.Address;
 import org.floj.core.Coin;
+import org.floj.core.NetworkParameters;
+import org.floj.core.PeerAddress;
+import org.floj.core.PeerGroup;
 import org.floj.core.Transaction;
 import org.floj.core.listeners.DownloadProgressTracker;
+import org.floj.params.MainNetParams;
+import org.floj.params.TestNet3Params;
 import org.floj.utils.MonetaryFormat;
 import org.fxmisc.easybind.EasyBind;
 
@@ -33,10 +43,14 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
@@ -58,7 +72,15 @@ public class MainController {
     public ReceiveMoneyController receivecontrol;
     public ListView<Transaction> transactionsList;
     public Label label;
-    public Button button;
+    public Button button = new Button();;
+    
+    public static NetworkParameters params= TestNet3Params.get();
+    
+    private PeerGroup peerGroup = new PeerGroup(params);
+    PeerAddress peerAdd;
+    
+    @FXML
+    public ImageView node;
     
     private FLOUIModel model = new FLOUIModel();
     public FLOUIModel getModel() {
@@ -82,7 +104,7 @@ public class MainController {
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(EasyBind.map(model.balanceProperty(), coin -> MonetaryFormat.FLO.noCode().format(coin).toString()));
         // Don't let the user click send money when the wallet is empty.
-        sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));//changes by sagar
+        //sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));//changes by sagar
 
         TorClient torClient = Main.flo.peerGroup().getTorClient();
         if (torClient != null) {
@@ -146,7 +168,36 @@ public class MainController {
 		            s.append("MapOfBlocks: ");
 		            s.append(tx.getAppearsInHashes());
 		            s.append('\n');
-		        }
+		        }		   
+		        
+		        //changes for link Sagar - Start
+		        StringBuilder ss = new StringBuilder();
+		        ss.append(tx.getHash());
+		        
+		        String[] string = ss.toString().split("\n");
+		        List<String> list = Arrays.asList(string);
+		        
+		        for(int j = 0; j < list.size(); j++)
+		        {
+		        String link = "https://testnet.flocha.in/tx/" + tx.getHash();
+		        
+		        transactionsList.setOnMouseClicked(new EventHandler<Event>() {
+		        	
+					@Override
+					public void handle(Event event){
+						// TODO Auto-generated method stub
+						System.out.println("clicked on " + transactionsList.getSelectionModel().getSelectedItem() + link);
+						try {
+							java.awt.Desktop.getDesktop().browse(java.net.URI.create(link));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+		        }	
+		        //Changes for link Sagar - End
+		        
 				if (value.isPositive()) {
 					return "Incoming payment of " + MonetaryFormat.FLO.format(value) + s;
 				} else if (value.isNegative()) {
@@ -162,7 +213,7 @@ public class MainController {
 			}
         }));
     }
-
+    
     private void showFLOSyncMessage() {
         syncItem = Main.instance.notificationBar.pushItem("Synchronising with the FLO network", model.syncProgressProperty());
     }
@@ -177,7 +228,7 @@ public class MainController {
         Main.OverlayUI<SendMoneyController> sendScreen = Main.instance.overlayUIsend("send_money.fxml");
         sendScreen.controller.initialize();
     }
-    public void receiveMoney(ActionEvent event)
+    public void receiveMoney(ActionEvent event) throws Exception
     {
     	Main.OverlayUI<ReceiveMoneyController> receiveScreen = Main.instance.overlayUIreceive("flo_address.fxml");
     	receiveScreen.controller.initialize();
@@ -188,8 +239,8 @@ public class MainController {
         donatescreen.controller.initialize();
     }
     
-    public void balinights(ActionEvent event) {
-        Main.OverlayUI<BaliNightsController> baliscreen = Main.instance.overlayUIdonateflo("bali_flo.fxml");
+    public void baliNight(ActionEvent event) {
+        Main.OverlayUI<BaliNightsController> baliscreen = Main.instance.overlayUIbaliNights("bali_flo.fxml");
         baliscreen.controller.initialize();
     }
     //changes end by sagar
@@ -197,6 +248,15 @@ public class MainController {
     public void settingsClicked(ActionEvent event) {
         Main.OverlayUI<WalletSettingsController> screen = Main.instance.overlayUI("wallet_settings.fxml");
         screen.controller.initialize(null);
+    }
+
+    public void nodePresent(ActionEvent event) {
+    	
+    	if(params == MainNetParams.get())
+    	JOptionPane.showMessageDialog(null, "Available Peers: " + Main.flo.peerGroup().getConnectedPeers().size());
+    	
+    	else
+    		JOptionPane.showMessageDialog(null, "Available Peers: " + Main.flo.peerGroup().getConnectedPeers().size());
     }
     
     public void primaryClicked(ActionEvent event) {

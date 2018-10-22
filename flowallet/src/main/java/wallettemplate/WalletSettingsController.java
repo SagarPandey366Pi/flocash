@@ -67,7 +67,7 @@ public class WalletSettingsController {
     // Note: NOT called by FXMLLoader!
     public void initialize(@Nullable KeyParameter aesKey) {
         DeterministicSeed seed = Main.flo.wallet().getKeyChainSeed();
-        log.info("Seed::::"+seed);
+        log.info("Seed in WalletSetting controller::::"+seed);
         if (aesKey == null) {
             if (seed.isEncrypted()) {
                 log.info("Wallet is encrypted, requesting password first.");
@@ -95,6 +95,7 @@ public class WalletSettingsController {
 
         // Validate words as they are being typed.
         MnemonicCode codec = unchecked(MnemonicCode::new);
+        System.out.println("Mnemonic Codec::"+codec.toString());
         TextFieldValidator validator = new TextFieldValidator(wordsArea, text ->
             !didThrow(() -> codec.check(Splitter.on(' ').splitToList(text)))
         );
@@ -178,14 +179,15 @@ public class WalletSettingsController {
         
         //long birthday = datePicker.getValue().atStartOfDay().toEpochSecond(ZoneOffset.UTC);
         DeterministicSeed seed = new DeterministicSeed(Splitter.on(' ').splitToList(wordsArea.getText()), null, "", 1409478661L);
+        System.out.println("Seed generated: " + seed.toString());
         
-        //Changes start by Sagar
+/*        //Changes start by Sagar
         DeterministicKeyChain chain = DeterministicKeyChain.builder().seed(seed).build();
         List<ChildNumber> keyPath = HDUtils.parsePath("M/44H/60H/0H/0/0");
         DeterministicKey key = chain.getKeyByPath(keyPath, true);
         BigInteger privkey = key.getPrivKey();
         //Changes End
-        
+*/        
         // Shut down bit-coin and restart it with the new seed.
         Main.flo.addListener(new Service.Listener() {
             @Override

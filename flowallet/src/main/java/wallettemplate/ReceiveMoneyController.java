@@ -9,9 +9,16 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.floj.core.Address;
+import org.floj.core.NetworkParameters;
+import org.floj.crypto.MnemonicCode;
+import org.floj.params.MainNetParams;
+import org.floj.params.TestNet3Params;
 import org.floj.uri.FLOURI;
+import org.floj.wallet.DeterministicSeed;
+import org.floj.wallet.Wallet;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -43,6 +50,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Window;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
+import walletSeed.WalletSeed;
 import wallettemplate.utils.GuiUtils;
 
 public class ReceiveMoneyController{
@@ -51,7 +59,8 @@ public class ReceiveMoneyController{
     public ContextMenu addressMenu;
     public Label copyWidget;
     public Label qrCode;
-    public SimpleObjectProperty<Address> address = new SimpleObjectProperty<>();
+    public SimpleObjectProperty<Address> addresss = new SimpleObjectProperty<>();
+    public Address address;
     public StringExpression addressStr;
     public Button cancelBtn;
     public TextField emailField;
@@ -60,6 +69,7 @@ public class ReceiveMoneyController{
     public ImageView ivPreview;
     
     public Main.OverlayUI overlayUI;
+    public NetworkParameters params = MainNetParams.get();//TestNet3Params.get();
     
     public void initialize()
     {
@@ -69,32 +79,45 @@ public class ReceiveMoneyController{
         AwesomeDude.setIcon(qrCode, AwesomeIcon.QRCODE);
         Tooltip.install(qrCode, new Tooltip("Show a barcode scannable with a mobile phone for this address"));
 
-        addressStr = convert(address);
+        addressStr = convert(addresss);
         addressLabel.textProperty().bind(addressStr);
     }
     
-    public String uri() {
-        return FLOURI.convertToFLOURI(address.get(), null, Main.APP_NAME, null);
+    public String uri() throws Exception {
+        return FLOURI.convertToFLOURI(addresss.get(), null, Main.APP_NAME, null);
+    	/*List<String> seeds = MnemonicCode.INSTANCE.getWordList();
+        byte[] seedd = MnemonicCode.toSeed(seeds, "");
+        MnemonicCode mc = new MnemonicCode();
+        
+        WalletTest wt = new WalletTest(mc, params, seedd, "");
+       	
+       	DeterministicSeed seed1 = null;
+       	long creationtime = 1409478661L;
+       	seed1 = new DeterministicSeed(wt.getMnemonic(), null,"", creationtime);
+       	
+       	Wallet wallet = Wallet.fromSeed(params, seed1);
+        address = wallet.currentReceiveAddress();
+       	return address.toString();*/
     }
 
     public Address getAddress() {
-        return address.get();
+        return addresss.get();
     }
 
     public void setAddress(Address address) {
     	System.out.println("adddress" + address);
-        this.address.set(address);
+        this.addresss.set(address);
     }
 
     public ObjectProperty<Address> addressProperty() {
-        return address;
+        return addresss;
     }
 
     public void cancel(ActionEvent event) {
         overlayUI.done();
     }
     
-    public void getQRCodeImage(ActionEvent event)
+    public void getQRCodeImage(ActionEvent event) throws Exception
     {
     	try {
     	QRCodeWriter qrCodeWriter = new QRCodeWriter();
@@ -126,7 +149,7 @@ public class ReceiveMoneyController{
     }
     
     @FXML
-    protected void copyAddress(ActionEvent event) {
+    protected void copyAddress(ActionEvent event) throws Exception {
         // User clicked icon or menu item.
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
@@ -136,7 +159,7 @@ public class ReceiveMoneyController{
     }
 
     @FXML
-    protected void requestMoney(MouseEvent event) {
+    protected void requestMoney(MouseEvent event) throws Exception {
         if (event.getButton() == MouseButton.SECONDARY || (event.getButton() == MouseButton.PRIMARY && event.isMetaDown())) {
             // User right clicked or the Mac equivalent. Show the context menu.
             addressMenu.show(addressLabel, event.getScreenX(), event.getScreenY());
@@ -151,12 +174,12 @@ public class ReceiveMoneyController{
     }
 
     @FXML
-    protected void copyWidgetClicked(MouseEvent event) {
+    protected void copyWidgetClicked(MouseEvent event) throws Exception {
         copyAddress(null);
     }
 
     @FXML
-    protected void showQRCode(MouseEvent event) {
+    protected void showQRCode(MouseEvent event) throws Exception {
         // Serialize to PNG and back into an image. Pretty lame but it's the shortest code to write and I'm feeling
         // lazy tonight.
         final byte[] imageBytes = QRCode

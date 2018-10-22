@@ -1039,7 +1039,7 @@ public class PeerGroup implements TransactionBroadcaster {
     }
 
     /** Returns number of discovered peers. */
-    protected int discoverPeers() throws PeerDiscoveryException {
+    public int discoverPeers() throws PeerDiscoveryException {
         // Don't hold the lock whilst doing peer discovery: it can take a long time and cause high API latency.
         checkState(!lock.isHeldByCurrentThread());
         int maxPeersToDiscoverCount = this.vMaxPeersToDiscoverCount;
