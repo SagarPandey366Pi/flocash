@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

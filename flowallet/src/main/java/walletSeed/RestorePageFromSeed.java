@@ -1,16 +1,7 @@
-package walletTest;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import javax.crypto.NoSuchPaddingException;
+package walletSeed;
 
 import org.floj.core.Address;
 import org.floj.core.NetworkParameters;
-import org.floj.crypto.MnemonicCode;
-import org.floj.wallet.DeterministicSeed;
-import org.floj.wallet.Wallet;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,26 +10,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import wallettemplate.Main;
-import wallettemplate.controls.ClickableFLOAddress;
 
-public class SignUp {
+public class RestorePageFromSeed {
 
-	String checkUser, checkPw, checkconfirmPw;
-    ClickableFLOAddress addressControl;
-    DeterministicSeed seed1;
-    
-	//Changes for implementing Login Page to get to the wallet start- Sagar
-    public void loginPage(Stage mainWindow, NetworkParameters params) throws Exception
+	String checkPw;
+	public void loginPage(Stage mainWindow, NetworkParameters params, Address addre, WalletSeed w) throws Exception
     {
     	mainWindow.setTitle("FLO");
     	
@@ -56,43 +40,34 @@ public class SignUp {
         gridPane.setVgap(5);
 
         //Implementing Nodes for GridPane
-        Label lblUserName = new Label("Address");
-        final TextField txtUserName = new TextField();
         Label lblPassword = new Label("Password");
         final PasswordField pf;
         pf = new PasswordField();
-        Label lblConfirmPassword = new Label("Confirm Password");
-        final PasswordField confirmPass;
-        confirmPass = new PasswordField();
         Label lblseed = new Label("seed");
-        final TextArea ssss = new TextArea();
-        //final TextField Seedng = new TextField();
-        Button btnLogin = new Button("Create User");
+        final TextArea seed = new TextArea();
+        Button btnLogin = new Button("Restore Wallet");
         final Label lblMessage = new Label();
         
         
         //Adding Nodes to GridPane layout
         gridPane.add(lblseed, 0, 0);//lblUserName ,txtUserName, seed, Seedng, lblPassword, pf
         //gridPane.add(Seedng, 1, 0);
-        gridPane.add(ssss, 1, 0);
-        gridPane.add(lblUserName, 0, 1);
-        gridPane.add(txtUserName, 1, 1);
+        gridPane.add(seed, 1, 0);
         gridPane.add(lblPassword, 0, 2);
         gridPane.add(pf, 1, 2);
-        gridPane.add(lblConfirmPassword, 0, 3);
-        gridPane.add(confirmPass, 1, 3);
         gridPane.add(btnLogin, 1, 4);
         gridPane.add(lblMessage, 1, 5);
 
-        ssss.setWrapText(true);
+        
+        seed.setWrapText(true);
         double height = 100; //making a variable called height with a value 400
         double width = 150;  //making a variable called height with a value 300
-        ssss.setPrefHeight(height);
-        ssss.setPrefWidth(width);
-        ssss.setEditable(false);
+        seed.setPrefHeight(height);
+        seed.setPrefWidth(width);
+        seed.setEditable(true);
         
         //Adding text and DropShadow effect to it
-        Text text = new Text("FLO Login");
+        Text text = new Text("Enter the seed in the given order with the password");
         text.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
 
         //Adding text to HBox
@@ -104,12 +79,13 @@ public class SignUp {
         btnLogin.setId("btnLogin");
         text.setId("text");
 
+        System.out.println("Address and seed in RestorePage:: " + addre + "Seed " + w.getMnemonic());
         //String pw = "abc";
         /*String pw = System.console().readLine();
         String confirmPassword = "abc";*/
         //Changes for seed creation Sagar - start
         
-        List<String> seeds = MnemonicCode.INSTANCE.getWordList();
+        /*List<String> seeds = MnemonicCode.INSTANCE.getWordList();
         byte[] seedd = MnemonicCode.toSeed(seeds, "");
         MnemonicCode mc = new MnemonicCode();
         
@@ -125,65 +101,38 @@ public class SignUp {
        	
        	Wallet wallet = Wallet.fromSeed(params, seed1);
        	Address address = wallet.currentReceiveAddress();
-       	System.out.println("Address defined in the SignUp Class is: " + address);
-       	
-       	txtUserName.setText(address.toString());
-       	txtUserName.setEditable(false);
+       	System.out.println("Address defined in the SignUp Class is: " + address);*/
+       
        	//Changes by Sagar from seed to key - end
 
         //Changes for seed creation Sagar- end
        	
         //Action for btnLogin
-        btnLogin.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
+       	RestorePageFromSeed rc = new RestorePageFromSeed();
+       	Main main = new Main();
+       	btnLogin.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-            	checkUser = address.toString();
-            	System.out.println("CheckUser:: " + checkUser);
-                checkPw = pf.getText().toString();
-                System.out.println("Password: " + checkPw);
-                checkconfirmPw = confirmPass.getText().toString();
-                try {
-					PushtoLocal.PushtoFile(checkUser, checkPw);
-				} catch (Exception e2) {
+				
+				checkPw = pf.getText().toString();
+				try {
+					PushtoLocal.PushtoFile(addre.toString(), checkPw);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e2.printStackTrace();
+					e.printStackTrace();
 				}
-                
-                try {
-					EncryptPassword.encrypt(checkPw, address);
-					//EncryptPassword.decrypt();
-				} catch (NoSuchAlgorithmException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (NoSuchPaddingException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				try
+				{
+					RestoreFromSeed.restore(params, w, 1409478661L);
+					main.loginPage();
 				}
-                
-                if(checkconfirmPw.equals(checkPw)){
-                    try {
-						//Main.realStart(mainWindow);
-                    	Main.loginPage();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-                }
-                else{
-                    lblMessage.setText("Incorrect user or pw.");
-                    lblMessage.setTextFill(Color.RED);
-                }
-                pf.setText("");
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
-        });
-
+		});
         //Add HBox and GridPane layout to BorderPane Layout
         bp.setTop(hb);
         bp.setCenter(gridPane);

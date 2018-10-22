@@ -1,18 +1,17 @@
-package walletTest;
+package walletSeed;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.util.List;
 import javax.crypto.NoSuchPaddingException;
-import javax.swing.JOptionPane;
 
 import org.floj.core.Address;
 import org.floj.core.NetworkParameters;
+import org.floj.crypto.MnemonicCode;
+import org.floj.wallet.DeterministicSeed;
+import org.floj.wallet.Wallet;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,24 +20,30 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import wallettemplate.Main;
+import wallettemplate.controls.ClickableFLOAddress;
 
-public class LoginPage {
+public class SignUp {
 
-	String checkUser, checkPw;
-	
-	public void loginPage(Stage mainWindow, NetworkParameters params, Address address) throws Exception
+	String checkUser, checkPw, checkconfirmPw;
+    ClickableFLOAddress addressControl;
+    DeterministicSeed seed1;
+    
+	//Changes for implementing Login Page to get to the wallet start- Sagar
+    public void loginPage(Stage mainWindow, NetworkParameters params, Address address, String seed) throws Exception
     {
     	mainWindow.setTitle("FLO");
-
+    	
         BorderPane bp = new BorderPane();
         bp.setPadding(new Insets(10,50,50,50));
 
@@ -58,20 +63,38 @@ public class LoginPage {
         Label lblPassword = new Label("Password");
         final PasswordField pf;
         pf = new PasswordField();
-        Button btnLogin = new Button("Login");
+        Label lblConfirmPassword = new Label("Confirm Password");
+        final PasswordField confirmPass;
+        confirmPass = new PasswordField();
+        Label lblseed = new Label("seed");
+        final TextArea seedText = new TextArea();
+        //final TextField Seedng = new TextField();
+        Button btnLogin = new Button("Create User");
         final Label lblMessage = new Label();
         
-        
+        btnLogin.setTranslateX(100);
         //Adding Nodes to GridPane layout
-        //gridPane.add(lblUserName, 0, 0);
-        gridPane.add(txtUserName, 1, 0);
+        gridPane.add(lblseed, 0, 0);//lblUserName ,txtUserName, seed, Seedng, lblPassword, pf
+        //gridPane.add(Seedng, 1, 0);
+        gridPane.add(seedText, 1, 0);
+        gridPane.add(lblUserName, 0, 1);
+        gridPane.add(txtUserName, 1, 1);
         gridPane.add(lblPassword, 0, 2);
         gridPane.add(pf, 1, 2);
-        gridPane.add(btnLogin, 1, 3);
-        gridPane.add(lblMessage, 1, 3);
+        gridPane.add(lblConfirmPassword, 0, 3);
+        gridPane.add(confirmPass, 1, 3);
+        gridPane.add(btnLogin, 1, 4);
+        gridPane.add(lblMessage, 1, 5);
+
+        seedText.setWrapText(true);
+        double height = 50; //making a variable called height with a value 400
+        double width = 450;  //making a variable called height with a value 300
+        seedText.setPrefHeight(height);
+        seedText.setPrefWidth(width);
+        seedText.setEditable(false);
         
         //Adding text and DropShadow effect to it
-        Text text = new Text("FLO Login");
+        Text text = new Text("Wallet Login");
         text.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
 
         //Adding text to HBox
@@ -88,60 +111,64 @@ public class LoginPage {
         String confirmPassword = "abc";*/
         //Changes for seed creation Sagar - start
         
+        seedText.setText(seed.toString());
+       	
        	txtUserName.setText(address.toString());
        	txtUserName.setEditable(false);
-       	txtUserName.setStyle("-fx-background-color: transparent;");
-       	txtUserName.setMinWidth(400.0);
        	//Changes by Sagar from seed to key - end
 
         //Changes for seed creation Sagar- end
-        
+       	
         //Action for btnLogin
         btnLogin.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
+            @Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				//checkUser = address.toString();
-				checkPw = pf.getText().toString();
-				try {
+            	checkUser = address.toString();
+            	System.out.println("CheckUser:: " + checkUser);
+                checkPw = pf.getText().toString();
+                System.out.println("Password: " + checkPw);
+                checkconfirmPw = confirmPass.getText().toString();
+                try {
+					PushtoLocal.PushtoFile(checkUser, checkPw);
+				} catch (Exception e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+                
+                try {
 					EncryptPassword.encrypt(checkPw, address);
-					checkUser = EncryptPassword.decrypt();
-					System.out.println("CheckUser Decrypted Value: " +checkUser );
-				} 
-				catch (InvalidKeyException | InvalidAlgorithmParameterException | NoSuchAlgorithmException
-						| NoSuchPaddingException | UnsupportedEncodingException | IllegalBlockSizeException
-						| BadPaddingException e1) {
+					//EncryptPassword.decrypt();
+				} catch (NoSuchAlgorithmException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (Exception e) {
+				} catch (NoSuchPaddingException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-            	System.out.println("CheckUser:: " + checkUser);
-                
-                System.out.println("Password: " + checkPw);
-				boolean validate = ValidatePassword.myHelper(checkUser, checkPw);
-				
-				Main main = new Main();
-				
-				if(validate)
-				{
-					try {
-						main.realStart(mainWindow);
+                LoginPage loginPage = new LoginPage();
+                if(checkconfirmPw.equals(checkPw)){
+                    try {
+						//Main.realStart(mainWindow);
+                    	loginPage.loginPage(mainWindow, params, address);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null, "Incorrect Password!!!");
-				}
-                //PushtoLocal.PushtoFile(checkUser, checkPw);
+                }
+                else{
+                    lblMessage.setText("Incorrect user or pw.");
+                    lblMessage.setTextFill(Color.RED);
+                }
                 pf.setText("");
 			}
-		});
+        });
 
         //Add HBox and GridPane layout to BorderPane Layout
         bp.setTop(hb);

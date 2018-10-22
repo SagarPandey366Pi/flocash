@@ -138,7 +138,7 @@ public class MnemonicCode {
         System.out.println("Salt: " + salt);
         
         final Stopwatch watch = Stopwatch.createStarted();
-        byte[] seed = PBKDF2SHA512.derive(pass, salt, PBKDF2_ROUNDS, 64);
+        byte[] seed = PBKDF2SHA512.derive(pass, salt, PBKDF2_ROUNDS, 32);//change by sagar from 64 to 32
         log.info("seed: " + seed.toString());
         watch.stop();
         log.info("PBKDF2 took {}", watch);
@@ -201,8 +201,9 @@ public class MnemonicCode {
      */
     public List<String> toMnemonic(byte[] entropy) throws MnemonicException.MnemonicLengthException {
         if (entropy.length % 4 > 0)
+        	{System.out.println("Entropy length::"+entropy.length);
             throw new MnemonicException.MnemonicLengthException("Entropy length not multiple of 32 bits.");
-
+        	}
         if (entropy.length == 0)
             throw new MnemonicException.MnemonicLengthException("Entropy is empty.");
 

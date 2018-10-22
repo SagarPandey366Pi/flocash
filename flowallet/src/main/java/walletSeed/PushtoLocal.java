@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +13,7 @@ public class PushtoLocal {
     static BufferedReader br = new BufferedReader(reader);
     static String users = System.getProperty("user.name");
     
-    static File file = new File("C:\\Users\\"+users+"\\FloData.txt");
+    static File file = new File("FloData.txt");
      
 	public static void PushtoFile(String user, String pass) 
     {

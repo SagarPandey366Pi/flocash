@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

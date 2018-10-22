@@ -25,7 +25,10 @@ import static wallettemplate.utils.GuiUtils.zoomIn;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 import org.floj.core.Address;
@@ -34,6 +37,7 @@ import org.floj.core.NetworkParameters;
 import org.floj.crypto.HDKeyDerivation;
 import org.floj.crypto.MnemonicCode;
 import org.floj.kits.WalletAppKit;
+import org.floj.params.MainNetParams;
 import org.floj.params.RegTestParams;
 import org.floj.params.TestNet3Params;
 import org.floj.utils.BriefLogFormatter;
@@ -54,6 +58,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
@@ -68,10 +73,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import walletTest.DisplaySaveSeedPage;
-import walletTest.LoginPage;
-import walletTest.SignUp;
-import walletTest.WalletTest;
+import walletSeed.DisplaySaveSeedPage;
+import walletSeed.LoginPage;
+import walletSeed.OneClickAppLaunch;
+import walletSeed.RestorePageFromSeed;
+import walletSeed.SignUp;
+import walletSeed.WalletSeed;
 import wallettemplate.controls.ClickableFLOAddress;
 import wallettemplate.controls.NotificationBarPane;
 import wallettemplate.model.ParameterModel;
@@ -93,19 +100,36 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
     public static NotificationBarPane notificationBar;
     public static Stage mainWindow = new Stage();
     boolean isOn = false;
-   // CustomToggleSwitch customToggleSwitch = new CustomToggleSwitch(this);
-    private static ImageView refreshData;
-    
-    String checkUser, checkPw;
+   String checkUser, checkPw;
     ClickableFLOAddress addressControl;
     DeterministicSeed seed1;
     static Address address;
+    
+    Random rand = new Random();
+    static WalletSeed wt;
 
     @Override
     public void start(Stage mainWindow) throws Exception {
         try {
         	params = parameterModel.getParameters();
-        	//realStart(mainWindow);
+        	
+        	List<String> seeds = MnemonicCode.INSTANCE.getWordList();
+            String randomEle = seeds.get(rand.nextInt(seeds.size()));
+            byte[] seedd = MnemonicCode.toSeed(seeds, randomEle);
+            MnemonicCode mc = new MnemonicCode();
+            
+            wt = new WalletSeed(mc, params, seedd, "");
+           	
+           	//Changes by Sagar from seed to key - start
+           	
+           	DeterministicSeed seed1 = null;       	
+           	byte[] passSeed = new byte[DeterministicSeed.DEFAULT_SEED_ENTROPY_BITS/8];
+           	seed1 = new DeterministicSeed(passSeed, wt.getMnemonic(), MnemonicCode.BIP39_STANDARDISATION_TIME_SECS);
+    		System.out.println("Deterministic seed in main: "+wt.getMnemonic());
+           	
+           	Wallet wallet = Wallet.fromSeed(params, seed1);
+           	address = wallet.currentReceiveAddress();
+           	System.out.println("Address defined in the Main is: " + address);
         	loginPage();
         } catch (Throwable e) {
             GuiUtils.crashAlert(e);
@@ -114,12 +138,17 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
     }
     
     //Changes for implementing Login Page to get to the wallet start- Sagar
-    public static void loginPage() throws Exception
+    public void loginPage() throws Exception
     {
     	mainWindow.setTitle("FLO");
 
         BorderPane bp = new BorderPane();
-        bp.setPadding(new Insets(10,50,50,50));
+        bp.setPadding(new Insets(100,80,80,80));
+
+        //Image image = new Image("background_image.jpg", 400, 400,false,true,true);
+/*        Image image = new Image("background_image.jpg", 0, 0, false, true, true);
+        ImageView imageView = new ImageView(image);
+        bp.getChildren().add(imageView);*/
 
         //Adding HBox
         HBox hb = new HBox();
@@ -127,7 +156,7 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
 
         //Adding GridPane
         GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(20,20,20,20));
+        gridPane.setPadding(new Insets(50,50,50,50));
         gridPane.setHgap(5);
         gridPane.setVgap(5);
 
@@ -139,24 +168,6 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
         Button btnsign = new Button("IMPORT ACCOUNT");
         final Label lblsign = new Label();
 
-        
-        List<String> seeds = MnemonicCode.INSTANCE.getWordList();
-        byte[] seedd = MnemonicCode.toSeed(seeds, "");
-        MnemonicCode mc = new MnemonicCode();
-        
-        WalletTest wt = new WalletTest(mc, params, seedd, "");
-       	//Seedng.setText(wt.getMnemonic());
-       	
-       	//Changes by Sagar from seed to key - start
-       	
-       	DeterministicSeed seed1 = null;
-       	long creationtime = 1409478661L;
-       	seed1 = new DeterministicSeed(wt.getMnemonic(), null,"", creationtime);
-       	System.out.println("Deterministic seed in main: "+wt.getMnemonic());
-       	
-       	Wallet wallet = Wallet.fromSeed(params, seed1);
-       	address = wallet.currentReceiveAddress();
-       	System.out.println("Address defined in the Main is: " + address);
        	//Changes by Sagar from seed to key - end
 
         //Changes for seed creation Sagar- end
@@ -170,9 +181,7 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
         gridPane.add(btnsign, 2, 0);
         gridPane.add(lblsign, 3, 0);
 
-        //Adding text and DropShadow effect to it
-        Rectangle rec = new Rectangle();
-        
+        //Adding text and DropShadow effect to it        
         Text text = new Text("ACCOUNTS");
         text.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
 
@@ -190,11 +199,9 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				try {
 					loginPage.loginPage(mainWindow, params, address);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -205,24 +212,37 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
-				display.displayPage(mainWindow, params);
+				display.displayPage(mainWindow, params, address, wt.getMnemonic());
 			}
 		});
         
+        RestorePageFromSeed restorepage = new RestorePageFromSeed();
+        btnsign.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					restorepage.loginPage(mainWindow, params, address, wt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+        	
+		});
         //Add HBox and GridPane layout to BorderPane Layout
         bp.setTop(hb);
         bp.setCenter(gridPane);
 
+        //Set the Background
+        //bp.setId("borderPane");
         //Adding BorderPane to the scene and loading CSS
         Scene scene = new Scene(bp);
-        //scene.getStylesheets().add(getClass().getClassLoader().getResource("login.css").toExternalForm());
+        //scene.getStylesheets().addAll(getClass().getResource("/css/style.css").toExternalForm());
         mainWindow.setScene(scene);
         mainWindow.titleProperty().unbindBidirectional(
                 scene.widthProperty().asString().
                         concat(" : ").
                         concat(scene.heightProperty().asString()));
-        //primaryStage.setResizable(false);
         mainWindow.show();
      }
        
@@ -257,7 +277,6 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("main.fxml"));
         loader.setController(new MainController("MainController"));
         mainUI = loader.load();
-        refreshData = (ImageView) mainUI.lookup("#refreshData");
         mainController = loader.getController();
         // Configure the window with a StackPane so we can overlay things on top of the main UI, and a
         // NotificationBarPane so we can slide messages and progress bars in from the bottom. Note that
@@ -552,6 +571,7 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
     }
  
     public static void main(String[] args) {
+    	new Main().checkSingleInstance();
     	String defaultEnvironmentVal = "1";
     	if(args.length > 0) { 
     		  defaultEnvironmentVal = args[0];
@@ -559,6 +579,20 @@ public class Main extends Application /*implements CustomToggleSwitchListener*/{
         Application.launch(Main.class, defaultEnvironmentVal);
     }
 
+    void checkSingleInstance() {
+        OneClickAppLaunch ua = new OneClickAppLaunch("JustOneId");
+
+        if (ua.isAppActive()) {
+        	informationalAlert("Already running", "This application is already running and cannot be started twice.");
+        	try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            System.exit(1);    
+        }
+    }
 /*	@Override
 	public void onToggleSwitchClick(boolean enabled) {
 			try {

@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;

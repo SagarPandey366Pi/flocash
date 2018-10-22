@@ -123,7 +123,8 @@ public class TransactionBroadcast {
         }
         else
         {
-        	peerGroup.waitForPeers(1).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        	//peerGroup.waitForPeers(1).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
+        	peerGroup.waitForPeers(minConnections).addListener(new EnoughAvailablePeers(), Threading.SAME_THREAD);
         }
       //Changes by Sagar for Peer - End
         return future;

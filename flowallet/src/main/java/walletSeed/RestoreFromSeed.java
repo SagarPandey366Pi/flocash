@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ import org.floj.wallet.Wallet;
 
 public class RestoreFromSeed {
 
-    public void restore(NetworkParameters params, WalletTest seed, long creationtime) throws Exception
+    public static void restore(NetworkParameters params, WalletSeed seed, long creationtime) throws Exception
     {
     	String seedCode = seed.getMnemonic();
         String passphrase = "";
@@ -26,7 +26,7 @@ public class RestoreFromSeed {
         // Because we are importing an existing wallet which might already have transactions we must re-download the blockchain to make the wallet picks up these transactions
         System.out.println(wallet.toString());
         wallet.clearTransactions(0);
-        File chainFile = new File("restore-from-seed.spvchain");
+        File chainFile = new File("FloWallet-test.spvchain");
         if (chainFile.exists()) {
             chainFile.delete();
         }

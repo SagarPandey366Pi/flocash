@@ -14,6 +14,7 @@ import java.util.List;
 import org.floj.core.Address;
 import org.floj.core.NetworkParameters;
 import org.floj.crypto.MnemonicCode;
+import org.floj.params.MainNetParams;
 import org.floj.params.TestNet3Params;
 import org.floj.uri.FLOURI;
 import org.floj.wallet.DeterministicSeed;
@@ -49,7 +50,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Window;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
-import walletTest.WalletTest;
+import walletSeed.WalletSeed;
 import wallettemplate.utils.GuiUtils;
 
 public class ReceiveMoneyController{
@@ -68,7 +69,7 @@ public class ReceiveMoneyController{
     public ImageView ivPreview;
     
     public Main.OverlayUI overlayUI;
-    public NetworkParameters params = TestNet3Params.get();
+    public NetworkParameters params = MainNetParams.get();//TestNet3Params.get();
     
     public void initialize()
     {

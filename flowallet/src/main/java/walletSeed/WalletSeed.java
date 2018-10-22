@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import com.google.common.base.Joiner;
 
-public class WalletTest {
+public class WalletSeed {
 
 	public static final String BIP_44_BITCOIN_FIRST = "M/44H/0H/0H";
 	public static final String BIP_44_PATH_RECEIVE = BIP_44_BITCOIN_FIRST + "/0";
@@ -53,7 +53,7 @@ public class WalletTest {
 	private NetworkParameters params = null;
 
 	@SuppressWarnings("unused")
-	private WalletTest() { }
+	private WalletSeed() { }
 
 
 	/**
@@ -66,13 +66,13 @@ public class WalletTest {
 	 * @param int nbAccounts number of accounts to create
 	 *
 	 */
-	public WalletTest(MnemonicCode mc, NetworkParameters params, byte[] seed, String passphrase) throws MnemonicException.MnemonicLengthException {
+	public WalletSeed(MnemonicCode mc, NetworkParameters params, byte[] seed, String passphrase) throws MnemonicException.MnemonicLengthException {
 		wordList = mc.toMnemonic(seed);
-		System.out.println("WordList in WalletTest: " +wordList);
+		System.out.println("WordList in WalletSeed: " +wordList);
 		init(params, seed, passphrase);
 	}
 	
-	public WalletTest(MnemonicCode mc, NetworkParameters params, List<String> words, String passphrase) throws MnemonicLengthException, MnemonicWordException, MnemonicChecksumException  {
+	public WalletSeed(MnemonicCode mc, NetworkParameters params, List<String> words, String passphrase) throws MnemonicLengthException, MnemonicWordException, MnemonicChecksumException  {
 		wordList = words;
 		init(params, mc.toEntropy(wordList), passphrase);
 	}
@@ -95,7 +95,7 @@ public class WalletTest {
 		strPath = dKey.getPathAsString();
 	}
 
-	public WalletTest(JSONObject jsonobj, String passPhrase, NetworkParameters params) throws Exception {
+	public WalletSeed(JSONObject jsonobj, String passPhrase, NetworkParameters params) throws Exception {
 
 		if(!jsonobj.has(JSON_VERSION)) {
 			throw new DecoderException("property 'version' missing in JSON object");
@@ -254,7 +254,7 @@ public class WalletTest {
 	 * @param String[] xpub array of XPUB strings
 	 *
 	 */
-	public WalletTest(NetworkParameters params, String[] xpub) throws AddressFormatException {
+	public WalletSeed(NetworkParameters params, String[] xpub) throws AddressFormatException {
 
 		this.params = params;
 		accounts = new ArrayList<Account>();

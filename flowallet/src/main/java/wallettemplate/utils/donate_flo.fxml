@@ -28,12 +28,12 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <Label text="Donate FLO to:">
+                  <Label text="Donate FLO to:"><!-- oTeCfJebC6ba1zRP9nv31KdAKEwAddThvV -->
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
-              <TextField fx:id="address" editable="true" maxWidth="1.7976931348623157E308" text="oTeCfJebC6ba1zRP9nv31KdAKEwAddThvV" HBox.hgrow="ALWAYS">
+              <TextField fx:id="address" editable="false" maxWidth="1.7976931348623157E308" text="oXQjTAa1tL8MhXhga2xi9x851fuk1opZmp" HBox.hgrow="ALWAYS">
                 <VBox.margin>
                   <Insets />
                 </VBox.margin>

@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.math.BigInteger;
 
@@ -111,7 +111,6 @@ public class Addresss {
        else    {
            return null;
        }
-
    }
 
    /**

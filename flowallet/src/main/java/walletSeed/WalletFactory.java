@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -12,6 +12,7 @@ import org.floj.core.AddressFormatException;
 import org.floj.core.NetworkParameters;
 import org.floj.crypto.MnemonicCode;
 import org.floj.crypto.MnemonicException;
+import org.floj.params.MainNetParams;
 import org.floj.params.TestNet3Params;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,10 +23,11 @@ public class WalletFactory {
 	public static final int NUM_ACCOUNTS = 1;
 
 	private static WalletFactory instance = null;
-	private static List<WalletTest> wallets = null;
-	private static WalletTest watch_only_wallet = null;
+	private static List<WalletSeed> wallets = null;
+	private static WalletSeed watch_only_wallet = null;
 
 	private static Locale locale = null;
+	NetworkParameters params = TestNet3Params.get();
 
 	private WalletFactory()	{ ; }
 
@@ -39,7 +41,7 @@ public class WalletFactory {
 
 		if (instance == null) {
 			locale = new Locale("en", "US");
-			wallets = new ArrayList<WalletTest>();
+			wallets = new ArrayList<WalletSeed>();
 			instance = new WalletFactory();
 		}
 
@@ -59,12 +61,12 @@ public class WalletFactory {
 
 		if(instance == null) {
 			locale = new Locale("en", "US");
-			wallets = new ArrayList<WalletTest>();
+			wallets = new ArrayList<WalletSeed>();
 			instance = new WalletFactory();
 		}
 
 		if(watch_only_wallet == null) {
-			watch_only_wallet = new WalletTest(TestNet3Params.get(), xpub);
+			watch_only_wallet = new WalletSeed(TestNet3Params.get(), xpub);
 		}
 
 		return instance;
@@ -95,9 +97,9 @@ public class WalletFactory {
 	 * @return Wallet
 	 *
 	 */
-	public WalletTest newWallet(int nbWords, String passphrase, int nbAccounts) throws IOException, MnemonicException.MnemonicLengthException   {
+	public WalletSeed newWallet(int nbWords, String passphrase, int nbAccounts) throws IOException, MnemonicException.MnemonicLengthException   {
 
-		WalletTest hdw = null;
+		WalletSeed hdw = null;
 
 		if((nbWords % 3 != 0) || (nbWords < 12 || nbWords > 24)) {
 			nbWords = 12;
@@ -110,14 +112,12 @@ public class WalletFactory {
 			passphrase = "";
 		}
 
-		NetworkParameters params = TestNet3Params.get();
-
 		SecureRandom random = new SecureRandom();
 		byte seed[] = new byte[len];
 		random.nextBytes(seed);
 
 		MnemonicCode mc = new MnemonicCode();
-		hdw = new WalletTest(mc, params, seed, passphrase);
+		hdw = new WalletSeed(mc, params, seed, passphrase);
 
 		wallets.clear();
 		wallets.add(hdw);
@@ -135,15 +135,15 @@ public class WalletFactory {
 	 * @return Wallet
 	 *
 	 */
-	public WalletTest restoreWallet(String data, String passphrase) throws AddressFormatException, IOException, DecoderException, MnemonicException.MnemonicLengthException, MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException  {
+	public WalletSeed restoreWallet(String data, String passphrase) throws AddressFormatException, IOException, DecoderException, MnemonicException.MnemonicLengthException, MnemonicException.MnemonicWordException, MnemonicException.MnemonicChecksumException  {
 
-		WalletTest hdw = null;
+		WalletSeed hdw = null;
 
 		if(passphrase == null) {
 			passphrase = "";
 		}
 
-		NetworkParameters params = TestNet3Params.get();
+		//NetworkParameters params = TestNet3Params.get();
 
 		List<String> words = null;
 
@@ -153,22 +153,22 @@ public class WalletFactory {
 		byte[] seed = null;
 		if(data.startsWith("xpub")) {
 			String[] xpub = data.split(":");
-			hdw = new WalletTest(params, xpub);
+			hdw = new WalletSeed(params, xpub);
 		}
 		else if(data.length() % 4 == 0 && !data.contains(" ")) {
 			seed = AesUtility.base64ToBytes(data);
-			hdw = new WalletTest(mc, params, seed, passphrase);
+			hdw = new WalletSeed(mc, params, seed, passphrase);
 		}
 		else if(locale.toString().equals("en_US")) {
 			data = data.replaceAll("[^a-z]+", " ");             // only use for BIP39 English
 			words = Arrays.asList(data.trim().split("\\s+"));
 			seed = mc.toEntropy(words);
-			hdw = new WalletTest(mc, params, seed, passphrase);
+			hdw = new WalletSeed(mc, params, seed, passphrase);
 		}
 		else {
 			words = Arrays.asList(data.trim().split("\\s+"));
 			seed = mc.toEntropy(words);
-			hdw = new WalletTest(mc, params, seed, passphrase);
+			hdw = new WalletSeed(mc, params, seed, passphrase);
 		}
 
 		wallets.clear();
@@ -183,7 +183,7 @@ public class WalletFactory {
 	 * @return Wallet
 	 *
 	 */
-	public WalletTest get() throws IOException, MnemonicException.MnemonicLengthException {
+	public WalletSeed get() throws IOException, MnemonicException.MnemonicLengthException {
 
 		if(wallets.size() < 1) {
 			wallets.clear();
@@ -199,7 +199,7 @@ public class WalletFactory {
 	 * @param  Wallet wallet
 	 *
 	 */
-	public void set(WalletTest wallet)	{
+	public void set(WalletSeed wallet)	{
 
 		if(wallet != null)	{
 			wallets.clear();
@@ -214,7 +214,7 @@ public class WalletFactory {
 	 * @return Wallet
 	 *
 	 */
-	public WalletTest getWatchOnlyWallet()   {
+	public WalletSeed getWatchOnlyWallet()   {
 		return watch_only_wallet;
 	}
 
@@ -224,18 +224,18 @@ public class WalletFactory {
 	 * @param  Wallet wallet
 	 *
 	 */
-	public void setWatchOnlyWallet(WalletTest wallet)   {
+	public void setWatchOnlyWallet(WalletSeed wallet)   {
 		watch_only_wallet = wallet;
 	}
 
-	public WalletTest restoreWalletFromJSON(String fileName, String passPhrase) throws Exception {
+	public WalletSeed restoreWalletFromJSON(String fileName, String passPhrase) throws Exception {
 		JSONObject obj = readJsonWalletFile(fileName);
 		return restoreWalletFromJSON(obj, passPhrase);
 	}
 	
-	public WalletTest restoreWalletFromJSON(JSONObject obj, String passPhrase) throws Exception {
-		NetworkParameters params = TestNet3Params.get();
-		WalletTest wallet = new WalletTest(obj, passPhrase, params);
+	public WalletSeed restoreWalletFromJSON(JSONObject obj, String passPhrase) throws Exception {
+		//NetworkParameters params = TestNet3Params.get();
+		WalletSeed wallet = new WalletSeed(obj, passPhrase, params);
 
 		log("mnemonics: " + wallet.getMnemonic());
 		log("address: " + wallet.getAddress().getAddressString());
@@ -258,16 +258,16 @@ public class WalletFactory {
 		JSONObject node = new JSONObject(jsonString);
 
 		// check and extract seed
-		if(!node.has(WalletTest.JSON_VERSION)) {
+		if(!node.has(WalletSeed.JSON_VERSION)) {
 			throw new JSONException("wallet file has no version attribute " + fileName);
 		}
 
 		// check and extract seed
-		if(!node.has(WalletTest.JSON_SEED)) {
+		if(!node.has(WalletSeed.JSON_SEED)) {
 			throw new JSONException("wallet file has no seed attribute " + fileName);
 		}
 
-		if(!node.has(WalletTest.JSON_IV)) {
+		if(!node.has(WalletSeed.JSON_IV)) {
 			throw new JSONException("wallet file has no iv attribute " + fileName);
 		}
 		

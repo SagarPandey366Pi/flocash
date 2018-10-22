@@ -1,5 +1,6 @@
-package walletTest;
+package walletSeed;
 
+import org.floj.core.Address;
 import org.floj.core.NetworkParameters;
 
 import javafx.event.ActionEvent;
@@ -19,7 +20,7 @@ import javafx.stage.Stage;
 //Displays the save your seed page for security reason!!!
 public class DisplaySaveSeedPage {
 
-	public void displayPage(Stage mainWindow, NetworkParameters params) {
+	public void displayPage(Stage mainWindow, NetworkParameters params, Address address, String seed) {
 		
 		BorderPane bp = new BorderPane();
         bp.setPadding(new Insets(10,50,50,50));
@@ -37,10 +38,11 @@ public class DisplaySaveSeedPage {
 		Text text = new Text("NEW ACCOUNT");
 		text.setFont(Font.font("Courier New", FontWeight.BOLD, 28));
 		
-		final TextArea ssss = new TextArea();
+		final TextArea seedText = new TextArea();
 		Button btnLogin = new Button("I UNDERSTAND");
+		btnLogin.setTranslateX(150);
 		
-		gridPane.add(ssss, 1, 0);
+		gridPane.add(seedText, 1, 0);
 		gridPane.add(btnLogin, 1, 2);
 		
 		//Adding text to HBox
@@ -49,14 +51,14 @@ public class DisplaySaveSeedPage {
 		btnLogin.setId("btnLogin");
 		
 		
-		ssss.setWrapText(true);
-        double height = 180; //making a variable called height with a value 400
-        double width = 350;  //making a variable called height with a value 300
-        ssss.setPrefHeight(height);
-        ssss.setPrefWidth(width);
-        ssss.setEditable(false);
+		seedText.setWrapText(true);
+        double height = 250; //making a variable called height with a value 400
+        double width = 450;  //making a variable called height with a value 300
+        seedText.setPrefHeight(height);
+        seedText.setPrefWidth(width);
+        seedText.setEditable(false);
         
-        ssss.setText("Treat your SEED (backup phrase) with care!" + "\n" + "Only SEED can provide access to your wallet." + "\n" + "\n" + "1. Don't put your SEED anywhere except official FLO clients."
+        seedText.setText("Treat your SEED (backup phrase) with care!" + "\n" + "Only SEED can provide access to your wallet." + "\n" + "\n" + "1. Don't put your SEED anywhere except official FLO clients."
         		+ "\n" + "\n" + "If someone else accesses it you will lose your funds." 
         		+ "\n" + "\n" + "2. Store your SEED safely, it is the only way to restore your wallet.");
         
@@ -66,7 +68,7 @@ public class DisplaySaveSeedPage {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					login.loginPage(mainWindow, params);
+					login.loginPage(mainWindow, params, address, seed);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

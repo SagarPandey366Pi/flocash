@@ -1,4 +1,4 @@
-package walletTest;
+package walletSeed;
 
 import org.floj.core.NetworkParameters;
 import org.floj.crypto.DeterministicKey;
