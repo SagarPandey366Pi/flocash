@@ -11,8 +11,8 @@ public class ParameterModel {
 	
 	private ParameterModel()
 	{
-		parameters = TestNet3Params.get();
-		//parameters = MainNetParams.get();
+		//parameters = TestNet3Params.get();
+		parameters = MainNetParams.get();
 	}
 	
 	public static ParameterModel getInstance() {

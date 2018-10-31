@@ -25,7 +25,7 @@ public class PushtoLocal {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //file.setReadOnly();
+        file.setReadOnly();
 	}
 
 }

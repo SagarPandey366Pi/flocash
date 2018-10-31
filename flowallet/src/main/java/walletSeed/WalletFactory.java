@@ -27,7 +27,7 @@ public class WalletFactory {
 	private static WalletSeed watch_only_wallet = null;
 
 	private static Locale locale = null;
-	NetworkParameters params = TestNet3Params.get();
+	static NetworkParameters params = MainNetParams.get();//TestNet3Params.get();
 
 	private WalletFactory()	{ ; }
 
@@ -66,7 +66,7 @@ public class WalletFactory {
 		}
 
 		if(watch_only_wallet == null) {
-			watch_only_wallet = new WalletSeed(TestNet3Params.get(), xpub);
+			watch_only_wallet = new WalletSeed(params/*TestNet3Params.get()*/, xpub);
 		}
 
 		return instance;

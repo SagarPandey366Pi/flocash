@@ -74,7 +74,7 @@ public class MainController {
     public Label label;
     public Button button = new Button();;
     
-    public static NetworkParameters params= TestNet3Params.get();
+    public static NetworkParameters params= MainNetParams.get();//TestNet3Params.get();
     
     private PeerGroup peerGroup = new PeerGroup(params);
     PeerAddress peerAdd;
