@@ -86,7 +86,7 @@ import wallettemplate.utils.GuiUtils;
 import wallettemplate.utils.TextFieldValidator;
 
 public class Main extends Application /*implements CustomToggleSwitchListener*/{
-    public static NetworkParameters params= TestNet3Params.get();//MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
+    public static NetworkParameters params= MainNetParams.get();//TestNet3Params.get();MainNetParams.get(); //TestNet3Params.get(); //UnitTestParams.get();
     public static final String APP_NAME = "FloWallet";
     private static String WALLET_FILE_NAME = "";
     private static ParameterModel parameterModel = ParameterModel.getInstance();
